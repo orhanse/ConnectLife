@@ -14,20 +14,13 @@ Code
 **explain the technical structure of your code**
 
 **to include a code listing, use the following example**::
-   
-   .. code-block:: java
-   
-      public class Foo {
-         private int _x;
-         
-         public int getX() {
-            return this._x;
-         }
-         
-         public void setX(int x) {
-            this._x = x;
-         }
-      }
+
+   .. code-block:: python
+
+      class Foo:
+
+         def __init__(self, x):
+            self.x = x
 
 .. toctree::
 
@@ -36,4 +29,3 @@ Code
    member3
    member4
    member5
-   
