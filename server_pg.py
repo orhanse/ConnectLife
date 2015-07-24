@@ -22,11 +22,15 @@ def home():
 def random_numbers():
     with dbapi2.connect(app.config['db_params']) as db:
         with db.cursor() as cursor:
-            cursor.execute("CREATE TABLE IF NOT EXISTS dummy (num INTEGER PRIMARY KEY)")
-            cursor.execute("INSERT INTO dummy (num) VALUES (%s)", (randrange(200),))
+            query = "CREATE TABLE IF NOT EXISTS dummy (num INTEGER PRIMARY KEY)"
+            cursor.execute(query)
+            query = "INSERT INTO dummy (num) VALUES (%s)"
+            num = randrange(200)
+            cursor.execute(query, (num,))
             db.commit()
 
-            cursor.execute("SELECT num FROM dummy")
+            query = "SELECT num FROM dummy"
+            cursor.execute(query)
             nums = [r[0] for r in cursor.fetchall()]
     return "Stored numbers: %s" % ', '.join(map(str, nums))
 
@@ -37,16 +41,10 @@ def get_db_params():
         parsed = json.loads(VCAP_SERVICES)
         uri = parsed["elephantsql"][0]["credentials"]["uri"]
         match = re.match('postgres://(.*?):(.*?)@(.*?):5432/(.*)', uri)
-        user = match.group(1)
-        password = match.group(2)
-        host = match.group(3)
-        dbname = match.group(4)
+        user, password, host, dbname = match.groups()
     else:
-        host = 'localhost'
-        user = 'vagrant'
-        password = 'vagrant'
-        dbname = 'itucsdb'
-    return "dbname='%s' user='%s' host='%s' password='%s'" % (dbname, user, host, password)
+        user, password, host, dbname = 'vagrant', 'vagrant', 'localhost', 'itucsdb'
+    return "user='{}' password='{}' host='{}' dbname='{}'".format(user, password, host, dbname)
 
 
 if __name__ == '__main__':
