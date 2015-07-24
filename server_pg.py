@@ -9,7 +9,6 @@ from random import randrange
 import re
 
 
-
 app = Flask(__name__)
 
 
