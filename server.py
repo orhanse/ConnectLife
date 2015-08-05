@@ -1,8 +1,8 @@
+import datetime
+import os
+
 from flask import Flask
 from flask import render_template
-
-from datetime import datetime
-import os
 
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    now = datetime.now()
+    now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
 
