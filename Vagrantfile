@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.network :forwarded_port, guest: 5432, host: 54321
     config.vm.network :forwarded_port, guest: 5000, host: 50001
+    config.vm.network :forwarded_port, guest:   80, host: 50080
 
     config.vm.provider "virtualbox" do |vb|
         #vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -34,5 +35,10 @@ Vagrant.configure("2") do |config|
     # initialize database
     config.vm.provision :shell do |shell|
         shell.path = "vagrant-manifests/initpg.sh"
+    end
+
+    # configure phppgadmin
+    config.vm.provision :shell do |shell|
+        shell.path = "vagrant-manifests/phppgadmin.sh"
     end
 end

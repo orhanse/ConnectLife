@@ -72,6 +72,9 @@ class itucsdb {
   package { "libpq-dev":
     ensure => present,
   }
+  package { "phppgadmin":
+    ensure => present,
+  }
 
   # used for creating a PuTTy-compatible key file
   package { "putty-tools":
