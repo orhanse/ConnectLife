@@ -16,9 +16,8 @@ def home():
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
-    if VCAP_APP_PORT is None:
-        port = int(VCAP_APP_PORT)
+    if VCAP_APP_PORT is not None:
+        port, debug = int(VCAP_APP_PORT), False
     else:
-        port = 5000
-        app.debug = True
-    app.run(host='0.0.0.0', port=port)
+        port, debug = 5000, True
+    app.run(host='0.0.0.0', port=port, debug=debug)
