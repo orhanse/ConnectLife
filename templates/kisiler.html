@@ -11,9 +11,40 @@
     <h1>Kişiler</h1>
     <a href="/">Anasayfa</a>
 
+    <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
+		<table id="KisilerTablosu">
 
-    <footer>
-      <div id="datetime">{{ current_time }}</div>
-    </footer>
+		<tr>
+			<th>Kullanıcı numarası</th>
+			<th>İsim</th>
+    		<th>Yaşadığı yer</th>
+    		<th>Yaşı</th>
+  		</tr>
+
+  		<tr>
+  			<td>120150053</td>
+  			<td>Tugba Özkal</td>
+  			<td>Afyonkarahisar</td>
+  			<td>22</td>
+  		</tr>
+
+  		<tr>
+  			<td>120150063</td>
+  			<td>Furkan Evirgen</td>
+  			<td>İstanbul</td>
+  			<td>26</td>
+
+  		</tr>
+
+		{% for ID, UserName, UserCity, UserAge in kisiler %}
+		<tr>
+			<td class="PeopleTableItem">{{ID}}</td>
+			<td class="PeopleTableItem">{{UserName}}</td>
+			<td class="PeopleTableItem">{{UserCity}}</td>
+			<td class="PeopleTableItem">{{UserAge}}</td>
+		</tr>
+
+		{% endfor %}
+
   </body>
 </html>
