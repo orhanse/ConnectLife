@@ -25,6 +25,13 @@ def universiteler_sayfasi():
     now = datetime.datetime.now()
     return render_template('universiteler.html', current_time=now.ctime())
 
+@app.route('/gruplar')
+def gruplar_sayfasi():
+    now = datetime.datetime.now()
+    return render_template('gruplar.html', current_time=now.ctime())
+
+
+
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
     if VCAP_APP_PORT is not None:

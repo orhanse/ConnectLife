@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Üniversiteler</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='universiteler.css') }}" />
-  </head>
+{% extends "home.html" %}
 
+{% block title %}Üniversiteler{% endblock %}
 
-  <body>
-    <h1>Üniversiteler</h1>
-    <a href="/">Anasayfa</a>
+{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='universiteler.css') }}" />
+{% endblock %}
+
+{% block content %}
+
 
     <form action="{{ url_for('universiteler_sayfasi') }}" method = "post">
 		<table id="UniversitelerTablosu">
@@ -52,5 +49,7 @@
 
 		{% endfor %}
 
-  </body>
-</html>
+		</table>
+		</form>
+
+{% endblock %}

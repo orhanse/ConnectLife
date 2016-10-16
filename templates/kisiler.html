@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Kişiler</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />
-  </head>
+{% extends "home.html" %}
 
+{% block title %}Kişiler{% endblock %}
 
-  <body>
-    <h1>Kişiler</h1>
-    <a href="/">Anasayfa</a>
+{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />{% endblock %}
 
-    <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
-		<table id="KisilerTablosu">
-
-
-
-
+{% block content %}
+	    <h1>Kişiler</h1>
+	    <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
+			<table id="KisilerTablosu">
 		<tr>
 			<th>Profil fotoğrafı</th>
 			<th>Kullanıcı numarası</th>
@@ -24,7 +15,6 @@
     		<th>Yaşadığı yer</th>
     		<th>Yaşı</th>
   		</tr>
-
   		<tr>
   			<td><img src="/static/images/profil1.jpg"></td>
   			<td>120150053</td>
@@ -32,16 +22,13 @@
   			<td>Afyonkarahisar</td>
   			<td>22</td>
   		</tr>
-
   		<tr>
   			<td><img src="/static/images/profil2.jpg"></td>
   			<td>120150063</td>
   			<td>Furkan Evirgen</td>
   			<td>İstanbul</td>
   			<td>26</td>
-
   		</tr>
-
 		{% for ID, UserName, UserCity, UserAge in kisiler %}
 		<tr>
 			<td class="PeopleTableItem">{{ID}}</td>
@@ -49,8 +36,7 @@
 			<td class="PeopleTableItem">{{UserCity}}</td>
 			<td class="PeopleTableItem">{{UserAge}}</td>
 		</tr>
-
 		{% endfor %}
-
-  </body>
-</html>
+		</table>
+		</form>
+{% endblock %}
