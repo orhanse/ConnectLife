@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Üniversiteler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='universiteler.css') }}" />
+  </head>
+
+
+  <body>
+    <h1>Üniversiteler</h1>
+    <a href="/">Anasayfa</a>
+
+    <form action="{{ url_for('universiteler_sayfasi') }}" method = "post">
+		<table id="UniversitelerTablosu">
+
+
+
+
+		<tr>
+			<th>Universite fotoğrafı</th>
+			<th>Üniversite Adı</th>
+			<th>Kuruluş yılı</th>
+    		<th>Lokasyon</th>
+    		<th>link</th>
+  		</tr>
+
+  		<tr>
+  			<td><img src="/static/images/universities/bogazici.png"></td>
+  			<td>Boğaziçi Üniversitesi</td>
+  			<td>1863</td>
+  			<td>Adres: Boğaziçi Üniversitesi 34342 Bebek/İstanbul Türkiye</td>
+  			<td><a href = "http://www.boun.edu.tr/">Resmi Internet Sitesi</a></td>
+  		</tr>
+
+  		<tr>
+  			<td><img src="/static/images/universities/itu.jpg"></td>
+  			<td>İstanbul Teknik Üniversitesi</td>
+  			<td>Kuruluş Yılı: 1773</td>
+  			<td>Adres: İstanbul Teknik Üniversitesi 34469 Maslak/İstanbul Türkiye</td>
+  			<td> <a href = "http://www.itu.edu.tr/">Resmi Internet Sitesi</a></td>
+
+  		</tr>
+
+		{% for ID, UserName, UserCity, UserAge in kisiler %}
+		<tr>
+			<td class="PeopleTableItem">{{ID}}</td>
+			<td class="PeopleTableItem">{{UserName}}</td>
+			<td class="PeopleTableItem">{{UserCity}}</td>
+			<td class="PeopleTableItem">{{UserAge}}</td>
+		</tr>
+
+		{% endfor %}
+
+  </body>
+</html>
