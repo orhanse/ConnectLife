@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Kişiler</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />
   </head>
 
 
@@ -14,7 +14,11 @@
     <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
 		<table id="KisilerTablosu">
 
+
+
+
 		<tr>
+			<th>Profil fotoğrafı</th>
 			<th>Kullanıcı numarası</th>
 			<th>İsim</th>
     		<th>Yaşadığı yer</th>
@@ -22,6 +26,7 @@
   		</tr>
 
   		<tr>
+  			<td><img src="/static/images/profil1.jpg"></td>
   			<td>120150053</td>
   			<td>Tugba Özkal</td>
   			<td>Afyonkarahisar</td>
@@ -29,6 +34,7 @@
   		</tr>
 
   		<tr>
+  			<td><img src="/static/images/profil2.jpg"></td>
   			<td>120150063</td>
   			<td>Furkan Evirgen</td>
   			<td>İstanbul</td>
