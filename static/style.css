@@ -7,15 +7,21 @@ body {
 }
 
 h1, h2, h3, h4 {
-  color: #E9601A;
+  color: #00cc99;
+}
+
+img {
+  border: 0;
 }
 
 a {
+  float: right;
+  margin-right:20px;
   color: #6F6F6F;
   text-decoration: underline;
+  font-weight:bold;
 }
 
 div#datetime {
   font-size: 80%;
-  text-align: right;
 }

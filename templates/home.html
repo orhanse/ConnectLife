@@ -2,11 +2,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Home</title>
+    <title>ConnectLife</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-    <h1>Hello, from Ahmet!</h1>
+    <img src="static/images/connectlife.png" alt="Connect to Life" style="width:40px;height:40px;">
+    <h1>ConnectLife</h1>
+
+    <a>İş İlanları</a>
+    <a>Şirketler</a>
+    <a>Gruplar</a>
+    <a href="/kisiler">Kişiler</a>
+
 
     <footer>
       <div id="datetime">{{ current_time }}</div>
