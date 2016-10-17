@@ -50,3 +50,9 @@ div#datetime {
     border-right: 15px solid transparent;
     border-top: 15px solid #dcefdc;
 }
+
+#universiteler img{
+
+  width:30px;
+  height:30px;
+}
