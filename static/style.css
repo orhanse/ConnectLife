@@ -45,6 +45,12 @@ div#datetime {
 	font-size: 14px;
 }
 
+.sidebar img{
+	width:20px;
+  height:20px;
+
+}
+
 .caret {
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
@@ -56,3 +62,4 @@ div#datetime {
   width:30px;
   height:30px;
 }
+
