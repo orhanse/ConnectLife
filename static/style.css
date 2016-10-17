@@ -34,3 +34,19 @@ div#datetime {
 	color: #dcefdc;
 	font-size: 20px;
 }
+
+.sidebar h2{
+	color: #dcefdc;
+	font-size: 20px;
+	font-weight:bold;
+}
+.sidebar p{
+	color: #dcefdc;
+	font-size: 14px;
+}
+
+.caret {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid #dcefdc;
+}

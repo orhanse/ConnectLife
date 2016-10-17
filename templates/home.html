@@ -10,6 +10,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 	{% block style %}{% endblock %}
 
+<!-- Sidebarin acilmasi icin gerekli javascript -->
+	<script>
+	function showDiv() {
+		var x = document.getElementById('sidebar');
+
+	    if (x.style.visibility === 'hidden') {
+	        x.style.visibility = 'visible';
+	    } else {
+	        x.style.visibility = 'hidden';
+	    }
+	}
+	</script>
+
+
+
   </head>
   <body>
   <div class="row" style="border-radius: 50px;">
@@ -27,10 +42,11 @@
 		<a id="navlink" >Haberler</a>
 	    <a id="navlink" >İş İlanları</a>
 	    <a id="navlink" >Şirketler</a>
-	    <a id="navlink" >Gruplar</a>
 	    <a id="navlink"  href = "{{ url_for('universiteler_sayfasi') }}">Üniversiteler</a>
 	    <a id="navlink"  href="{{ url_for('gruplar_sayfasi') }}">Gruplar</a>
 	    <a id="navlink"  href="{{ url_for('kisiler_sayfasi') }}">Kişiler</a>
+		<span type="button" class="caret pull-right" style = "font-size:30px;" onclick="showDiv()"></span>
+
 	</div>
 </div>
 
@@ -40,8 +56,19 @@
 		<div class="col-md-9">
 			{% block content %}{% endblock %}
 		</div>
-		<div class="col-md-3 container-fluid" style="background-color:#5d737e;">
-		asdasdas
+		<div class="col-md-3 sidebar" id="sidebar" style="background-color:#5d737e;">
+			<h2>İlgilenebileceğiniz İş İlanları</h2>
+			<p>ARÇELİK A.Ş - Software Engineer</p>
+			<p>ASELSAN ELEKTRONİK SAN. VE TİC. A.Ş.- PCB Tasarım Mühendisi</p>
+			<p>VESTEL A.Ş.- IT Uzmanı</p>
+
+			<hr>
+			<h2>Popüler Gruplar</h2>
+			<p>Yazılım & Teknoloji</p>
+			<p>Finans Klubü </p>
+			<p>Digital Marketing</p>
+			<p>Mühendisler Topluluğu</p>
+			<hr>
 		</div>
 	</div>
 
