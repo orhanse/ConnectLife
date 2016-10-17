@@ -1,0 +1,52 @@
+{% extends "home.html" %}
+
+{% block title %}Kişiler{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />{% endblock %}
+
+{% block content %}
+	        <h1>Şirketler</h1>
+    <a href="/">Anasayfa</a>
+
+    <form action="{{ url_for('sirketler_sayfasi') }}" method = "post">
+		<table id="SirketlerTablosu">
+
+
+
+
+		<tr>
+			<th>Şirket Logosu</th>
+			<th>Şirket Adı</th>
+			<th>Çalışma Alanı</th>
+    		<th>Şirketin Lokasyonu</th>
+    		<th>Kuruluş Yılı</th>
+  		</tr>
+
+  		<tr>
+  			<td><img src="/static/images/logo.jpg"></td>
+  			<td><a href= "http://simitlab.itu.edu.tr/">SiMiT Lab</a></td>
+  			<td>Akıllı Etkileşim, Mobil İstihbarat, Multimedya Teknolojileri</td>
+  			<td>Istanbul,Türkiye</td>
+  			<td>2010</td>
+  		</tr>
+
+  		<tr>
+  			<td><img src="/static/images/vestel.jpg"></td>
+  			<td><a href= "https://www.vestel.com.tr/">Vestel</a></td>
+  			<td>Elektronik, Beyaz Eşya, Savunma Sistemleri</td>
+  			<td>Manisa, Türkiye</td>
+  			<td>1984</td>
+
+  		</tr>
+
+  		<tr>
+  			<td><img src="/static/images/siemens.jpg"></td>
+  			<td><a href= "https://www.siemens.com/tr/tr/home.html">Siemens AG</a></td>
+  			<td>Endüstri, Enerji, Sağlık</td>
+  			<td>Berlin, Almanya</td>
+  			<td>1847</td>
+
+  		</tr>
+		</table>
+		</form>
+{% endblock %}

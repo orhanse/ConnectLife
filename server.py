@@ -30,6 +30,11 @@ def gruplar_sayfasi():
     now = datetime.datetime.now()
     return render_template('gruplar.html', current_time=now.ctime())
 
+@app.route('/sirketler')
+def sirketler_sayfasi():
+    now = datetime.datetime.now()
+    return render_template('sirketler.html', current_time=now.ctime())
+
 
 
 if __name__ == '__main__':
