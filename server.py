@@ -35,6 +35,12 @@ def sirketler_sayfasi():
     now = datetime.datetime.now()
     return render_template('sirketler.html', current_time=now.ctime())
 
+@app.route('/isilanlari')
+def isilanlari_sayfasi():
+    now = datetime.datetime.now()
+    return render_template('isilanlari.html', current_time=now.ctime())
+
+
 
 
 if __name__ == '__main__':

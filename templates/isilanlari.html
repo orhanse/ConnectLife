@@ -1,0 +1,65 @@
+{% extends "home.html" %}
+
+{% block title %}Kişiler{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />{% endblock %}
+
+{% block content %}
+		<h1>İş İlanları</h1>
+	    <form action="{{ url_for('isilanlari_sayfasi') }}" method = "post">
+			<table id="İsilanlariTablosu">
+
+		<tr>
+			<th>Pozisyon Bilgisi</th>
+			<th>Şirket Adı</th>
+			<th>Şirketin Lokasyonu</th>
+    		<th>Başvuru Sayısı</th>
+    		<th>İlan Tarihi</th>
+  		</tr>
+
+  		<tr>
+  			<td>Elektrik Elektronik Mühendisi</td>
+  			<td><a href= "https://www.vestel.com.tr/">Vestel A.Ş.</a></td>
+  			<td>İzmir,Manisa</td>
+  			<td>10000+</td>
+  			<td>17.10.2016</td>
+  		</tr>
+
+  		<tr>
+  			<td>Yazılım Mühendisi</td>
+  			<td><a href= "http://www.arcelik.com.tr/">Arçelik A.Ş.</a></td>
+  			<td>İstanbul(Avr.)</td>
+  			<td>1000-1500</td>
+  			<td>16.10.2016</td>
+
+  		</tr>
+
+  		<tr>
+  			<td>PCB Tasarım Mühendisi</td>
+  			<td><a href= "http://www.aselsan.com.tr/">ASELSAN ELEKTRONİK SAN. VE TİC. A.Ş.</a></td>
+  			<td>Ankara</td>
+  			<td>5000+</td>
+  			<td>15.10.2016</td>
+
+  		</tr>
+
+		<tr>
+  			<td>Software Developer</td>
+  			<td><a href= "https://www.siemens.com/tr/tr/home.html">Siemens</a></td>
+  			<td>İstanbul(Asya)</td>
+  			<td>50-200</td>
+  			<td>14.10.2016</td>
+
+  		</tr>
+
+		<tr>
+  			<td>Electrical Maintenance Engineer</td>
+  			<td><a href= "http://www.mercedes-benz.com.tr/">Mercedes-Benz Türk A.Ş.</a></td>
+  			<td>Aksaray</td>
+  			<td>200-300</td>
+  			<td>13.10.2016</td>
+
+  		</tr>
+		</table>
+		</form>
+{% endblock %}
