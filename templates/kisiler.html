@@ -8,63 +8,37 @@
 	    <h1>Kişiler</h1>
 	    <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
 			<table id="KisilerTablosu">
-		<tr>
-			<th>Profil fotoğrafı</th>
-			<th>Kullanıcı numarası</th>
-			<th>İsim</th>
-    		<th>Yaşadığı yer</th>
-    		<th>Yaşı</th>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/profil1.jpg"></td>
-  			<td>00001</td>
-  			<td>Tugba Özkal</td>
-  			<td>Afyonkarahisar</td>
-  			<td>22</td>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/profil2.jpg"></td>
-  			<td>00002</td>
-  			<td>Furkan Evirgen</td>
-  			<td>İstanbul</td>
-  			<td>26</td>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/defaultprofil.png"></td>
-  			<td>00003</td>
-  			<td>Çağrı Gökçe</td>
-  			<td>İstanbul</td>
-  			<td>22</td>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/defaultprofil.png"></td>
-  			<td>00004</td>
-  			<td>Gülşah Damla</td>
-  			<td>İstanbul</td>
-  			<td>23</td>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/defaultprofil.png"></td>
-  			<td>00005</td>
-  			<td>Ahmet Eğinkaya</td>
-  			<td>İstanbul</td>
-  			<td>25</td>
-  		</tr>
-  		<tr>
-  			<td><img src="/static/images/defaultprofil.png"></td>
-  			<td>00006</td>
-  			<td>Selman Orhan</td>
-  			<td>İstanbul</td>
-  			<td>25</td>
-  		</tr>
-		{% for ID, UserName, UserCity, UserAge in kisiler %}
-		<tr>
-			<td class="PeopleTableItem">{{ID}}</td>
-			<td class="PeopleTableItem">{{UserName}}</td>
-			<td class="PeopleTableItem">{{UserCity}}</td>
-			<td class="PeopleTableItem">{{UserAge}}</td>
-		</tr>
-		{% endfor %}
-		</table>
+				<tr>
+					<th>Kullanici Kodu</th>
+					<th>İsim</th>
+		    		<th>Yaşadığı yer</th>
+		    		<th>Yaş</th>
+		    		<th>İş</th>
+		    		<th>Üniversite</th>
+		  		</tr>
+
+				{% for ID, KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity in kisiler %}
+				<tr>
+					<td class="KisilerTablosuItem">{{ID}}</td>
+					<td class="KisilerTablosuItem">{{KisiName}}</td>
+					<td class="KisilerTablosuItem">{{KisiCity}}</td>
+					<td class="KisilerTablosuItem">{{KisiAge}}</td>
+					<td class="KisilerTablosuItem">{{KisiWork}}</td>
+					<td class="KisilerTablosuItem">{{KisiUniversity}}</td>
+				</tr>
+				{% endfor %}
+				<tr>
+					<td class="KisilerTablosuNewItem"> </td>
+					<td class="KisilerTablosuNewItem"><input type="text" name="name" required="required"></td>
+					<td class="KisilerTablosuNewItem"><input type="text" name="city" required="required"></td>
+					<td class="KisilerTablosuNewItem"><input type="number" name="age" required="required"></td>
+					<td class="KisilerTablosuNewItem"><input type="text" name="work"></td>
+					<td class="KisilerTablosuNewItem"><input type="text" name="university"></td>
+					<td class="KisilerTablosuNewItem"> </td>
+				</tr>
+				<tr>
+					<td colspan="10"><input value="Yeni kisi ekle" name="add" type="submit"></td>
+				</tr>
+			</table>
 		</form>
 {% endblock %}
