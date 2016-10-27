@@ -1,6 +1,6 @@
 applications:
 - services:
-  - ElephantSQL-1f
+  - ElephantSQL-ak47
   disk_quota: 1024M
   host: itucsdb1606
   name: itucsdb1606
