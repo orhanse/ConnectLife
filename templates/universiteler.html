@@ -6,9 +6,9 @@
 <h1>Üniversiteler</h1>
 <form action="{{ url_for('universiteler_sayfasi')}}" method = "post">
 
-{% for name, foundation_date, location, small_info, photo in university%}
 <hr id = university>
-<div class = "row" id = university>
+<div class = "row">
+	{% for name, foundation_date, location, small_info, photo in university%}
 	<div class = "col-md-3" id = university>
 		<!-- Title -->
 		<h2 id = university>{{name}}</h2>
@@ -21,9 +21,8 @@
 		<!-- Join Button -->
 		<button type="button" class="btn btn-success">Daha Fazla</button>
 	</div>
+	{% endfor %}
 </div>
-{% endfor %}
-
 </form>
 
 {% endblock %}
