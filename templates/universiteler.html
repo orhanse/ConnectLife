@@ -1,32 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset = "utf-8" />
-	{% extends "home.html" %}
-	{% block title %} Universiteler {% endblock %}
-</head>
-	{% block content %}
-	<h1>Üniversiteler</h1>
-	<form action="{{ url_for('universiteler_sayfasi')}}" method = "post">
 
-	{% for name, foundation_date, location, small_info in universities%}
-	<hr id = university>
-	<div class = "row" id = university>
-		<div class = "col-md-3" id = university>
-			<!-- Title -->
-			<h2 id = university><input id="university" type="text" placeholder="Name" name="name" required="required"></h2>
-			<!-- Description -->
-			<p style= "font-size: 13pt;color: #00CED1;" id = university>Kuruluş Yılı: <input id="university" type="text" placeholder="Foundation_date" name="faundation_date" required="required"></p>
-			<p style= "font-size: 13pt;color: #00CED1;" id = university>Lokasyon: <input id="university" type="text" placeholder="Location" name="location" required="required"> </p>
-			<p id = university>Small Info<input id="university" type="text" placeholder="Small_info" name="small_info" required="required"></p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/universities/itu.jpg" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Daha Fazla</button>
-		</div>
+{% extends "home.html" %}
+{% block title %} Universiteler {% endblock %}
+{% block content %}
+
+<h1>Üniversiteler</h1>
+<form action="{{ url_for('universiteler_sayfasi')}}" method = "post">
+
+{% for name, foundation_date, location, small_info, photo in university%}
+<hr id = university>
+<div class = "row" id = university>
+	<div class = "col-md-3" id = university>
+		<!-- Title -->
+		<h2 id = university>{{name}}</h2>
+		<!-- Description -->
+		<p style= "font-size: 13pt;color: #00CED1;" id = university>Kuruluş Yılı: {{faundation_date}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;" id = university>Lokasyon: {{location}}</p>
+		<p id = university>{{small_info}}</p>
+		<!-- Group Image -->
+		<img style= "width:300px;heigth=300px"src = "static/images/universities/{{photo}}" class="img-responsive">
+		<!-- Join Button -->
+		<button type="button" class="btn btn-success">Daha Fazla</button>
 	</div>
+</div>
+{% endfor %}
 
-	</form>
-	{% endblock %}
+</form>
 
-</html>
+{% endblock %}
+
