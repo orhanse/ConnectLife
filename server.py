@@ -10,6 +10,8 @@ from flask import redirect
 from flask import request
 from flask.helpers import url_for
 
+from university import *
+
 
 app = Flask(__name__)
 
@@ -40,6 +42,8 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
+    init_universities_db(cursor)
+
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -57,15 +61,32 @@ def counter_page():
     count = cursor.fetchone()[0]
     return "This page was accesed %d times." % count
 
-@app.route('/kisiler')
+@app.route('/kisiler',)
 def kisiler_sayfasi():
     now = datetime.datetime.now()
     return render_template('kisiler.html', current_time=now.ctime())
 
-@app.route('/universiteler')
+@app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():
-    now = datetime.datetime.now()
-    return render_template('universiteler.html', current_time=now.ctime())
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if reguest.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM UNIVERSITY"
+        cursor.execute(query)
+
+        return render_template('universiteler.html', university = cursor, current_time=now.ctime())
+    else:
+        variables = (request.form['name'],
+                     request.form['faundation_date'],
+                     request.form['location'],
+                     request.form['small_info'],)
+
+        add_university(cursor, request, variables)
+
+        connection.commit()
+        return redirection(url_for('universiteler_sayfasi'))
 
 @app.route('/gruplar')
 def gruplar_sayfasi():
@@ -96,5 +117,5 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         app.config['dsn'] = """user='vagrant' password='vagrant'
-                               host='localhost' port=54321 dbname='itucsdb'"""
+                               host='localhost' port=5432 dbname='itucsdb'"""
     app.run(host='0.0.0.0', port=port, debug=debug)
