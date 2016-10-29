@@ -11,11 +11,12 @@ from flask import request
 from flask.helpers import url_for
 
 class University:
-    def __init__(self, name, faundation_date, location, small_info):
+    def __init__(self, name, faundation_date, location, small_info, photo):
         self.name = name
         self.faundation_date = faundation_date
         self.location = location
         self.small_info = small_info
+        self.photo = photo
 
 def init_universities_db(cursor):
     query = """DROP TABLE IF EXISTS UNIVERSITY"""
@@ -25,15 +26,55 @@ def init_universities_db(cursor):
         FAUNDATION_DATE integer NOT NULL,
         LOCATION varchar(80) NOT NULL,
         SMALL_INFO varchar(500),
+        PHOTO varchar(80),
         PRIMARY KEY (NAME, FAUNDATION_DATE, LOCATION)
+        )"""
+    cursor.execute(query)
+
+def insert_university(cursor):
+    query = """INSERT INTO UNIVERSITY
+        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        "Istanbul Technical University",
+        1773,
+        "Maslak/Istanbul",
+        "ağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.",
+        "itu.jpg"
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO UNIVERSITY
+        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        "Bogazici University",
+        1863,
+        "Bebek/Istanbul",
+        "Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.",
+        "bogazici.jpg"
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO UNIVERSITY
+        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        "Koc University",
+        1993,
+        "Sariyer/Istanbul",
+        "Koç Üniversitesi bir Mükemmeliyet Merkezi olma misyonuyla, üstün yetenekli gençler ile değerli öğretim görevlilerini biraraya getirerek; bilime evrensel düzeyde katkıda bulunmayı amaçlamaktadır.",
+        "koc.jpg"
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO UNIVERSITY
+        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        "Sabanci University",
+        1994,
+        "Tuzla/Istanbul",
+        "Türkiye'de bir "dünya üniversitesi" kurma vizyonuyla, Ağustos 1995'te, 22 ülkeden, farklı disiplinlerde çalışan 50'nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul'da düzenlenen arama konferansında bir araya geldi.",
+        "sabanci.jpg"
         )"""
     cursor.execute(query)
 
 def add_university(cursor, request, variables):
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO) VALUES (
+        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         %s,
         %d,
+        %s,
         %s,
         %s
         )"""
@@ -43,6 +84,8 @@ def get_university_page(app):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     init_universities_db(cursor)
+
+    insert_university(cursor)
 
     if request.method == 'GET':
         now = datetime.datetime.now()
