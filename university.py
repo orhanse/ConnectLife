@@ -86,7 +86,7 @@ def get_university_page(app):
     init_universities_db(cursor)
 
     insert_university(cursor)
-
+    connection.commit()
     if request.method == 'GET':
         now = datetime.datetime.now()
         query = "SELECT * FROM UNIVERSITY"

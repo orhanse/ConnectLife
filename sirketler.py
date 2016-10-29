@@ -70,6 +70,7 @@ def get_sirket_page(app):
 
     insert_sirket(cursor)
 
+    connection.commit()
     if request.method == 'GET':
         now = datetime.datetime.now()
         query = "SELECT * FROM SIRKET"
