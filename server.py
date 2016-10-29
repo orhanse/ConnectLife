@@ -68,25 +68,8 @@ def kisiler_sayfasi():
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
 
-    if reguest.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM UNIVERSITY"
-        cursor.execute(query)
-
-        return render_template('universiteler.html', university = cursor, current_time=now.ctime())
-    else:
-        variables = (request.form['name'],
-                     request.form['faundation_date'],
-                     request.form['location'],
-                     request.form['small_info'],)
-
-        add_university(cursor, request, variables)
-
-        connection.commit()
-        return redirection(url_for('universiteler_sayfasi'))
+    return get_university_page(app)
 
 @app.route('/gruplar')
 def gruplar_sayfasi():

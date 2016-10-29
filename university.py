@@ -1,3 +1,15 @@
+import json
+import datetime
+import re
+import os
+import psycopg2 as dbapi2
+
+from flask import Flask
+from flask import render_template
+from flask import redirect
+from flask import request
+from flask.helpers import url_for
+
 class University:
     def __init__(self, name, faundation_date, location, small_info):
         self.name = name
@@ -6,7 +18,7 @@ class University:
         self.small_info = small_info
 
 def init_universities_db(cursor):
-    query = """DROP TABLE IF EXIST UNIVERSITIES"""
+    query = """DROP TABLE IF EXISTS UNIVERSITIES"""
     cursor.execute(query)
     query = """CREATE TABLE UNIVERSITIES (
         NAME varchar(100) NOT NULL,
@@ -26,3 +38,25 @@ def add_university(cursor, request, variables):
         %s
         )"""
     cursor.execute(query, variables)
+    
+def get_university_page(app):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    if reguest.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT * FROM UNIVERSITY"
+        cursor.execute(query)
+
+        return render_template('universiteler.html', university = cursor, current_time=now.ctime())
+    elif "add" in request.form:
+        university = University(request.form['name'],
+                     request.form['faundation_date'],
+                     request.form['location'],
+                     request.form['small_info'])
+
+        add_university(cursor, request, university)
+        
+        connection.commit()
+        return redirect(url_for('universiteler_sayfasi'))
+        
