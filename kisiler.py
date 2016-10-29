@@ -30,7 +30,6 @@ def init_kisiler_db(cursor):
 
 
 def fill_kisiler_db():
-
     query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil1.jpg', 'Tugba Ozkal','Afyonkarahisar',22, 'Student', 'ITU')"""
     cursor.execute(query)
     query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'Engineer', 'ITU')"""

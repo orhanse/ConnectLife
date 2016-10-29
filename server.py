@@ -13,6 +13,7 @@ from flask.helpers import url_for
 from university import *
 from sirketler import *
 from gruplar import *
+from kisiler import *
 
 app = Flask(__name__)
 
@@ -27,7 +28,7 @@ def get_elephantsql_dsn(vcap_services):
     return dsn
 
 
-#KISILER SAYFASI
+#KISILER
 @app.route('/kisiler/initdb')
 def initialize_database_kisiler():
     connection = dbapi2.connect(app.config['dsn'])
