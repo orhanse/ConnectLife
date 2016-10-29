@@ -6,9 +6,9 @@ import psycopg2 as dbapi2
 
 
 class People:
-    def __init__(self, resim, isim, mekan, yas, universite, work):
-        self.resim = resim
+    def __init__(self, isim, resim, mekan, yas, universite, work):
         self.isim = isim
+        self.resim = resim
         self.mekan = mekan
         self.yas = yas
         self.universite = universite
@@ -18,7 +18,7 @@ class People:
 def init_kisiler_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS KISILER (
     ID SERIAL PRIMARY KEY,
-    RESIM VHARCHAR DEAFULT,
+    RESIM VHARCHAR,
     ISIM VARCHAR NOT NULL,
     MEKAN VARCHAR NOT NULL,
     YAS INTEGER,
@@ -30,10 +30,10 @@ def init_kisiler_db(cursor):
 
 
 def fill_kisiler_db():
-    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil1.jpg', 'Tugba Ozkal','Afyonkarahisar',22, 'Student', 'ITU')"""
+    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil1.jpg', 'Tugba Ozkal','Afyonkarahisar',22, 'Student', 'ITU')"""
     cursor.execute(query)
-    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'Engineer', 'ITU')"""
+    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'Engineer', 'ITU')"""
     cursor.execute(query)
-    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil2.jpg', 'Furkan Evirgen', 'Istanbul', 26, 'CEO', 'BAU')"""
+    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil2.jpg', 'Furkan Evirgen', 'Istanbul', 26, 'CEO', 'BAU')"""
     cursor.execute(query)
 

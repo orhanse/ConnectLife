@@ -8,13 +8,13 @@
 	<hr>
 	<div class = "row">
 
-		{%for id, resim, isim, mekan, yas, universite, is in kisiler%}
+		{%for id, isim, resim, mekan, yas, universite, is in kisiler%}
 
 			<div class = "col-md-3">
-			<!-- Image -->
-			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
 			<!-- Name -->
 			<h2>{{isim}}</h2>
+			<!-- Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
 			<!-- Location -->
 			<p>{{mekan}}</p>
 			<!-- Age -->
