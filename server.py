@@ -27,6 +27,30 @@ def get_elephantsql_dsn(vcap_services):
     return dsn
 
 
+#KISILER SAYFASI
+@app.route('/kisiler/initdb')
+def initialize_database_kisiler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS KISILER CASCADE;
+    ''')
+    init_kisiler_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+
+@app.route('/kisiler')
+def kisiler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = "SELECT ID, RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
+    cursor.execute(query)
+    gruplar = cursor.fetchall()
+    now = datetime.datetime.now()
+    return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
+
+
 #GRUPLAR SAYFASI
 @app.route('/gruplar/initdb')
 def initialize_database_gruplar():
@@ -87,10 +111,6 @@ def counter_page():
     count = cursor.fetchone()[0]
     return "This page was accesed %d times." % count
 
-@app.route('/kisiler',)
-def kisiler_sayfasi():
-    now = datetime.datetime.now()
-    return render_template('kisiler.html', current_time=now.ctime())
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():

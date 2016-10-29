@@ -1,44 +1,35 @@
 {% extends "home.html" %}
 
-{% block title %}Kişiler{% endblock %}
-
-{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='kisiler.css') }}" />{% endblock %}
+{% block title %} Kisiler {% endblock %}
 
 {% block content %}
-	    <h1>Kişiler</h1>
-	    <form action="{{ url_for('kisiler_sayfasi') }}" method = "post">
-			<table id="KisilerTablosu">
-				<tr>
-					<th>Kullanici Kodu</th>
-					<th>İsim</th>
-		    		<th>Yaşadığı yer</th>
-		    		<th>Yaş</th>
-		    		<th>İş</th>
-		    		<th>Üniversite</th>
-		  		</tr>
 
-				{% for ID, KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity in kisiler %}
-				<tr>
-					<td class="KisilerTablosuItem">{{ID}}</td>
-					<td class="KisilerTablosuItem">{{KisiName}}</td>
-					<td class="KisilerTablosuItem">{{KisiCity}}</td>
-					<td class="KisilerTablosuItem">{{KisiAge}}</td>
-					<td class="KisilerTablosuItem">{{KisiWork}}</td>
-					<td class="KisilerTablosuItem">{{KisiUniversity}}</td>
-				</tr>
-				{% endfor %}
-				<tr>
-					<td class="KisilerTablosuNewItem"> </td>
-					<td class="KisilerTablosuNewItem"><input type="text" name="name" required="required"></td>
-					<td class="KisilerTablosuNewItem"><input type="text" name="city" required="required"></td>
-					<td class="KisilerTablosuNewItem"><input type="number" name="age" required="required"></td>
-					<td class="KisilerTablosuNewItem"><input type="text" name="work"></td>
-					<td class="KisilerTablosuNewItem"><input type="text" name="university"></td>
-					<td class="KisilerTablosuNewItem"> </td>
-				</tr>
-				<tr>
-					<td colspan="10"><input value="Yeni kisi ekle" name="add" type="submit"></td>
-				</tr>
-			</table>
-		</form>
+	<h1>Kisiler</h1>
+	<hr>
+	<div class = "row">
+
+		{%for id, resim, isim, mekan, yas, universite, is in gruplar%}
+
+			<div class = "col-md-3">
+			<!-- Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<!-- Name -->
+			<h2>{{isim}}</h2>
+			<!-- Location -->
+			<p>{{mekan}}</p>
+			<!-- Age -->
+			<p>{{yas}}</p>
+			<!-- University -->
+			<p>{{universite}}</p>
+			<!-- Work -->
+			<p>{{work}}</p>
+			<!-- Join Button -->
+			<button type="button" class="btn btn-success">Ekle!</button>
+			</div>
+
+		{%endfor%}
+
+
+	</div>
+
 {% endblock %}

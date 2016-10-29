@@ -1,50 +1,40 @@
+import datetime
+import os
+import json
+import re
 import psycopg2 as dbapi2
 
-from flask import render_template
-from flask import redirect
-from flask import request
-from flask.helpers import url_for
-from config import app
 
-@app.route('/kisiler', methods=['GET', 'POST'])
-def kisiler_sayfasi():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    if request.method == 'GET':
-        query = "SELECT * FROM KISILER"
-        cursor.execute(query)
-        return render_template('kisiler.html', kisiler = cursor)
-    else:
-        name_in = request.form['name']
-        age_in = request.form['age']
-        city_in = request.form['city']
-        work_in = request.form['work']
-        university_in = request.form['university']
-        query = """INSERT INTO KISILER (KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity  )
-        VALUES ('"""+name_in+"', '"+city_in+"', '"+age_in+"', '"+work_in+"', '"+university_in+"')"
-        cursor.execute(query)
-        connection.commit()
-        return redirect(url_for('kisiler_sayfasi'))
+class People:
+    def __init__(self, resim, isim, mekan, yas, universite, work):
+        self.resim = resim
+        self.isim = isim
+        self.mekan = mekan
+        self.yas = yas
+        self.universite = universite
+        self.work = work
 
 
+def init_kisiler_db(cursor):
+    query = """CREATE TABLE IF NOT EXISTS KISILER (
+    ID SERIAL PRIMARY KEY,
+    RESIM VHARCHAR DEAFULT,
+    ISIM VARCHAR NOT NULL,
+    MEKAN VARCHAR NOT NULL,
+    YAS INTEGER,
+    UNIVERSITE VARCHAR,
+    WORK VARCHAR)"""
 
-@app.route('/kisiler/initdb')
-def initialize_database_kisiler():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    query = """DROP TABLE IF EXISTS KISILER CASCADE"""
     cursor.execute(query)
-    query = """CREATE TABLE KISILER (ID SERIAL PRIMARY KEY, KisiName VARCHAR NOT NULL, KisiCity VARCHAR NOT NULL, KisiAge INTEGER, KisiWork VARCHAR, KisiUniversity VARCHAR"""
+    fill_kisiler_db(cursor)
+
+
+def fill_kisiler_db():
+
+    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil1.jpg', 'Tugba Ozkal','Afyonkarahisar',22, 'Student', 'ITU')"""
     cursor.execute(query)
-    query = """INSERT INTO KISILER (KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity) VALUES ('Tugba Ozkal','Afyonkarahisar',22, 'Student', 'ITU')"""
+    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'Engineer', 'ITU')"""
     cursor.execute(query)
-    query = """INSERT INTO KISILER (KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity) VALUES ('Cagri Gokce', 'Ankara', 22, 'Engineer', 'ITU')"""
-    cursor.execute(query)
-    query = """INSERT INTO KISILER (KisiName, KisiCity, KisiAge, KisiWork, KisiUniversity) VALUES ('Furkan Evirgen', 'Istanbul', 26, 'CEO', 'BAU')"""
+    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil2.jpg', 'Furkan Evirgen', 'Istanbul', 26, 'CEO', 'BAU')"""
     cursor.execute(query)
 
-
-    connection.commit()
-    return redirect(url_for('kisiler_sayfasi'))
