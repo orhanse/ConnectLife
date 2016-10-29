@@ -11,6 +11,7 @@ from flask import request
 from flask.helpers import url_for
 
 from university import *
+from sirketler import *
 
 
 app = Flask(__name__)
@@ -77,7 +78,7 @@ def gruplar_sayfasi():
 @app.route('/sirketler')
 def sirketler_sayfasi():
     now = datetime.datetime.now()
-    return render_template('sirketler.html', current_time=now.ctime())
+    return get_sirket_page(app)
 
 @app.route('/isilanlari')
 def isilanlari_sayfasi():

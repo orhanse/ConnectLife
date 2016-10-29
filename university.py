@@ -47,7 +47,7 @@ def insert_university(cursor):
         1863,
         'Bebek/Istanbul',
         'Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.',
-        'bogazici.jpg'
+        'bogazici.png'
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
@@ -64,7 +64,7 @@ def insert_university(cursor):
         'Sabanci University',
         1994,
         'Tuzla/Istanbul',
-        'Türkiye'de bir "dünya üniversitesi" kurma vizyonuyla, Ağustos 1995'te, 22 ülkeden, farklı disiplinlerde çalışan 50'nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul'da düzenlenen arama konferansında bir araya geldi.',
+        'Türkiye de bir dünya üniversitesi kurma vizyonuyla, Ağustos 1995 te, 22 ülkeden, farklı disiplinlerde çalışan 50 nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul da düzenlenen arama konferansında bir araya geldi.',
         'sabanci.jpg'
         )"""
     cursor.execute(query)

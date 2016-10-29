@@ -5,44 +5,23 @@
 {% block content %}
 
 	<h1>Sirketler</h1>
-	<hr>
-	<div class = "row">
-		<div class = "col-md-3">
-			<!-- Title -->
-			<h2>SiMiT Lab </h2>
-			<!-- Description -->
-			<p>SiMiT Lab’s objective is to conduct research on computer vision and pattern recognition, specifically face analysis/human perception, with the applications on human computer interaction, mobile intelligence, gaming, multimedia analysis, assistive technologies for people with disabilities, and convenient healthcare applications within the scope of the international and industrial research projects at the lab.</p>
-			<p>Akıllı Etkileşim, Mobil İstihbarat, Multimedya Teknolojileri</p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/itulogo.png" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Katıl!</button>
-		</div>
+	<form action="{{ url_for('sirketler_sayfasi')}}" method = "post">
 
-		<div class = "col-md-3">
-			<!-- Title -->
-			<h2>Vestel </h2>
-			<!-- Description -->
-			<p>Vestel, 1984 yılında Türkiye'de kurulmuştur. Vestel‘in üretim tesisleri Manisa’da yer almaktadır. Manisa’da 1,1 milyon metrekare alan üzerine kurulu Vestel City, Avrupa’nın tek lokasyonda üretim yapan en büyük endüstri komplekslerinden biridir.</p>
-			<p>Elektronik, Beyaz Eşya, Savunma Sistemleri</p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/vestel1.png" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Katıl!</button>
-		</div>
-
-		<div class = "col-md-3">
-				<!-- Title -->
-				<h2>Siemens AG </h2>
-				<!-- Description -->
-				<p>Siemens AG, Avrupa'nın en büyük teknoloji holdingidir. Şirketin yönetimi Almanya'nın Berlin ve Münih kentlerindedir. Holding uluslararası alanda üç ana sektörde faaliyet göstermektedir: endüstri, enerji, ve sağlık.</p>
-				<p>Endüstri, Enerji, Sağlık</p>
-				<!-- Group Image -->
-				<img style= "width:300px;heigth=300px"src = "static/images/siemens1.png" class="img-responsive">
-				<!-- Join Button -->
-				<button type="button" class="btn btn-success">Katıl!</button>
-		</div>
-
+<hr id = sirket>
+<div class = "row">
+	{% for name, date, location, work_area, photo in sirket%}
+	<div class = "col-md-3" id = sirket>
+		<!-- Title -->
+		<h2 id = sirket>{{name}}</h2>
+		<!-- Description -->
+		<p style= "font-size: 13pt;color: #00CED1;" id = sirket>Kuruluş Yılı: {{date}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;" id = sirket>Lokasyon: {{location}}</p>
+		<p id = sirket>{{work_area}}</p>
+		<!-- Group Image -->
+		<img style= "width:300px;heigth=300px"src = "static/images/{{photo}}" class="img-responsive">
 	</div>
+	{% endfor %}
+</div>
+</form>
 
 {% endblock %}
