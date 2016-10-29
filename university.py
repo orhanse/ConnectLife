@@ -34,38 +34,38 @@ def init_universities_db(cursor):
 def insert_university(cursor):
     query = """INSERT INTO UNIVERSITY
         (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
-        "Istanbul Technical University",
+        'Istanbul Technical University',
         1773,
-        "Maslak/Istanbul",
-        "ağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.",
-        "itu.jpg"
+        'Maslak/Istanbul',
+        'ağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.',
+        'itu.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
         (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
-        "Bogazici University",
+        'Bogazici University',
         1863,
-        "Bebek/Istanbul",
-        "Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.",
-        "bogazici.jpg"
+        'Bebek/Istanbul',
+        'Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.',
+        'bogazici.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
         (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
-        "Koc University",
+        'Koc University',
         1993,
-        "Sariyer/Istanbul",
-        "Koç Üniversitesi bir Mükemmeliyet Merkezi olma misyonuyla, üstün yetenekli gençler ile değerli öğretim görevlilerini biraraya getirerek; bilime evrensel düzeyde katkıda bulunmayı amaçlamaktadır.",
-        "koc.jpg"
+        'Sariyer/Istanbul',
+        'Koç Üniversitesi bir Mükemmeliyet Merkezi olma misyonuyla, üstün yetenekli gençler ile değerli öğretim görevlilerini biraraya getirerek; bilime evrensel düzeyde katkıda bulunmayı amaçlamaktadır.',
+        'koc.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
         (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
-        "Sabanci University",
+        'Sabanci University',
         1994,
-        "Tuzla/Istanbul",
-        "Türkiye'de bir "dünya üniversitesi" kurma vizyonuyla, Ağustos 1995'te, 22 ülkeden, farklı disiplinlerde çalışan 50'nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul'da düzenlenen arama konferansında bir araya geldi.",
-        "sabanci.jpg"
+        'Tuzla/Istanbul',
+        'Türkiye'de bir "dünya üniversitesi" kurma vizyonuyla, Ağustos 1995'te, 22 ülkeden, farklı disiplinlerde çalışan 50'nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul'da düzenlenen arama konferansında bir araya geldi.',
+        'sabanci.jpg'
         )"""
     cursor.execute(query)
 
