@@ -11,9 +11,9 @@ from flask import request
 from flask.helpers import url_for
 
 class University:
-    def __init__(self, name, faundation_date, location, small_info, photo):
+    def __init__(self, name, foundation_date, location, small_info, photo):
         self.name = name
-        self.faundation_date = faundation_date
+        self.foundation_date = foundation_date
         self.location = location
         self.small_info = small_info
         self.photo = photo
@@ -23,7 +23,7 @@ def init_universities_db(cursor):
     cursor.execute(query)
     query = """CREATE TABLE UNIVERSITY (
         NAME VARCHAR(100) NOT NULL,
-        FAUNDATION_DATE INTEGER NOT NULL,
+        FOUNDATION_DATE INTEGER NOT NULL,
         LOCATION VARCHAR(80) NOT NULL,
         SMALL_INFO VARCHAR(500),
         PHOTO VARCHAR(80),
@@ -33,7 +33,7 @@ def init_universities_db(cursor):
 
 def insert_university(cursor):
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Istanbul Technical University',
         1773,
         'Maslak/Istanbul',
@@ -42,7 +42,7 @@ def insert_university(cursor):
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Bogazici University',
         1863,
         'Bebek/Istanbul',
@@ -51,7 +51,7 @@ def insert_university(cursor):
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Koc University',
         1993,
         'Sariyer/Istanbul',
@@ -60,7 +60,7 @@ def insert_university(cursor):
         )"""
     cursor.execute(query)
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Sabanci University',
         1994,
         'Tuzla/Istanbul',
@@ -71,7 +71,7 @@ def insert_university(cursor):
 
 def add_university(cursor, request, variables):
     query = """INSERT INTO UNIVERSITY
-        (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         %s,
         %d,
         %s,
@@ -95,7 +95,7 @@ def get_university_page(app):
         return render_template('universiteler.html', university = cursor, current_time=now.ctime())
     elif "add" in request.form:
         university = University(request.form['name'],
-                     request.form['faundation_date'],
+                     request.form['foundation_date'],
                      request.form['location'],
                      request.form['small_info'],
                      request.form['photo'])
