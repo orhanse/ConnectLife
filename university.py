@@ -22,11 +22,11 @@ def init_universities_db(cursor):
     query = """DROP TABLE IF EXISTS UNIVERSITY"""
     cursor.execute(query)
     query = """CREATE TABLE UNIVERSITY (
-        NAME varchar(100) NOT NULL,
-        FAUNDATION_DATE integer NOT NULL,
-        LOCATION varchar(80) NOT NULL,
-        SMALL_INFO varchar(500),
-        PHOTO varchar(80),
+        NAME VARCHAR(100) NOT NULL,
+        FAUNDATION_DATE INTEGER NOT NULL,
+        LOCATION VARCHAR(80) NOT NULL,
+        SMALL_INFO VARCHAR(500),
+        PHOTO VARCHAR(80),
         PRIMARY KEY (NAME, FAUNDATION_DATE, LOCATION)
         )"""
     cursor.execute(query)
@@ -37,7 +37,7 @@ def insert_university(cursor):
         'Istanbul Technical University',
         1773,
         'Maslak/Istanbul',
-        'ağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.',
+        'Çağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.',
         'itu.jpg'
         )"""
     cursor.execute(query)
@@ -97,7 +97,8 @@ def get_university_page(app):
         university = University(request.form['name'],
                      request.form['faundation_date'],
                      request.form['location'],
-                     request.form['small_info'])
+                     request.form['small_info'],
+                     request.form['photo'])
 
         add_university(cursor, request, university)
 
