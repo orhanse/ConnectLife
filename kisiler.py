@@ -5,8 +5,6 @@ import re
 import psycopg2 as dbapi2
 
 
-
-#kisiler sinifi
 class People:
     def __init__(self, resim, isim, mekan, yas, universite, work):
         self.resim = resim
