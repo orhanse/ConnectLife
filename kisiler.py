@@ -18,7 +18,7 @@ class People:
 def init_kisiler_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS KISILER (
     ID SERIAL PRIMARY KEY,
-    RESIM VHARCHAR(80),
+    RESIM VARCHAR(80),
     ISIM VARCHAR(30) NOT NULL,
     MEKAN VARCHAR(15) NOT NULL,
     YAS INTEGER,
@@ -30,14 +30,9 @@ def init_kisiler_db(cursor):
 
 
 def fill_kisiler_db(cursor):
-    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
-    VALUES ('profil1.jpg', 'Tugba Ozkal','Afyonkarahisar',22, 'ITU' 'Student');
-
-    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
-    VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'ITU', 'Engineer');
-
-    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
-    VALUES ('profil2.jpg', 'Furkan Evirgen', 'Istanbul', 26, 'BAU', 'CEO');"""
+    query = """INSERT INTO KISILER (RESIM, ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil1.jpg' ,'Tugba Ozkal', 'Afyonkarahisar', 22, 'ITU', 'Student');
+    INSERT INTO KISILER (RESIM,ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('defaultprofil.png', 'Cagri Gokce', 'Ankara', 22, 'ITU', 'Engineer');
+    INSERT INTO KISILER (RESIM,ISIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('profil2.jpg', 'Furkan Evirgen', 'Istanbul', 26, 'BAU', 'CEO');"""
 
     cursor.execute(query)
 

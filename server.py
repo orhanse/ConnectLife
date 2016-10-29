@@ -45,9 +45,9 @@ def initialize_database_kisiler():
 def kisiler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = "SELECT ID, ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
+    query = "SELECT ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
     cursor.execute(query)
-    gruplar = cursor.fetchall()
+    kisiler = cursor.fetchall()
     now = datetime.datetime.now()
     return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
 

@@ -5,7 +5,7 @@ import re
 import psycopg2 as dbapi2
 
 #Gruplar classi olusturuluyor ve yapi tanimlaniyor.
-class Championships:
+class Gruplar:
     def __init__(self, baslik, aciklama, icerik, resim, zaman):
         self.baslik = baslik
         self.aciklama = aciklama
