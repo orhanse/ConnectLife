@@ -1,63 +1,32 @@
-{% extends "home.html" %}
-
-{% block title %} Universiteler {% endblock %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = "utf-8" />
+	{% extends "home.html" %}
+	{% block title %} Universiteler {% endblock %}
+</head>
+	{% block content %}
 	<h1>Üniversiteler</h1>
-	<hr>
-	<div class = "row">
-		<div class = "col-md-3">
+	<form action="{{ url_for('universiteler_sayfasi')}}" method = "post">
+
+	{% for name, foundation_date, location, small_info in universities%}
+	<hr id = university>
+	<div class = "row" id = university>
+		<div class = "col-md-3" id = university>
 			<!-- Title -->
-			<h2>İstanbul Teknik Üniversitesi </h2>
+			<h2 id = university><input id="university" type="text" placeholder="Name" name="name" required="required"></h2>
 			<!-- Description -->
-			<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: 1773</p>
-			<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: Maslak/İstanbul</a></p>
-			<p>Çağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.</p>
+			<p style= "font-size: 13pt;color: #00CED1;" id = university>Kuruluş Yılı: <input id="university" type="text" placeholder="Foundation_date" name="faundation_date" required="required"></p>
+			<p style= "font-size: 13pt;color: #00CED1;" id = university>Lokasyon: <input id="university" type="text" placeholder="Location" name="location" required="required"> </p>
+			<p id = university>Small Info<input id="university" type="text" placeholder="Small_info" name="small_info" required="required"></p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px"src = "static/images/universities/itu.jpg" class="img-responsive">
 			<!-- Join Button -->
 			<button type="button" class="btn btn-success">Daha Fazla</button>
 		</div>
-
-		<div class = "col-md-3">
-			<!-- Title -->
-			<h2>Boğaziçi Üniversitesi </h2>
-			<!-- Description -->
-			<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: 1863</p>
-			<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: Bebek/İstanbul</a></p>
-			<p>Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.</p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/universities/bogazici.png" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Daha Fazla</button>
-		</div>
-
-		<div class = "col-md-3">
-			<!-- Title -->
-			<h2>Koç Üniversitesi </h2>
-			<!-- Description -->
-			<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: 1993</p>
-			<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: Sarıyer/İstanbul</a></p>
-			<p>1993 yılında İstanbul’da kurulan Koç Üniversitesi, kar amacı gütmeyen bir vakıf üniversitesidir. Koç Üniversitesi bir Mükemmeliyet Merkezi olma misyonuyla, üstün yetenekli gençler ile değerli öğretim görevlilerini biraraya getirerek; bilime evrensel düzeyde katkıda bulunmayı amaçlamaktadır.</p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/universities/koc.jpg" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Daha Fazla</button>
-		</div>
-
-		<div class = "col-md-3">
-			<!-- Title -->
-			<h2>Sabancı Üniversitesi </h2>
-			<!-- Description -->
-			<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: 1994</p>
-			<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: Tuzlu/İstanbul</a></p>
-			<p>Türkiye'de bir "dünya üniversitesi" kurma vizyonuyla, Ağustos 1995'te, 22 ülkeden, farklı disiplinlerde çalışan 50'nin üzerinde bilim adamı, araştırmacı, öğrenci ve iş adamı İstanbul'da düzenlenen arama konferansında bir araya geldi. Konferansta, İstanbul'da kurulacak bir dünya üniversitesinin felsefesi oluşturuldu: "Birlikte yaratmak ve geliştirmek".</p>
-			<!-- Group Image -->
-			<img style= "width:300px;heigth=300px"src = "static/images/universities/sabanci.jpg" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Daha Fazla</button>
-		</div>
 	</div>
 
-{% endblock %}
+	</form>
+	{% endblock %}
+
+</html>

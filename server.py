@@ -42,8 +42,6 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
-    init_universities_db(cursor)
-
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -68,7 +66,7 @@ def kisiler_sayfasi():
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():
-
+    now = datetime.datetime.now()
     return get_university_page(app)
 
 @app.route('/gruplar')

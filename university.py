@@ -18,19 +18,19 @@ class University:
         self.small_info = small_info
 
 def init_universities_db(cursor):
-    query = """DROP TABLE IF EXISTS UNIVERSITIES"""
+    query = """DROP TABLE IF EXISTS UNIVERSITY"""
     cursor.execute(query)
-    query = """CREATE TABLE UNIVERSITIES (
+    query = """CREATE TABLE UNIVERSITY (
         NAME varchar(100) NOT NULL,
         FAUNDATION_DATE integer NOT NULL,
         LOCATION varchar(80) NOT NULL,
         SMALL_INFO varchar(500),
-        PRIMARY KEY (NAME, FAUNDATION_DATE, LOCATION
+        PRIMARY KEY (NAME, FAUNDATION_DATE, LOCATION)
         )"""
     cursor.execute(query)
 
 def add_university(cursor, request, variables):
-    query = """INSERT INTO FIXTURE
+    query = """INSERT INTO UNIVERSITY
         (NAME, FAUNDATION_DATE, LOCATION, SMALL_INFO) VALUES (
         %s,
         %d,
@@ -38,12 +38,13 @@ def add_university(cursor, request, variables):
         %s
         )"""
     cursor.execute(query, variables)
-    
+
 def get_university_page(app):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
+    init_universities_db(cursor)
 
-    if reguest.method == 'GET':
+    if request.method == 'GET':
         now = datetime.datetime.now()
         query = "SELECT * FROM UNIVERSITY"
         cursor.execute(query)
@@ -56,7 +57,6 @@ def get_university_page(app):
                      request.form['small_info'])
 
         add_university(cursor, request, university)
-        
+
         connection.commit()
         return redirect(url_for('universiteler_sayfasi'))
-        
