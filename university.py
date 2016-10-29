@@ -27,7 +27,7 @@ def init_universities_db(cursor):
         LOCATION VARCHAR(80) NOT NULL,
         SMALL_INFO VARCHAR(500),
         PHOTO VARCHAR(80),
-        PRIMARY KEY (NAME, FAUNDATION_DATE, LOCATION)
+        PRIMARY KEY (NAME, FOUNDATION_DATE, LOCATION)
         )"""
     cursor.execute(query)
 
