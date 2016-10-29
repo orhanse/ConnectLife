@@ -12,7 +12,7 @@ from flask.helpers import url_for
 
 from university import *
 from sirketler import *
-
+from gruplar import *
 
 app = Flask(__name__)
 
@@ -25,6 +25,33 @@ def get_elephantsql_dsn(vcap_services):
     dsn = """user='{}' password='{}' host='{}' port={}
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
+
+
+#GRUPLAR SAYFASI
+@app.route('/gruplar/initdb')
+def initialize_database_gruplar():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS GRUPLAR CASCADE;
+    ''')
+    init_gruplar_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+
+@app.route('/gruplar')
+def gruplar_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = "SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR"
+    cursor.execute(query)
+    gruplar=cursor.fetchall()
+    now = datetime.datetime.now()
+    return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
+
+
+
 
 @app.route('/')
 def home_page():
@@ -69,11 +96,6 @@ def kisiler_sayfasi():
 def universiteler_sayfasi():
     now = datetime.datetime.now()
     return get_university_page(app)
-
-@app.route('/gruplar')
-def gruplar_sayfasi():
-    now = datetime.datetime.now()
-    return render_template('gruplar.html', current_time=now.ctime())
 
 @app.route('/sirketler')
 def sirketler_sayfasi():
