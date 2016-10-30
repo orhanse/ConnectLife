@@ -14,6 +14,7 @@ from university import *
 from sirketler import *
 from gruplar import *
 from kisiler import *
+from isilanlari import *
 
 app = Flask(__name__)
 
@@ -79,12 +80,36 @@ def gruplar_sayfasi():
     return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
 
 
+#ISILANLARI
+@app.route('/isilanlari/initdb')
+def initialize_database_isilanlari():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS ISILANLARI CASCADE;
+    ''')
+    init_isilanlari_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+
+@app.route('/isilanlari')
+def isilanlari_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    query = "SELECT SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI"
+    cursor.execute(query)
+    isilanlari=cursor.fetchall()
+    now = datetime.datetime.now()
+    return render_template('isilanlari.html', isilanlari = isilanlari, current_time=now.ctime())
+
 
 
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
+
 
 @app.route('/initdb')
 def initialize_database():
@@ -126,12 +151,6 @@ def sirketler_sayfasi():
     now = datetime.datetime.now()
     return get_sirket_page(app)
 
-@app.route('/isilanlari')
-def isilanlari_sayfasi():
-    now = datetime.datetime.now()
-    return render_template('isilanlari.html', current_time=now.ctime())
-
-
 
 
 if __name__ == '__main__':
@@ -144,6 +163,6 @@ if __name__ == '__main__':
     if VCAP_SERVICES is not None:
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
-        app.config['dsn'] = """user='vagrant' password='vagrant'
+        app.config['dsn'] = """user='postgres' password='vagrant'
                                host='localhost' port=5432 dbname='itucsdb'"""
     app.run(host='0.0.0.0', port=port, debug=debug)
