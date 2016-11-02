@@ -60,7 +60,7 @@ def fill_gruplar_db(cursor):
 
 
 def add_gruplar(cursor, request, grup1):
-        query = """INSERT INTO CHAMPIONSHIP
+        query = """INSERT INTO GRUPLAR
         (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
         INITCAP(%s),
         to_date(%s, 'DD-MM-YYYY'),

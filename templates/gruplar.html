@@ -8,6 +8,8 @@
 	<hr>
 	<div class = "row">
 
+
+		<!-- Gruplari ekranda gosteren kisim -->
 		{%for id, baslik, zaman, aciklama, icerik, resim in gruplar%}
 
 			<div class = "col-md-3">
@@ -21,15 +23,54 @@
 			<p>{{icerik}}</p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
-			<!-- Update Page -->
-
+			<!-- Update Page URL -->
 			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
 			<button type="button" action=" class="btn btn-success">Katıl!</button>
 			</div>
 
 		{%endfor%}
 
-
 	</div>
+	<hr>
+	<div class = "row">
+
+		<!-- Yeni grup ekleme sayfası  -->
+		    <h2>Yeni Grup Ekle!</h2>
+            <form id="add" action="{{ url_for('gruplar_sayfasi')}}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Başlık:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Baslik (Zorunlu)" name="baslik" required="required">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Kuruluş Tarihi (GG-AA-YYYY) - Bu formatta girmezseniz sitede hata olusacaktir!!!</label>
+						<input class="form-control" size="7" form ="add" type="date" placeholder="Tarih (Zorunlu) (dd/MM/yyyy)" name="zaman">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Açıklama</label>
+		                <input class="form-control" rows ="5" size="7" form ="add" type="text" placeholder = "Aciklama (Zorunlu)" name="aciklama" required="required">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">İçerik (Grup içerisinde ortak yapılan çalışmalar ve elde edilen başarılar vs):</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Icerik (Zorunlu)" name="icerik" required="required">
+                  </div>
+				  <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: software.jpg" name="resim">
+				  </div>
+                  <input class="add" form="add" id="gruplar_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Grup Ara!</h2>
+			<form id="search" action="{{ url_for('gruplar_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Grup Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="gruplar_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
 
 {% endblock %}

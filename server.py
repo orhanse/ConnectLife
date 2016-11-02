@@ -80,8 +80,25 @@ def gruplar_sayfasi():
         cursor.execute(query)
         gruplar=cursor.fetchall()
         return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
+    elif "add" in request.form:
+        grup1 = Gruplar(request.form['baslik'],
+                            request.form['zaman'],
+                            request.form['aciklama'],
+                            request.form['icerik'],
+                            request.form['resim'])
+        add_gruplar(cursor, request, grup1)
+        connection.commit()
+        return redirect(url_for('gruplar_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR WHERE BASLIK LIKE %s"""
+        cursor.execute(query,[aranan])
+        gruplar=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('grup_ara.html', gruplar = gruplar, current_time=now.ctime(), sorgu = aranan)
 
-#Gruplari Guncelle (UPDATE) ve sil DELETE)
+
+#Gruplari Guncelle (UPDATE) ve sil (DELETE)
 @app.route('/gruplar/<grup_id>', methods=['GET', 'POST'])
 def gruplar_update_page(grup_id):
     connection = dbapi2.connect(app.config['dsn'])
