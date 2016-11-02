@@ -21,8 +21,10 @@
 			<p>{{icerik}}</p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
-			<!-- Join Button -->
-			<button type="button" class="btn btn-success">Katıl!</button>
+			<!-- Update Page -->
+
+			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Katıl!</button>
 			</div>
 
 		{%endfor%}

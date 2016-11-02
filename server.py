@@ -56,6 +56,7 @@ def kisiler_sayfasi():
     return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
 
 
+
 #GRUPLAR SAYFASI
 @app.route('/gruplar/initdb')
 def initialize_database_gruplar():
@@ -69,15 +70,43 @@ def initialize_database_gruplar():
     return redirect(url_for('home_page'))
 
 
-@app.route('/gruplar')
+@app.route('/gruplar',methods=['GET', 'POST'])
 def gruplar_sayfasi():
     connection = dbapi2.connect( app.config['dsn'])
     cursor = connection.cursor()
-    query = "SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR"
-    cursor.execute(query)
-    gruplar=cursor.fetchall()
     now = datetime.datetime.now()
-    return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
+    if request.method == 'GET':
+        query = "SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR"
+        cursor.execute(query)
+        gruplar=cursor.fetchall()
+        return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
+
+#Gruplari Guncelle (UPDATE) ve sil DELETE)
+@app.route('/gruplar/<grup_id>', methods=['GET', 'POST'])
+def gruplar_update_page(grup_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM GRUPLAR WHERE (ID = %s)"""
+        cursor.execute(query,grup_id)
+        now = datetime.datetime.now()
+        return render_template('grup_guncelle.html', grup = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            grup1 = Gruplar(request.form['baslik'],
+                            request.form['zaman'],
+                            request.form['aciklama'],
+                            request.form['icerik'],
+                            request.form['resim'])
+            update_gruplar(cursor, request.form['grup_id'], grup1)
+            connection.commit()
+            return redirect(url_for('gruplar_sayfasi'))
+        elif "delete" in request.form:
+            delete_gruplar(cursor, grup_id)
+            connection.commit()
+            return redirect(url_for('gruplar_sayfasi'))
 
 
 #ISILANLARI
