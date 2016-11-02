@@ -60,3 +60,34 @@ def insert_isilanlari(cursor):
          to_date('14.10.2016', 'DD-MM-YYYY')
         );"""
     cursor.execute(query)
+
+
+def add_isilanlari(cursor, request, ilan1):
+        query = """INSERT INTO ISILANLARI
+        (SIRKET, POZISYON, LOKASYON, BASVURU, TARIH) VALUES (
+        INITCAP(%s),
+        INITCAP(%s),
+        INITCAP(%s),
+        %s,
+        to_date(%s, 'DD-MM-YYYY')
+        )"""
+        cursor.execute(query, (ilan1.sirket, ilan1.pozisyon, ilan1.lokasyon,
+                               ilan1.basvuru, ilan1.tarih))
+
+def delete_isilanlari(cursor, id):
+        query="""DELETE FROM ISILANLARI WHERE ID = %s"""
+        cursor.execute(query, id)
+
+
+def update_isilanlari(cursor, id, ilan1):
+            query="""
+            UPDATE ISILANLARI
+            SET SIRKET=INITCAP(%s),
+            POZISYON=INITCAP(%s),
+            LOKASYON=%s,
+            BASVURU=%s,
+            TARIH=to_date(%s, 'DD-MM-YYYY')
+            WHERE ID=%s
+            """
+            cursor.execute(query, (ilan1.sirket, ilan1.pozisyon, ilan1.lokasyon,
+                                   ilan1.basvuru, ilan1.tarih, id))

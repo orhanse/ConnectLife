@@ -139,16 +139,58 @@ def initialize_database_isilanlari():
     return redirect(url_for('home_page'))
 
 
-@app.route('/isilanlari')
+@app.route('/isilanlari', methods=['GET', 'POST'])
 def isilanlari_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = "SELECT SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI"
-    cursor.execute(query)
-    isilanlari=cursor.fetchall()
     now = datetime.datetime.now()
-    return render_template('isilanlari.html', isilanlari = isilanlari, current_time=now.ctime())
+    if request.method == 'GET':
+        query = "SELECT ID, SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI"
+        cursor.execute(query)
+        isilanlari=cursor.fetchall()
+        return render_template('isilanlari.html', isilanlari = isilanlari, current_time=now.ctime())
+    elif "add" in request.form:
+        ilan1 = Isilanlari(request.form['sirket'],
+                            request.form['pozisyon'],
+                            request.form['lokasyon'],
+                            request.form['basvuru'],
+                            request.form['tarih'])
+        add_isilanlari(cursor, request, ilan1)
+        connection.commit()
+        return redirect(url_for('isilanlari_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT ID, SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI WHERE SIRKET LIKE %s"""
+        cursor.execute(query,[aranan])
+        isilanlari=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('ilan_ara.html', isilanlari = isilanlari, current_time=now.ctime(), sorgu = aranan)
 
+@app.route('/isilanlari/<ilan_id>', methods=['GET', 'POST'])
+def isilanlari_update_page(ilan_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM ISILANLARI WHERE (ID = %s)"""
+        cursor.execute(query,ilan_id)
+        now = datetime.datetime.now()
+        return render_template('ilan_guncelle.html', ilan = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            ilan1 = Isilanlari(request.form['sirket'],
+                            request.form['pozisyon'],
+                            request.form['lokasyon'],
+                            request.form['basvuru'],
+                            request.form['tarih'])
+            update_isilanlari(cursor, request.form['ilan_id'], ilan1)
+            connection.commit()
+            return redirect(url_for('isilanlari_sayfasi'))
+        elif "delete" in request.form:
+            delete_isilanlari(cursor, ilan_id)
+            connection.commit()
+            return redirect(url_for('isilanlari_sayfasi'))
 
 
 @app.route('/')
@@ -209,6 +251,6 @@ if __name__ == '__main__':
     if VCAP_SERVICES is not None:
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
-        app.config['dsn'] = """user='vagrant' password='vagrant'
+        app.config['dsn'] = """user='vagrant' password='deneme'
                                host='localhost' port=5432 dbname='itucsdb'"""
     app.run(host='0.0.0.0', port=port, debug=debug)

@@ -1,0 +1,38 @@
+{% extends "home.html"%}
+{% block title %}Grup Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Is Ilanlari Guncelleme Sayfasi</h2>
+
+		{%for id,sirket, pozisyon, lokasyon, basvuru, tarih in ilan%}
+            <p> ILAN ID: {{id}} </p>
+            <form id="update" action="{{ url_for('isilanlari_update_page',ilan_id=id) }}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Sirket Ismi:</label>
+				  		<input class="form-control" size="7" value="{{sirket}}" form ="update" type="text" placeholder="Sirket Ismi" name="sirket">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Aranan pozisyon:</label>
+						<input class="form-control" size="7" value="{{pozisyon}}" form ="update" type="text" placeholder="Aranan pozisyon" name="pozisyon">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Sirket Lokasyonu:</label>
+		                <input class="form-control" rows ="5" size="7" value="{{lokasyon}}" form ="update" type="text" placeholder = "Lokasyon" name="lokasyon">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Basvuru Sayisi:</label>
+		          		<input class="form-control" size="7" value="{{basvuru}}" form ="update" type="text" placeholder="Basvuru Sayisi" name="basvuru">
+                  </div>
+				  <div class="form-group">
+				  		<label for="usr">Tarih:</label>
+		          		<input class="form-control" size="7" value="{{tarih}}" form ="update" type="date" placeholder="Tarih (dd/MM/yyyy)" name="tarih">
+				  </div>
+                  <input type="hidden" name="ilan_id" value="{{id}}">
+                  <input class="add" form="update" id="isilanlari_form_update" value="Ilani Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('isilanlari_update_page',ilan_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Ilani Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

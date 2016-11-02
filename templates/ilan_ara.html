@@ -1,0 +1,34 @@
+{% extends "home.html" %}
+
+{% block title %} Ilan Arama {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		{%for id, sirket, pozisyon, lokasyon, basvuru, tarih in isilanlari%}
+
+			<div class = "col-md-3">
+			<!-- Company -->
+			<h2>{{sirket}}</h2>
+			<!-- Position -->
+			<p>{{pozisyon}}</p>
+			<!-- Location -->
+			<p>{{lokasyon}}</p>
+			<!-- Application -->
+			<p style= "font-size: 13pt;color: #00CED1;">Başvuru sayısı: </p>
+			<p>{{basvuru}}</p>
+			<!-- Date -->
+			<p style= "font-size: 13pt;color: #00CED1;">İlan tarihi: </p>
+			<p>{{tarih}}</p>
+			<a class="btn btn-large btn-info" href= "{{ url_for('isilanlari_update_page',ilan_id=id)}}">Ilani Duzenle</a>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

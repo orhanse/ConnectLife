@@ -8,7 +8,7 @@
 	<hr>
 	<div class = "row">
 
-	{%for sirket, pozisyon, lokasyon, basvuru, tarih in isilanlari%}
+	{%for id, sirket, pozisyon, lokasyon, basvuru, tarih in isilanlari%}
 
 			<div class = "col-md-3">
 			<!-- Company -->
@@ -23,10 +23,51 @@
 			<!-- Date -->
 			<p style= "font-size: 13pt;color: #00CED1;">İlan tarihi: </p>
 			<p>{{tarih}}</p>
+			<a class="btn btn-large btn-info" href= "{{ url_for('isilanlari_update_page',ilan_id=id)}}">Ilani Duzenle</a>
 			</div>
 
 		{%endfor%}
 
 	</div>
+	<hr>
+	<div class = "row">
 
+		<!-- Yeni ilan ekleme kismi  -->
+		    <h2>Yeni Ilan Ekle!</h2>
+            <form id="add" action="{{ url_for('isilanlari_sayfasi')}}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Sirket Adi:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Sirket Adı (Zorunlu)" name="sirket" required="required">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Pozisyon Adi:</label>
+						<input class="form-control" size="7" form ="add" type="text" placeholder=" İş içerisinde yapılması gereken görevin tanımı buraya gelecektir. (Zorunlu)" required="required" name="pozisyon">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Şirket Konumu:</label>
+		                <input class="form-control" rows ="5" size="7" form ="add" type="text" placeholder = "Şirket Lokasyonu (Zorunlu)" name="lokasyon" required="required">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Toplam Başvuru Sayısı:</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Ilan Acildigindaki Basvuru Sayisi(Sonradan guncellenecektir)" name="basvuru">
+                  </div>
+				  <div class="form-group">
+				  		<label for="usr">Ilan Tarihi:</label>
+		          		<input class="form-control" size="7" form ="add" type="date" placeholder="(GG-AA-YYYY) formatinda olmalidir." name="tarih">
+				  </div>
+                  <input class="add" form="add" id="isilanlari_form_add" value="Ilan Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Ilan Ara!</h2>
+			<form id="search" action="{{ url_for('isilanlari_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Ilan Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="isilanlari_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
 {% endblock %}
