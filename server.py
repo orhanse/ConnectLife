@@ -42,7 +42,7 @@ def initialize_database_kisiler():
     return redirect(url_for('home_page'))
 
 
-@app.route('/kisiler')
+@app.route('/kisiler',methods=['GET', 'POST'])
 def kisiler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
@@ -52,8 +52,6 @@ def kisiler_sayfasi():
         cursor.execute(query)
         kisiler = cursor.fetchall()
         return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
-
-
     elif "add" in request.form:
         kisi1 = Kisiler(request.form['isim'],
                         request.form['resim'],

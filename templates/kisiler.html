@@ -8,7 +8,7 @@
 	<hr>
 	<div class = "row">
 
-		{%for isim, resim, mekan, yas, universite, work in kisiler%}
+		{%for id, isim, resim, mekan, yas, universite, work in kisiler%}
 
 			<div class = "col-md-3">
 			<!-- Name -->
@@ -38,7 +38,7 @@
 
 		<!-- Yeni kisi ekleme sayfası  -->
 		    <h2>Yeni Kisi Ekle!</h2>
-            <form id="add" action="{{ url_for('Kisiler_sayfasi')}}" method = "post">
+            <form id="add" action="{{ url_for('kisiler_sayfasi')}}" method = "post">
                   <div class="form-group">
   						<label for="usr">Isim:</label>
 				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Isim (Zorunlu)" name="isim" required="required">
@@ -49,7 +49,7 @@
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Yas</label>
-		                <input class="form-control" size="7" form ="add" type="text" placeholder = "Yas" name="yas">
+		                <input class="form-control" size="7" form ="add" type="text" placeholder = "(Sayı ile Yazınız)" name="yas">
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Yasadigi yer:</label>
@@ -57,7 +57,7 @@
                   </div>
 				  <div class="form-group">
 				  		<label for="usr">Universite:</label>
-		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Universite" name="university">
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Universite" name="universite">
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Calistigi yer:</label>
@@ -70,7 +70,7 @@
 		<hr>
 		<div class = "row">
 			<h2>Kisi Ara!</h2>
-			<form id="search" action="{{ url_for('kisi_sayfasi')}}" method = "post">
+			<form id="search" action="{{ url_for('kisiler_sayfasi')}}" method = "post">
 				<div class="form-group">
 				  		<label for="usr">Kisi Arama:</label>
 		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranankisi">
