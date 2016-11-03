@@ -7,21 +7,63 @@
 	<h1>Sirketler</h1>
 	<form action="{{ url_for('sirketler_sayfasi')}}" method = "post">
 
-<hr id = sirket>
+<hr>
 <div class = "row">
-	{% for name, date, location, work_area, photo in sirket%}
-	<div class = "col-md-3" id = sirket>
+	{% for id, name, date, location, work_area, photo in sirket%}
+	<div class = "col-md-3">
 		<!-- Title -->
-		<h2 id = sirket>{{name}}</h2>
+		<h2>{{name}}</h2>
 		<!-- Description -->
-		<p style= "font-size: 13pt;color: #00CED1;" id = sirket>Kuruluş Yılı: {{date}}</p>
-		<p style= "font-size: 13pt;color: #00CED1;" id = sirket>Lokasyon: {{location}}</p>
-		<p id = sirket>{{work_area}}</p>
-		<!-- Group Image -->
+		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{date}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
+		<p>{{work_area}}</p>
+		<!-- Sirket Image -->
 		<img style= "width:300px;heigth=300px"src = "static/images/{{photo}}" class="img-responsive">
+		<a class="btn btn-large btn-info" href= "{{ url_for('sirketler_update_page',sirket_id=id)}}">Sirketi Duzenle</a>
 	</div>
 	{% endfor %}
 </div>
 </form>
+	<hr>
+	<div class = "row">
+
+		<!-- Yeni Şirket ekleme sayfası  -->
+		    <h2>Yeni Şirket Ekle!</h2>
+            <form id="add" action="{{ url_for('sirketler_sayfasi')}}" method = "post">
+                  <div class="form-sirket">
+  						<label for="usr">Şirket Adı</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Şirket Adı (Zorunlu)" name="name" required="required">
+				  </div>
+                  <div class="form-sirket">
+				  		<label for="usr">Kuruluş Yılı</label>
+						<input class="form-control" size="7" form ="add" type="text" placeholder="Kuruluş Yılı (Zorunlu)" name="date">
+				  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Lokasyonu</label>
+		                <input class="form-control" size="7" form ="add" type="text" placeholder = "Lokasyonu (Zorunlu)" name="location" required="required">
+				  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Çalışma Alanı</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Çalışma Alanı (Zorunlu)" name="work_area" required="required">
+                  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: itulogo.png" name="photo">
+				  </div>
+                  <input class="add" form="add" id="sirketler_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Şirket Ara!</h2>
+			<form id="search" action="{{ url_for('sirketler_sayfasi')}}" method = "post">
+				<div class="form-sirket">
+				  		<label for="usr">Şirket Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="sirketler_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
 
 {% endblock %}

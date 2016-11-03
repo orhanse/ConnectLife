@@ -254,6 +254,9 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
+    init_sirketler_db(cursor)
+    insert_sirket(cursor)
+
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -311,10 +314,16 @@ def initialize_database_university():
     connection.commit()
     return redirect(url_for('home_page'))
 
-@app.route('/sirketler')
+@app.route('/sirketler', methods = ['GET', 'POST'])
 def sirketler_sayfasi():
     now = datetime.datetime.now()
     return get_sirket_page(app)
+
+@app.route('/sirketler/<sirket_id>', methods=['GET', 'POST'])
+def sirketler_update_page(sirket_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    now = datetime.datetime.now()
+    return get_sirket_page_update(app, sirket_id,connection)
 
 
 

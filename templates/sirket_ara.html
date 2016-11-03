@@ -1,0 +1,34 @@
+{% extends "home.html" %}
+
+{% block title %} Şirketler {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Şirketleri ekranda gosteren kisim -->
+		{%for id, name, date, location, work_area, photo in sirketler%}
+
+			<div class = "col-md-3">
+			<!-- Title -->
+			<h2>{{name}}</h2>
+			<!-- Zaman -->
+			<p>{{date}}</p>
+			<!-- Description -->
+			<p>{{location}}</p>
+			<!-- Icerik -->
+			<p>{{work_area}}</p>
+			<!-- Group Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{photo}}" class="img-responsive">
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('sirketler_update_page',sirket_id=id)}}">Şirketi Duzenle</a>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

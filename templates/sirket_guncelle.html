@@ -1,0 +1,38 @@
+{% extends "home.html"%}
+{% block title %}Sirket Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Sirket Guncelleme Sayfasi</h2>
+
+		{%for id, name, date, location, work_area, photo in sirket%}
+            <p> SIRKET ID: {{id}} </p>
+            <form id="update" action="{{ url_for('sirketler_update_page',sirket_id=id) }}" method = "post">
+                  <div class="form-sirket">
+  						<label for="usr">Şirket Adı</label>
+				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Şirket Adı" name="name">
+				  </div>
+                  <div class="form-sirket">
+				  		<label for="usr">Kuruluş Yılı</label>
+						<input class="form-control" size="7" value="{{date}}" form ="update" type="text" placeholder="Yıl" name="date">
+				  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Lokasyonu</label>
+		                <input class="form-control" size="7" value="{{location}}" form ="update" type="text" placeholder = "Lokasyonu" name="location">
+				  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Çalışma Alanı</label>
+		          		<input class="form-control" size="7" value="{{work_area}}" form ="update" type="text" placeholder="Çalışma Alanı" name="work_area">
+                  </div>
+				  <div class="form-sirket">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" value="{{photo}}" form ="update" type="text" placeholder="Resim url'si" name="photo">
+				  </div>
+                  <input type="hidden" name="sirket_id" value="{{id}}">
+                  <input class="add" form="update" id="sirketler_form_update" value="Sirketi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('sirketler_update_page',sirket_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Sirketi Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}
