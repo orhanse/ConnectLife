@@ -254,7 +254,6 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
-    init_universities_db(cursor)
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -277,6 +276,15 @@ def counter_page():
 def universiteler_sayfasi():
     now = datetime.datetime.now()
     return get_university_page(app)
+
+@app.route('/universiteler/initdb')
+def initialize_database_university():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+
+    init_universities_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
 
 @app.route('/sirketler')
 def sirketler_sayfasi():
