@@ -274,8 +274,32 @@ def counter_page():
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
     now = datetime.datetime.now()
-    return get_university_page(app)
+
+    if request.method == 'GET':
+        query = "SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY"
+        cursor.execute(query)
+        university = cursor.fetchall()
+        return render_template('universiteler.html', university = university, current_time=now.ctime())
+    elif "add" in request.form:
+        university1 = University(request.form['name'],
+                    request.form['foundation_date'],
+                    request.form['location'],
+                    request.form['small_info'],
+                    request.form['photo'])
+
+        add_university(cursor, request, university1)
+        connection.commit()
+        return redirect(url_for('universiteler_sayfasi'))
+    elif "search" in request.form:
+        searched = request.form['searched'];
+        query = """SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY WHERE NAME LIKE %s"""
+        cursor.execute(query,[searched])
+        university=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('universiteler_ara.html', university = university, current_time=now.ctime(), sorgu = searched)
 
 @app.route('/universiteler/initdb')
 def initialize_database_university():

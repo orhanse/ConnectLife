@@ -76,25 +76,3 @@ def add_university(cursor, request, university):
         %s
         )"""
     cursor.execute(query, (university.name, university.foundation_date, university.location, university.small_info, university.photo))
-
-def get_university_page(app):
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY"
-        cursor.execute(query)
-        university = cursor.fetchall()
-
-        return render_template('universiteler.html', university = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        university = University(request.form['name'],
-                     request.form['foundation_date'],
-                     request.form['location'],
-                     request.form['small_info'],
-                     request.form['photo'])
-
-        add_university(cursor, request, university)
-        connection.commit()
-        return redirect(url_for('universiteler_sayfasi'))

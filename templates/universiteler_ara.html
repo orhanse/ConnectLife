@@ -1,0 +1,27 @@
+{% extends "home.html" %}
+
+{% block title %} Universiteler {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		{% for id, name, foundation_date, location, small_info, photo in university%}
+	<div class = "col-md-3">
+		<!-- Title -->
+		<h2>{{name}}</h2>
+		<!-- Description -->
+		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{foundation_date}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
+		<p>{{small_info}}</p>
+		<!-- Group Image -->
+		<img style= "width:300px;heigth=300px"src = "static/images/universities/{{photo}}" class="img-responsive">
+		<!-- Join Button -->
+		<button type="button" class="btn btn-success">Daha Fazla</button>
+	</div>
+	{% endfor %}
+
+{% endblock %}
