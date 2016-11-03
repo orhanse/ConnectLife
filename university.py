@@ -75,17 +75,15 @@ def add_university(cursor, request, university):
         INITCAP(%s),
         %s
         )"""
-    cursor.execute(query, (university.name, university.faundation_date, university.location, university.small_info, university.photo))
+    cursor.execute(query, (university.name, university.foundation_date, university.location, university.small_info, university.photo))
 
 def get_university_page(app):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
 
-    connection.commit()
-
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT * FROM UNIVERSITY"
+        query = "SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY"
         cursor.execute(query)
         university = cursor.fetchall()
 
