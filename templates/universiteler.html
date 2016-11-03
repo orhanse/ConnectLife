@@ -4,11 +4,10 @@
 {% block content %}
 
 <h1>Üniversiteler</h1>
-<form action="{{ url_for('universiteler_sayfasi')}}" method = "post">
-
-<hr id = university>
+<hr>
 <div class = "row">
-	{% for name, foundation_date, location, small_info, photo in university%}
+
+	{% for id, name, foundation_date, location, small_info, photo in university%}
 	<div class = "col-md-3" id = university>
 		<!-- Title -->
 		<h2 id = university>{{name}}</h2>
@@ -23,7 +22,37 @@
 	</div>
 	{% endfor %}
 </div>
-</form>
+
+<hr>
+	<div class = "row">
+
+		<!-- Adding new university page  -->
+		    <h2>Add New University</h2>
+            <form id="add" action="{{ url_for('universiteler_sayfasi')}}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Üniversite Adı: </label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Üniversite Adı (zorunlu)" name="name" required="required">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Kuruluş Yılı(YYYY): </label>
+						<input class="form-control" size="7" form ="add" type="date" placeholder="Kuruluş Yılı (zorunlu) (YYYY)" name="foundation_date" required="required">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Lokasyon: </label>
+		                <input class="form-control" rows ="5" size="7" form ="add" type="text" placeholder = "Lokasyon (zorunlu)" name="location" required="required">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Kısa Bilgi (Üniversiteyi kısaca tanıtın):</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Kısa Bilgi " name="small_info" >
+                  </div>
+				  <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: itu.jpg" name="photo">
+				  </div>
+                  <input class="add" form="add" id="university_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
 
 {% endblock %}
 

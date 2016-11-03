@@ -254,6 +254,7 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
+    init_universities_db(cursor)
     connection.commit()
     return redirect(url_for('home_page'))
 

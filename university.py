@@ -22,14 +22,16 @@ def init_universities_db(cursor):
     query = """DROP TABLE IF EXISTS UNIVERSITY"""
     cursor.execute(query)
     query = """CREATE TABLE UNIVERSITY (
+        ID SERIAL,
         NAME VARCHAR(100) NOT NULL,
         FOUNDATION_DATE INTEGER NOT NULL,
         LOCATION VARCHAR(80) NOT NULL,
         SMALL_INFO VARCHAR(500),
         PHOTO VARCHAR(80),
-        PRIMARY KEY (NAME, FOUNDATION_DATE, LOCATION)
+        PRIMARY KEY (ID)
         )"""
     cursor.execute(query)
+    insert_university(cursor)
 
 def insert_university(cursor):
     query = """INSERT INTO UNIVERSITY
@@ -69,28 +71,28 @@ def insert_university(cursor):
         )"""
     cursor.execute(query)
 
-def add_university(cursor, request, variables):
+def add_university(cursor, request, university):
     query = """INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
-        %s,
+        INITCAP(%s),
         %d,
-        %s,
-        %s,
+        INITCAP(%s),
+        INITCAP(%s),
         %s
         )"""
-    cursor.execute(query, variables)
+    cursor.execute(query, (university.name, university.faundation_date, university.location, university.small_info, university.photo))
 
 def get_university_page(app):
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    init_universities_db(cursor)
 
-    insert_university(cursor)
     connection.commit()
+
     if request.method == 'GET':
         now = datetime.datetime.now()
         query = "SELECT * FROM UNIVERSITY"
         cursor.execute(query)
+        university = cursor.fetchall()
 
         return render_template('universiteler.html', university = cursor, current_time=now.ctime())
     elif "add" in request.form:
@@ -101,6 +103,5 @@ def get_university_page(app):
                      request.form['photo'])
 
         add_university(cursor, request, university)
-
         connection.commit()
         return redirect(url_for('universiteler_sayfasi'))
