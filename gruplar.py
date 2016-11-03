@@ -6,12 +6,12 @@ import psycopg2 as dbapi2
 
 #Gruplar classi olusturuluyor ve yapi tanimlaniyor.
 class Gruplar:
-    def __init__(self, baslik, aciklama, icerik, resim, zaman):
+    def __init__(self, baslik, zaman, aciklama, icerik, resim):
         self.baslik = baslik
+        self.zaman = zaman
         self.aciklama = aciklama
         self.icerik = icerik
         self.resim = resim
-        self.zaman = zaman
 
 def init_gruplar_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS GRUPLAR (
@@ -57,3 +57,34 @@ def fill_gruplar_db(cursor):
         'muhendis.jpg');
         """
     cursor.execute(query)
+
+
+def add_gruplar(cursor, request, grup1):
+        query = """INSERT INTO GRUPLAR
+        (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+        INITCAP(%s),
+        to_date(%s, 'DD-MM-YYYY'),
+        INITCAP(%s),
+        INITCAP(%s),
+        %s
+        )"""
+        cursor.execute(query, (grup1.baslik, grup1.zaman, grup1.aciklama,
+                               grup1.icerik, grup1.resim))
+
+def delete_gruplar(cursor, id):
+        query="""DELETE FROM GRUPLAR WHERE ID = %s"""
+        cursor.execute(query, id)
+
+
+def update_gruplar(cursor, id, grup1):
+            query="""
+            UPDATE GRUPLAR
+            SET BASLIK=INITCAP(%s),
+            ZAMAN=to_date(%s, 'DD-MM-YYYY'),
+            ACIKLAMA=INITCAP(%s),
+            ICERIK=%s,
+            RESIM=%s
+            WHERE ID=%s
+            """
+            cursor.execute(query,(grup1.baslik, grup1.zaman, grup1.aciklama,
+                                  grup1.icerik, grup1.resim, id))

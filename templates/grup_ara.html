@@ -1,0 +1,35 @@
+{% extends "home.html" %}
+
+{% block title %} Gruplar {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Gruplari ekranda gosteren kisim -->
+		{%for id, baslik, zaman, aciklama, icerik, resim in gruplar%}
+
+			<div class = "col-md-3">
+			<!-- Title -->
+			<h2>{{baslik}}</h2>
+			<!-- Zaman -->
+			<p>{{zaman}}</p>
+			<!-- Description -->
+			<p>{{aciklama}}</p>
+			<!-- Icerik -->
+			<p>{{icerik}}</p>
+			<!-- Group Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Katıl!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}
