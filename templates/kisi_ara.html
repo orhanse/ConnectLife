@@ -1,0 +1,37 @@
+{% extends "home.html" %}
+
+{% block title %} Kisiler {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Kisiler ekranda gosteren kisim -->
+		{%for id, isim, resim, mekan, yas, universite, work in kisiler%}
+
+			<div class = "col-md-3">
+			<!-- Isim -->
+			<h2>{{isim}}</h2>
+			<!-- Kisi Resmi -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<!-- Yasi -->
+			<p>{{yas}}</p>
+			<!-- Yasadigi yer -->
+			<p>{{mekan}}</p>
+			<!-- Universite -->
+			<p>{{universite}}</p>
+			<!-- Calistigi yer -->
+			<p>{{work}}</p>
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('kisiler_update_page',kisi_id=id)}}">Kisiyi Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Ekle!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

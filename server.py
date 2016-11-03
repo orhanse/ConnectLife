@@ -46,11 +46,59 @@ def initialize_database_kisiler():
 def kisiler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
-    query = "SELECT ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
-    cursor.execute(query)
-    kisiler = cursor.fetchall()
     now = datetime.datetime.now()
-    return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
+    if request.method == 'GET':
+        query = "SELECT ID, ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
+        cursor.execute(query)
+        kisiler = cursor.fetchall()
+        return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
+
+
+    elif "add" in request.form:
+        kisi1 = Kisiler(request.form['isim'],
+                        request.form['resim'],
+                        request.form['mekan'],
+                        request.form['yas'],
+                        request.form['universite'],
+                        request.form['work'])
+        add_kisiler(cursor, request, kisi1)
+        connection.commit()
+        return redirect(url_for('kisiler_sayfasi'))
+    elif "search" in request.form:
+        aranankisi = request.form['aranankisi'];
+        query = """SELECT ID, ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER WHERE ISIM LIKE %s"""
+        cursor.execute(query,[aranankisi])
+        kisiler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('kisi_ara.html', kisiler = kisiler, current_time=now.ctime(), sorgu = aranankisi)
+
+
+@app.route('/kisiler/<kisi_id>', methods=['GET', 'POST'])
+def kisiler_update_page(kisi_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM KISILER WHERE (ID = %s)"""
+        cursor.execute(query, kisi_id)
+        now = datetime.datetime.now()
+        return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            kisi1 = Kisiler(request.form['isim'],
+                            request.form['resim'],
+                            request.form['mekan'],
+                            request.form['yas'],
+                            request.form['universite'],
+                            request.form['work'])
+            update_kisiler(cursor, request.form['kisi_id'], kisi1)
+            connection.commit()
+            return redirect(url_for('kisiler_sayfasi'))
+        elif "delete" in request.form:
+            delete_kisiler(cursor, kisi_id)
+            connection.commit()
+            return redirect(url_for('kisiler_sayfasi'))
 
 
 
