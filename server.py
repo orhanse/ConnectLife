@@ -281,6 +281,7 @@ def universiteler_sayfasi():
 def initialize_database_university():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
+    cursor.execute("""DROP TABLE IF EXISTS UNIVERSITY""")
 
     init_universities_db(cursor)
     connection.commit()

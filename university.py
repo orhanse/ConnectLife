@@ -19,8 +19,6 @@ class University:
         self.photo = photo
 
 def init_universities_db(cursor):
-    query = """DROP TABLE IF EXISTS UNIVERSITY"""
-    cursor.execute(query)
     query = """CREATE TABLE UNIVERSITY (
         ID SERIAL,
         NAME VARCHAR(100) NOT NULL,
@@ -41,27 +39,24 @@ def insert_university(cursor):
         'Maslak/Istanbul',
         'Çağın önde gelen üniversitelerinden olan İstanbul Teknik Üniversitesi, her yıl binlerce başarılı mühendis yetiştiriyor. Sizi de üniversitemizde görmekten mutluluk duyarız.',
         'itu.jpg'
-        )"""
-    cursor.execute(query)
-    query = """INSERT INTO UNIVERSITY
+        );
+        INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Bogazici University',
         1863,
         'Bebek/Istanbul',
         'Üniversiteler; bilim, düşünce ve teknoloji üretme, yaygınlaştırma ve bunları topluma kazandırma suretiyle yerel ve evrensel gelişime katkıda bulunan en temel öğretim, araştırma ve bilgi yayma kurumlarıdır.',
         'bogazici.png'
-        )"""
-    cursor.execute(query)
-    query = """INSERT INTO UNIVERSITY
+        );
+        INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Koc University',
         1993,
         'Sariyer/Istanbul',
         'Koç Üniversitesi bir Mükemmeliyet Merkezi olma misyonuyla, üstün yetenekli gençler ile değerli öğretim görevlilerini biraraya getirerek; bilime evrensel düzeyde katkıda bulunmayı amaçlamaktadır.',
         'koc.jpg'
-        )"""
-    cursor.execute(query)
-    query = """INSERT INTO UNIVERSITY
+        );
+        INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         'Sabanci University',
         1994,
