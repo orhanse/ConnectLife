@@ -22,7 +22,7 @@ def init_universities_db(cursor):
     query = """CREATE TABLE UNIVERSITY (
         ID SERIAL,
         NAME VARCHAR(100) NOT NULL,
-        FOUNDATION_DATE INTEGER NOT NULL,
+        FOUNDATION_DATE VARCHAR(4) NOT NULL,
         LOCATION VARCHAR(80) NOT NULL,
         SMALL_INFO VARCHAR(500),
         PHOTO VARCHAR(80),
@@ -70,7 +70,7 @@ def add_university(cursor, request, university1):
     query = """INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         INITCAP(%s),
-        %d,
+        %s,
         INITCAP(%s),
         INITCAP(%s),
         %s
@@ -85,7 +85,7 @@ def update_university(cursor, id, university1):
     query = """
     UPDATE UNIVERSITY
     SET NAME=INITCAP(%s),
-    FOUNDATION_DATE=%d,
+    FOUNDATION_DATE=%s,
     LOCATION=INITCAP(%s),
     SMALL_INFO=INITCAP(%s),
     PHOTO=%s

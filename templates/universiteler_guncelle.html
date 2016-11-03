@@ -13,10 +13,10 @@
 				  </div>
                   <div class="form-group">
 				  		<label for="usr">Kurulus Tarihi:</label>
-						<input class="form-control" size="7" value="{{foundation_date}}" form ="update" type="integer" placeholder="Kurulus Yili (yyyy)" name="foundation_date">
+						<input class="form-control" size="7" value="{{foundation_date}}" form ="update" type="text" placeholder="Kurulus Yili (yyyy)" name="foundation_date">
 				  </div>
 				  <div class="form-group">
-				  		<label for="usr">Locasyon:</label>
+				  		<label for="usr">Lokasyon:</label>
 		                <input class="form-control" rows ="5" size="7" value="{{location}}" form ="update" type="text" placeholder = "Lokasyon" name="location">
 				  </div>
 				  <div class="form-group">
@@ -27,7 +27,7 @@
 				  		<label for="usr">Resim URL'si:</label>
 		          		<input class="form-control" size="7" value="{{photo}}" form ="update" type="text" placeholder="Resim url'si" name="photo">
 				  </div>
-                  <input type="hidden" name="grup_id" value="{{id}}">
+                  <input type="hidden" name="university_id" value="{{id}}">
                   <input class="add" form="update" id="university_form_update" value="Universiteyi Guncelle" name="update" type="submit">
 			</form>
         	<form id="delete" action="{{ url_for('university_update_page',university_id=id) }}" method = "post">
