@@ -20,6 +20,7 @@
 		<!-- Group Image -->
 		<img style= "width:300px;heigth=300px"src = "static/images/universities/{{photo}}" class="img-responsive">
 		<!-- Join Button -->
+		<a class="btn btn-large btn-info" href= "{{ url_for('university_update_page',university_id=id)}}">Universite Bilgilerini Duzenle</a>
 		<button type="button" class="btn btn-success">Daha Fazla</button>
 	</div>
 	{% endfor %}

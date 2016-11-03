@@ -274,6 +274,15 @@ def counter_page():
     count = cursor.fetchone()[0]
     return "This page was accessed %d times." % count
 
+@app.route('/universiteler/initdb')
+def initialize_database_university():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+    cursor.execute("""DROP TABLE IF EXISTS UNIVERSITY""")
+
+    init_universities_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
 def universiteler_sayfasi():
@@ -304,15 +313,31 @@ def universiteler_sayfasi():
         now = datetime.datetime.now()
         return render_template('universiteler_ara.html', university = university, current_time=now.ctime(), sorgu = searched)
 
-@app.route('/universiteler/initdb')
-def initialize_database_university():
+@app.route('/universiteler/<university_id>', methods=['GET', 'POST'])
+def university_update_page(university_id):
     connection = dbapi2.connect(app.config['dsn'])
-    cursor =connection.cursor()
-    cursor.execute("""DROP TABLE IF EXISTS UNIVERSITY""")
-
-    init_universities_db(cursor)
-    connection.commit()
-    return redirect(url_for('home_page'))
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM UNIVERSITY WHERE (ID = %s)"""
+        cursor.execute(query,university_id)
+        now = datetime.datetime.now()
+        return render_template('universiteler_guncelle.html', universite = cursor, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            university1 = University(request.form['name'],
+                            request.form['foundation_date'],
+                            request.form['location'],
+                            request.form['small_info'],
+                            request.form['photo'])
+            update_university(cursor, request.form['university_id'], university1)
+            connection.commit()
+            return redirect(url_for('universiteler_sayfasi'))
+        elif "delete" in request.form:
+            delete_university(cursor, university_id)
+            connection.commit()
+            return redirect(url_for('universiteler_sayfasi'))
 
 @app.route('/sirketler', methods = ['GET', 'POST'])
 def sirketler_sayfasi():

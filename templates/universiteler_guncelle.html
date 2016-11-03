@@ -1,0 +1,38 @@
+{% extends "home.html"%}
+{% block title %}Universite Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Universiteler Guncelleme Sayfasi</h2>
+
+		{%for id, name, foundation_date, location, small_info, photo in universite%}
+            <p> UNIVERSITY ID: {{id}} </p>
+            <form id="update" action="{{ url_for('university_update_page',university_id=id) }}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Universite Adi:</label>
+				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Unvirsite Adi" name="name">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Kurulus Tarihi:</label>
+						<input class="form-control" size="7" value="{{foundation_date}}" form ="update" type="integer" placeholder="Kurulus Yili (yyyy)" name="foundation_date">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Locasyon:</label>
+		                <input class="form-control" rows ="5" size="7" value="{{location}}" form ="update" type="text" placeholder = "Lokasyon" name="location">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Kisa Bilgi:</label>
+		          		<input class="form-control" size="7" value="{{small_info}}" form ="update" type="text" placeholder="Kisa Bilgi" name="small_info">
+                  </div>
+				  <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" value="{{photo}}" form ="update" type="text" placeholder="Resim url'si" name="photo">
+				  </div>
+                  <input type="hidden" name="grup_id" value="{{id}}">
+                  <input class="add" form="update" id="university_form_update" value="Universiteyi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('university_update_page',university_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Universiteyi Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

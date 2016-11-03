@@ -66,7 +66,7 @@ def insert_university(cursor):
         )"""
     cursor.execute(query)
 
-def add_university(cursor, request, university):
+def add_university(cursor, request, university1):
     query = """INSERT INTO UNIVERSITY
         (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
         INITCAP(%s),
@@ -75,4 +75,21 @@ def add_university(cursor, request, university):
         INITCAP(%s),
         %s
         )"""
-    cursor.execute(query, (university.name, university.foundation_date, university.location, university.small_info, university.photo))
+    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo))
+
+def delete_university(cursor, id):
+    query ="""DELETE FROM UNIVERSITY WHERE ID = %s"""
+    cursor.execute(query, id)
+
+def update_university(cursor, id, university1):
+    query = """
+    UPDATE UNIVERSITY
+    SET NAME=INITCAP(%s),
+    FOUNDATION_DATE=%d,
+    LOCATION=INITCAP(%s),
+    SMALL_INFO=INITCAP(%s),
+    PHOTO=%s
+    WHERE ID=%s
+    """
+
+    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo, id))

@@ -3,31 +3,32 @@
 {% block title %} Universiteler {% endblock %}
 {% block content %}
 
-<h1>Üniversiteler</h1>
-<hr>
-<div class = "row">
+	<h1>Üniversiteler</h1>
+	<hr>
+	<div class = "row">
 
-	{% for id, name, foundation_date, location, small_info, photo in university%}
-	<div class = "col-md-3">
-		<!-- Title -->
-		<h2>{{name}}</h2>
-		<!-- Description -->
-		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{foundation_date}}</p>
-		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
-		<p>{{small_info}}</p>
-		<!-- Group Image -->
-		<img style= "width:300px;heigth=300px"src = "static/images/universities/{{photo}}" class="img-responsive">
-		<!-- Join Button -->
-		<button type="button" class="btn btn-success">Daha Fazla</button>
+		{% for id, name, foundation_date, location, small_info, photo in university%}
+			<div class = "col-md-3">
+			<!-- Title -->
+			<h2>{{name}}</h2>
+			<!-- Description -->
+			<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{foundation_date}}</p>
+			<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
+			<p>{{small_info}}</p>
+			<!-- Group Image -->
+			<img style= "width:300px;heigth=300px"src = "static/images/universities/{{photo}}" class="img-responsive">
+			<!-- Join Button -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('university_update_page',university_id=id)}}">Universite Bilgilerini Duzenle</a>
+			<button type="button" class="btn btn-success">Daha Fazla</button>
+			</div>
+		{% endfor %}
 	</div>
-	{% endfor %}
-</div>
 
-<hr>
+	<hr>
 	<div class = "row">
 
 		<!-- Adding new university page  -->
-		    <h2>Add New University</h2>
+		    <h2>Yeni Universite Ekle!</h2>
             <form id="add" action="{{ url_for('universiteler_sayfasi')}}" method = "post">
                   <div class="form-group">
   						<label for="usr">Üniversite Adı: </label>
@@ -52,7 +53,20 @@
                   <input class="add" form="add" id="university_form_add" value="Ekle!" name="add" type="submit">
 			</form>
 
+	</div>
+
+	<hr>
+		<div class = "row">
+			<h2>Universite Ara</h2>
+			<form id="search" action="{{ url_for('universiteler_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Universite Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak universite ismini yaziniz." name="searched">
+				  </div>
+                  <input class="search" form="search" id="university_form_add" value="Ara!" name="search" type="submit">
+            </form>
 		</div>
+
 
 {% endblock %}
 
