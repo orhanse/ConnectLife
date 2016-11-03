@@ -30,9 +30,6 @@ def get_elephantsql_dsn(vcap_services):
 
 
 #KISILER
-
-
-#KISILER
 @app.route('/kisiler/initdb')
 def initialize_database_kisiler():
     connection = dbapi2.connect(app.config['dsn'])
@@ -138,7 +135,7 @@ def counter_page():
     query = "SELECT N FROM COUNTER"
     cursor.execute(query)
     count = cursor.fetchone()[0]
-    return "This page was accesed %d times." % count
+    return "This page was accessed %d times." % count
 
 
 @app.route('/universiteler', methods = ['GET', 'POST'])
