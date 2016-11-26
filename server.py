@@ -275,9 +275,6 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
-    init_sirketler_db(cursor)
-    insert_sirket(cursor)
-
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -368,16 +365,80 @@ def university_update_page(university_id):
             connection.commit()
             return redirect(url_for('universiteler_sayfasi'))
 
+@app.route('/sirketler/initdb')
+def initialize_database_sirket():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS SIRKET CASCADE;
+    ''')
+
+    init_sirketler_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
 @app.route('/sirketler', methods = ['GET', 'POST'])
 def sirketler_sayfasi():
-    now = datetime.datetime.now()
-    return get_sirket_page(app)
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT S.ID,S.NAME,S.DATE,S.LOCATION,K.ISIM FROM KISILER AS K RIGHT JOIN SIRKET AS S ON S.CEO_ID = K.ID,S.WORK_AREA,S.PHOTO"
+        cursor.execute(query)
+        sirket=cursor.fetchall()
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        return render_template('sirketler.html', sirket = cursor, current_time=now.ctime(),kisiler=kisiler)
+    elif "add" in request.form:
+        sirket = Sirket(request.form['name'],
+                     request.form['date'],
+                     request.form['location'],
+                     request.form['kisiler_isim'],
+                     request.form['work_area'],
+                     request.form['photo'])
+
+        add_sirket(cursor, request, sirket)
+
+        connection.commit()
+        return redirect(url_for('sirketler_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT ID,NAME, DATE, LOCATION, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
+        cursor.execute(query,[aranan])
+        sirketler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('sirket_ara.html', sirketler = sirketler, current_time=now.ctime(), sorgu = aranan)
+
 
 @app.route('/sirketler/<sirket_id>', methods=['GET', 'POST'])
 def sirketler_update_page(sirket_id):
     connection = dbapi2.connect(app.config['dsn'])
-    now = datetime.datetime.now()
-    return get_sirket_page_update(app, sirket_id,connection)
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = """SELECT * FROM SIRKET WHERE (ID = %s)"""
+        cursor.execute(query,sirket_id)
+        sirket = cursor.fetchall()
+        now = datetime.datetime.now()
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        return render_template('sirket_guncelle.html', sirket = cursor, current_time=now.ctime(),kisiler = kisiler)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            sirket1 = Sirket(request.form['name'],
+                            request.form['date'],
+                            request.form['location'],
+                            request.form['kisiler_isim'],
+                            request.form['work_area'],
+                            request.form['photo'])
+            update_sirketler(cursor, request.form['sirket_id'], sirket1)
+            connection.commit()
+            return redirect(url_for('sirketler_sayfasi'))
+        elif "delete" in request.form:
+            delete_sirketler(cursor, sirket_id)
+            connection.commit()
+            return redirect(url_for('sirketler_sayfasi'))
 
 
 

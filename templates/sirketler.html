@@ -9,13 +9,14 @@
 
 <hr>
 <div class = "row">
-	{% for id, name, date, location, work_area, photo in sirket%}
+	{% for id, name, date, location, kisi, work_area, photo in sirket%}
 	<div class = "col-md-3">
 		<!-- Title -->
 		<h2>{{name}}</h2>
 		<!-- Description -->
 		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{date}}</p>
 		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;">CEO: {{kisi}}</p>
 		<p>{{work_area}}</p>
 		<!-- Sirket Image -->
 		<img style= "width:300px;heigth=300px"src = "static/images/{{photo}}" class="img-responsive">
@@ -41,6 +42,14 @@
 				  <div class="form-sirket">
 				  		<label for="usr">Lokasyonu</label>
 		                <input class="form-control" size="7" form ="add" type="text" placeholder = "Lokasyonu (Zorunlu)" name="location" required="required">
+				  </div>
+				   <div class="form-sirket">
+  						<label for="sel1">CEO</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" required="required" form="add">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 				  <div class="form-sirket">
 				  		<label for="usr">Çalışma Alanı</label>

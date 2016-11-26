@@ -11,10 +11,11 @@ from flask import request
 from flask.helpers import url_for
 
 class Sirket:
-    def __init__(self, name, date, location, work_area, photo):
+    def __init__(self, name, date, location, ceo_id, work_area, photo):
         self.name = name
         self.date = date
         self.location = location
+        self.ceo_id = ceo_id
         self.work_area = work_area
         self.photo = photo
 
@@ -26,26 +27,30 @@ def init_sirketler_db(cursor):
         NAME varchar(100) NOT NULL,
         DATE varchar NOT NULL,
         LOCATION varchar(80) NOT NULL,
+        CEO_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
         WORK_AREA varchar(500),
         PHOTO varchar(80)
         )"""
     cursor.execute(query)
+    insert_sirket(cursor)
 
 def insert_sirket(cursor):
     query = """INSERT INTO SIRKET
-        (NAME, DATE, LOCATION, WORK_AREA, PHOTO) VALUES (
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'SiMiT Lab',
         2010,
         'Istanbul/Türkiye',
+        1,
         'Akıllı Etkileşim, Mobil İstihbarat, Multimedya Teknolojileri',
         'itulogo.png'
         )"""
     cursor.execute(query)
     query = """INSERT INTO SIRKET
-        (NAME, DATE, LOCATION, WORK_AREA, PHOTO) VALUES (
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'Siemens AG',
         1847,
         'Berlin/Almanya',
+        2,
         'Endüstri, Enerji, Sağlık',
         'siemens1.png'
         )"""
@@ -54,14 +59,15 @@ def insert_sirket(cursor):
 
 def add_sirket(cursor, request, sirket):
     query = """INSERT INTO SIRKET
-        (NAME, DATE, LOCATION, WORK_AREA, PHOTO) VALUES (
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
+        %s,
         %s,
         %s,
         %s,
         %s,
         %s
         )"""
-    cursor.execute(query, (sirket.name, sirket.date, sirket.location, sirket.work_area, sirket.photo))
+    cursor.execute(query, (sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo))
 
 def delete_sirketler(cursor, id):
         query="""DELETE FROM SIRKET WHERE ID = %s"""
@@ -74,69 +80,10 @@ def update_sirketler(cursor, id, sirket):
             SET NAME=INITCAP(%s),
             DATE=%s,
             LOCATION=INITCAP(%s),
+            CEO_ID=%s,
             WORK_AREA=%s,
             PHOTO=%s
             WHERE ID=%s
             """
             cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.work_area, sirket.photo, id))
-
-def get_sirket_page(app):
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-
-    connection.commit()
-    if request.method == 'GET':
-        now = datetime.datetime.now()
-        query = "SELECT * FROM SIRKET"
-        cursor.execute(query)
-
-        return render_template('sirketler.html', sirket = cursor, current_time=now.ctime())
-    elif "add" in request.form:
-        sirket = Sirket(request.form['name'],
-                     request.form['date'],
-                     request.form['location'],
-                     request.form['work_area'],
-                     request.form['photo'])
-
-        add_sirket(cursor, request, sirket)
-
-        connection.commit()
-        return redirect(url_for('sirketler_sayfasi'))
-    elif "search" in request.form:
-        aranan = request.form['aranan'];
-        query = """SELECT ID,NAME, DATE, LOCATION, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
-        cursor.execute(query,[aranan])
-        sirketler=cursor.fetchall()
-        now = datetime.datetime.now()
-        return render_template('sirket_ara.html', sirketler = sirketler, current_time=now.ctime(), sorgu = aranan)
-
-
-def get_sirket_page_update(app, sirket_id,connection):
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-    if request.method == 'GET':
-        query = """SELECT * FROM SIRKET WHERE (ID = %s)"""
-        cursor.execute(query,sirket_id)
-        now = datetime.datetime.now()
-        return render_template('sirket_guncelle.html', sirket = cursor, current_time=now.ctime())
-    elif request.method == 'POST':
-        if "update" in request.form:
-            sirket1 = Sirket(request.form['name'],
-                            request.form['date'],
-                            request.form['location'],
-                            request.form['work_area'],
-                            request.form['photo'])
-            update_sirketler(cursor, request.form['sirket_id'], sirket1)
-            connection.commit()
-            return redirect(url_for('sirketler_sayfasi'))
-        elif "delete" in request.form:
-            delete_sirketler(cursor, sirket_id)
-            connection.commit()
-            return redirect(url_for('sirketler_sayfasi'))
-
-
-
-
-
 

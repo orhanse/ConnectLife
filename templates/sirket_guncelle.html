@@ -4,7 +4,7 @@
 {% block content %}
     <h2>Sirket Guncelleme Sayfasi</h2>
 
-		{%for id, name, date, location, work_area, photo in sirket%}
+		{%for id, name, date, location, kisi, work_area, photo in sirket%}
             <p> SIRKET ID: {{id}} </p>
             <form id="update" action="{{ url_for('sirketler_update_page',sirket_id=id) }}" method = "post">
                   <div class="form-sirket">
@@ -18,6 +18,14 @@
 				  <div class="form-sirket">
 				  		<label for="usr">Lokasyonu</label>
 		                <input class="form-control" size="7" value="{{location}}" form ="update" type="text" placeholder = "Lokasyonu" name="location">
+				  </div>
+				  <div class="form-sirket">
+  						<label for="sel1">CEO</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" required="required" form="update">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 				  <div class="form-sirket">
 				  		<label for="usr">Çalışma Alanı</label>

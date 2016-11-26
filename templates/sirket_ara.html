@@ -10,7 +10,7 @@
 
 
 		<!-- Şirketleri ekranda gosteren kisim -->
-		{%for id, name, date, location, work_area, photo in sirketler%}
+		{%for id, name, date, location, kisi, work_area, photo in sirketler%}
 
 			<div class = "col-md-3">
 			<!-- Title -->
@@ -19,6 +19,8 @@
 			<p>{{date}}</p>
 			<!-- Description -->
 			<p>{{location}}</p>
+			<!-- CEO -->
+			<p>{{kisi}}</p>
 			<!-- Icerik -->
 			<p>{{work_area}}</p>
 			<!-- Group Image -->
