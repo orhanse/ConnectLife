@@ -10,7 +10,7 @@
 
 
 		<!-- Gruplari ekranda gosteren kisim -->
-		{%for id, baslik, zaman, aciklama, icerik, resim in gruplar%}
+		{%for id, baslik, zaman, aciklama, icerik, resim, kisi in gruplar%}
 
 			<div class = "col-md-3">
 			<!-- Title -->
@@ -21,6 +21,8 @@
 			<p>{{aciklama}}</p>
 			<!-- Icerik -->
 			<p>{{icerik}}</p>
+			<!-- Olusturan Kisi -->
+			<p>Olusturan Kisi Id: {{kisi}}</p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
 			<!-- Update Page URL -->

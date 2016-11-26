@@ -119,22 +119,26 @@ def gruplar_sayfasi():
     cursor = connection.cursor()
     now = datetime.datetime.now()
     if request.method == 'GET':
-        query = "SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR"
+        query = "SELECT G.ID,G.BASLIK,G.ZAMAN,G.ACIKLAMA,G.ICERIK,G.RESIM,K.ISIM FROM KISILER AS K RIGHT JOIN GRUPLAR AS G ON G.KISILER_ID = K.ID"
         cursor.execute(query)
         gruplar=cursor.fetchall()
-        return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime())
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime(),kisiler=kisiler)
     elif "add" in request.form:
         grup1 = Gruplar(request.form['baslik'],
                             request.form['zaman'],
                             request.form['aciklama'],
                             request.form['icerik'],
-                            request.form['resim'])
+                            request.form['resim'],
+                            request.form['kisiler_isim'])
         add_gruplar(cursor, request, grup1)
         connection.commit()
         return redirect(url_for('gruplar_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM FROM GRUPLAR WHERE BASLIK LIKE %s"""
+        query = """SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM,KISILER_ID FROM GRUPLAR WHERE BASLIK LIKE %s"""
         cursor.execute(query,[aranan])
         gruplar=cursor.fetchall()
         now = datetime.datetime.now()
@@ -151,15 +155,20 @@ def gruplar_update_page(grup_id):
         cursor = connection.cursor()
         query = """SELECT * FROM GRUPLAR WHERE (ID = %s)"""
         cursor.execute(query,grup_id)
+        grup = cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('grup_guncelle.html', grup = cursor, current_time=now.ctime())
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        return render_template('grup_guncelle.html', grup = grup, current_time=now.ctime(),kisiler=kisiler)
     elif request.method == 'POST':
         if "update" in request.form:
             grup1 = Gruplar(request.form['baslik'],
                             request.form['zaman'],
                             request.form['aciklama'],
                             request.form['icerik'],
-                            request.form['resim'])
+                            request.form['resim'],
+                            request.form['kisiler_isim'])
             update_gruplar(cursor, request.form['grup_id'], grup1)
             connection.commit()
             return redirect(url_for('gruplar_sayfasi'))

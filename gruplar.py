@@ -6,12 +6,13 @@ import psycopg2 as dbapi2
 
 #Gruplar classi olusturuluyor ve yapi tanimlaniyor.
 class Gruplar:
-    def __init__(self, baslik, zaman, aciklama, icerik, resim):
+    def __init__(self, baslik, zaman, aciklama, icerik, resim, kisiler_id):
         self.baslik = baslik
         self.zaman = zaman
         self.aciklama = aciklama
         self.icerik = icerik
         self.resim = resim
+        self.kisiler_id = kisiler_id
 
 def init_gruplar_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS GRUPLAR (
@@ -21,6 +22,7 @@ def init_gruplar_db(cursor):
     ACIKLAMA VARCHAR(500) NOT NULL,
     ICERIK VARCHAR(500) NOT NULL,
     RESIM VARCHAR(80),
+    KISILER_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
     PRIMARY KEY(ID)
     )"""
     cursor.execute(query)
@@ -61,15 +63,16 @@ def fill_gruplar_db(cursor):
 
 def add_gruplar(cursor, request, grup1):
         query = """INSERT INTO GRUPLAR
-        (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+        (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM, KISILER_ID) VALUES (
         INITCAP(%s),
         to_date(%s, 'DD-MM-YYYY'),
         INITCAP(%s),
         INITCAP(%s),
+        %s,
         %s
         )"""
         cursor.execute(query, (grup1.baslik, grup1.zaman, grup1.aciklama,
-                               grup1.icerik, grup1.resim))
+                               grup1.icerik, grup1.resim, grup1.kisiler_id))
 
 def delete_gruplar(cursor, id):
         query="""DELETE FROM GRUPLAR WHERE ID = %s"""
@@ -83,8 +86,9 @@ def update_gruplar(cursor, id, grup1):
             ZAMAN=to_date(%s, 'DD-MM-YYYY'),
             ACIKLAMA=INITCAP(%s),
             ICERIK=%s,
-            RESIM=%s
+            RESIM=%s,
+            KISILER_ID=%s
             WHERE ID=%s
             """
             cursor.execute(query,(grup1.baslik, grup1.zaman, grup1.aciklama,
-                                  grup1.icerik, grup1.resim, id))
+                                  grup1.icerik, grup1.resim, grup1.kisiler_id, id))

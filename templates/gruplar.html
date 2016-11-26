@@ -9,7 +9,7 @@
 	<div class = "row">
 
 
-		{%for id, baslik, zaman, aciklama, icerik, resim in gruplar%}
+		{%for id, baslik, zaman, aciklama, icerik, resim, kisi in gruplar%}
 
 			<div class = "col-md-3">
 			<!-- Title -->
@@ -20,6 +20,8 @@
 			<p>{{aciklama}}</p>
 			<!-- Icerik -->
 			<p>{{icerik}}</p>
+			<!-- Olusturan Kisi -->
+			<p>{{kisi}}</p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
 			<!-- Update Page URL -->
@@ -56,6 +58,15 @@
 				  		<label for="usr">Resim URL'si:</label>
 		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: software.jpg" name="resim">
 				  </div>
+				   <div class="form-group">
+  						<label for="sel1">Olusturan Kisi:</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" form="add">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+
                   <input class="add" form="add" id="gruplar_form_add" value="Ekle!" name="add" type="submit">
 			</form>
 

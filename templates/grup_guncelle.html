@@ -4,7 +4,7 @@
 {% block content %}
     <h2>Grup Guncelleme Sayfasi</h2>
 
-		{%for id, baslik, zaman, aciklama, icerik, resim in grup%}
+		{%for id, baslik, zaman, aciklama, icerik, resim,kisi in grup%}
             <p> GROUP ID: {{id}} </p>
             <form id="update" action="{{ url_for('gruplar_update_page',grup_id=id) }}" method = "post">
                   <div class="form-group">
@@ -26,6 +26,14 @@
 				  <div class="form-group">
 				  		<label for="usr">Resim URL'si:</label>
 		          		<input class="form-control" size="7" value="{{resim}}" form ="update" type="text" placeholder="Resim url'si" name="resim">
+				  </div>
+				  <div class="form-group">
+  						<label for="sel1">Olusturan Kisi:</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" form="update">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
                   <input type="hidden" name="grup_id" value="{{id}}">
                   <input class="add" form="update" id="gruplar_form_update" value="Grubu Guncelle" name="update" type="submit">
