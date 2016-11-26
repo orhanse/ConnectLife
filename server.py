@@ -69,8 +69,8 @@ def kisiler_sayfasi():
                         request.form['resim'],
                         request.form['mekan'],
                         request.form['yas'],
-                        request.form['universite'],
-                        request.form['work'])
+                        request.form['university_name'],
+                        request.form['work_name'])
         add_kisiler(cursor, request, kisi1)
         connection.commit()
         return redirect(url_for('kisiler_sayfasi'))
@@ -100,8 +100,8 @@ def kisiler_update_page(kisi_id):
                             request.form['resim'],
                             request.form['mekan'],
                             request.form['yas'],
-                            request.form['universite'],
-                            request.form['work'])
+                            request.form['university_name'],
+                            request.form['work_name'])
             update_kisiler(cursor, request.form['kisi_id'], kisi1)
             connection.commit()
             return redirect(url_for('kisiler_sayfasi'))
@@ -296,7 +296,9 @@ def counter_page():
 def initialize_database_university():
     connection = dbapi2.connect(app.config['dsn'])
     cursor =connection.cursor()
-    cursor.execute("""DROP TABLE IF EXISTS UNIVERSITY""")
+    cursor.execute('''
+                    DROP TABLE IF EXISTS UNIVERSITY CASCADE;
+                    ''')
 
     init_universities_db(cursor)
     connection.commit()
@@ -389,7 +391,7 @@ def sirketler_sayfasi():
         query = "SELECT ID,ISIM FROM KISILER"
         cursor.execute(query)
         kisiler =cursor.fetchall()
-        return render_template('sirketler.html', sirket = cursor, current_time=now.ctime(),kisiler=kisiler)
+        return render_template('sirketler.html', sirket = sirket, current_time=now.ctime(),kisiler=kisiler)
     elif "add" in request.form:
         sirket = Sirket(request.form['name'],
                      request.form['date'],

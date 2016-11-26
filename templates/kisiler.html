@@ -57,7 +57,7 @@
                   </div>
 				  <div class="form-group">
   						<label for="usr">Universite:</label>
-					 	<select class="form-control" id="sel1" name="universite" form="add">
+					 	<select class="form-control" id="sel1" name="university_name" form="add">
 					 	{%for id, name in university%}
 					    	<option value = "{{id}}" >{{name}}</option>
 					    {%endfor%}
@@ -65,7 +65,7 @@
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Calistigi yer:</label>
-		          		<select class="form-control" id="sel1" name="work" form ="add">
+		          		<select class="form-control" id="sel1" name="work_name" form ="add">
 		          		{%for id, name in sirket%}
 					    	<option value = "{{id}}" >{{name}}</option>
 					    {%endfor%}
