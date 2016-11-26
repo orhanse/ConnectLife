@@ -47,11 +47,23 @@ def kisiler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     now = datetime.datetime.now()
+
     if request.method == 'GET':
-        query = "SELECT ID, ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER"
+        query2 = "SELECT ID, NAME FROM UNIVERSITY"
+        cursor.execute(query2)
+        university = cursor.fetchall()
+        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME
+                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S
+                    WHERE(
+                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID)
+                    ) """
         cursor.execute(query)
-        kisiler = cursor.fetchall()
-        return render_template('kisiler.html', kisiler = kisiler, current_time=now.ctime())
+        kisi2 = cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM SIRKET")
+        sirket = cursor.fetchall()
+        return render_template('kisiler.html', kisiler = kisi2, universite = university, work = sirket)
+
+
     elif "add" in request.form:
         kisi1 = Kisiler(request.form['isim'],
                         request.form['resim'],

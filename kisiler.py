@@ -19,20 +19,23 @@ def init_kisiler_db(cursor):
     query = """CREATE TABLE IF NOT EXISTS KISILER (
     ID SERIAL PRIMARY KEY,
     ISIM VARCHAR(30) NOT NULL,
-    RESIM VARCHAR(80),
+    RESIM VARCHAR(80) DEFAULT 'defaultprofil.png',
     MEKAN VARCHAR(15) NOT NULL,
     YAS INTEGER,
-    UNIVERSITE VARCHAR(15),
-    WORK VARCHAR(15))"""
+    UNIVERSITE INTEGER REFERENCES UNIVERSITY(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    WORK INTEGER REFERENCES SIRKET(ID) ON DELETE CASCADE ON UPDATE CASCADE)"""
 
     cursor.execute(query)
     fill_kisiler_db(cursor)
 
 
 def fill_kisiler_db(cursor):
-    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 'ITU', 'Student');
-    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('Cagri Gokce', 'defaultprofil.png', 'Ankara', 22, 'ITU', 'Engineer');
-    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK) VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 'BAU', 'CEO');"""
+    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
+                   VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 1, 1);
+                INSERT INTO KISILER (ISIM, MEKAN, YAS, UNIVERSITE, WORK)
+                    VALUES ('Cagri Gokce', 'Ankara', 22, 2, 2);
+                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
+                    VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 2, 1);"""
 
     cursor.execute(query)
 
@@ -44,8 +47,8 @@ def add_kisiler(cursor, request, kisi1):
         %s,
         INITCAP(%s),
         %s,
-        INITCAP(%s),
-        INITCAP(%s)
+        %s,
+        %s
         )"""
         cursor.execute(query, (kisi1.isim, kisi1.resim, kisi1.mekan,
                                kisi1.yas, kisi1.universite, kisi1.work))
