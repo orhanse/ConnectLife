@@ -312,23 +312,26 @@ def universiteler_sayfasi():
     now = datetime.datetime.now()
 
     if request.method == 'GET':
-        query = "SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY"
+        query = "SELECT U.ID, U.NAME, U.FOUNDATION_DATE, U.LOCATION, U.SMALL_INFO, U.PHOTO, K.ISIM FROM KISILER AS K RIGHT JOIN UNIVERSITY AS U ON U.RECTOR_ID = K.ID"
         cursor.execute(query)
         university = cursor.fetchall()
-        return render_template('universiteler.html', university = university, current_time=now.ctime())
+        query = "SELECT ID, ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler = cursor.fetchall()
+        return render_template('universiteler.html', university = university, current_time=now.ctime(), kisiler = kisiler)
     elif "add" in request.form:
         university1 = University(request.form['name'],
                     request.form['foundation_date'],
                     request.form['location'],
                     request.form['small_info'],
-                    request.form['photo'])
-
+                    request.form['photo'],
+                    request.form['rector_name'])
         add_university(cursor, request, university1)
         connection.commit()
         return redirect(url_for('universiteler_sayfasi'))
     elif "search" in request.form:
         searched = request.form['searched'];
-        query = """SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO FROM UNIVERSITY WHERE NAME LIKE %s"""
+        query = """SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO, RECTOR_ID FROM UNIVERSITY WHERE NAME LIKE %s"""
         cursor.execute(query,[searched])
         university=cursor.fetchall()
         now = datetime.datetime.now()
@@ -343,15 +346,20 @@ def university_update_page(university_id):
         cursor = connection.cursor()
         query = """SELECT * FROM UNIVERSITY WHERE (ID = %s)"""
         cursor.execute(query,university_id)
+        university = cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('universiteler_guncelle.html', universite = cursor, current_time=now.ctime())
+        query = "SELECT ID, ISIM FROM KISILER"
+        cursor.execute(query)
+        rector = fetchall()
+        return render_template('universiteler_guncelle.html', university = university, current_time=now.ctime(), rector = rector)
     elif request.method == 'POST':
         if "update" in request.form:
             university1 = University(request.form['name'],
                             request.form['foundation_date'],
                             request.form['location'],
                             request.form['small_info'],
-                            request.form['photo'])
+                            request.form['photo'],
+                            request.form['rector_name'])
             update_university(cursor, request.form['university_id'], university1)
             connection.commit()
             return redirect(url_for('universiteler_sayfasi'))

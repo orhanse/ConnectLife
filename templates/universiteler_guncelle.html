@@ -4,12 +4,20 @@
 {% block content %}
     <h2>Universiteler Guncelleme Sayfasi</h2>
 
-		{%for id, name, foundation_date, location, small_info, photo in universite%}
+		{%for id, name, foundation_date, location, small_info, photo, rector in universite%}
             <p> UNIVERSITY ID: {{id}} </p>
             <form id="update" action="{{ url_for('university_update_page',university_id=id) }}" method = "post">
                   <div class="form-group">
   						<label for="usr">Universite Adi:</label>
 				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Unvirsite Adi" name="name">
+				  </div>
+				  <div class="form-group">
+  						<label for="sel1">Rektor:</label>
+				  		<select class="form-control" id="sel1" name=rector_name" form ="update">
+				  			{%for id, rector in kisiler%}
+				  				<option value "{{id}}">{{rector}}</option>
+				  			{%endfor%}
+				  		</select>
 				  </div>
                   <div class="form-group">
 				  		<label for="usr">Kurulus Tarihi:</label>

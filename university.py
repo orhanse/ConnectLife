@@ -11,12 +11,13 @@ from flask import request
 from flask.helpers import url_for
 
 class University:
-    def __init__(self, name, foundation_date, location, small_info, photo):
+    def __init__(self, name, foundation_date, location, small_info, photo, rector_id):
         self.name = name
         self.foundation_date = foundation_date
         self.location = location
         self.small_info = small_info
         self.photo = photo
+        self.rector_id =rector_id
 
 def init_universities_db(cursor):
     query = """CREATE TABLE UNIVERSITY (
@@ -26,6 +27,7 @@ def init_universities_db(cursor):
         LOCATION VARCHAR(80) NOT NULL,
         SMALL_INFO VARCHAR(500),
         PHOTO VARCHAR(80),
+        RECTOR_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
         PRIMARY KEY (ID)
         )"""
     cursor.execute(query)
@@ -68,14 +70,15 @@ def insert_university(cursor):
 
 def add_university(cursor, request, university1):
     query = """INSERT INTO UNIVERSITY
-        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO) VALUES (
+        (NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO, RECTOR_ID) VALUES (
         INITCAP(%s),
         %s,
         INITCAP(%s),
         INITCAP(%s),
+        %s,
         %s
         )"""
-    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo))
+    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo, university1.rector_id))
 
 def delete_university(cursor, id):
     query ="""DELETE FROM UNIVERSITY WHERE ID = %s"""
@@ -88,8 +91,9 @@ def update_university(cursor, id, university1):
     FOUNDATION_DATE=%s,
     LOCATION=INITCAP(%s),
     SMALL_INFO=INITCAP(%s),
-    PHOTO=%s
+    PHOTO=%s,
+    RECTOR_ID =%s
     WHERE ID=%s
     """
 
-    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo, id))
+    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo,university1.rector_id, id))

@@ -9,10 +9,12 @@
 	<div class = "row">
 
 
-		{% for id, name, foundation_date, location, small_info, photo in university%}
+		{% for id, name, foundation_date, location, small_info, photo, rector in university%}
 	<div class = "col-md-3">
 		<!-- Title -->
 		<h2>{{name}}</h2>
+		<!-- Rector -->
+		<p>Rektor: {{rector}}</p>
 		<!-- Description -->
 		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{foundation_date}}</p>
 		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
