@@ -8,7 +8,7 @@
             <p> Kisi ID: {{id}} </p>
             <form id="update" action="{{ url_for('kisiler_update_page',kisi_id=id) }}" method = "post">
                   <div class="form-group">
-  						<label for="usr">Isim:</label>
+  						<label for="usr">İsim:</label>
 				  		<input class="form-control" size="7" value="{{isim}}" form ="update" type="text" placeholder="Isim" name="isim">
 				  </div>
 				  <div class="form-group">
@@ -16,20 +16,20 @@
 		          		<input class="form-control" size="7" value="{{resim}}" form ="update" type="text" placeholder="Resim url'si" name="resim">
 				  </div>
                   <div class="form-group">
-				  		<label for="usr">Yasadigi yer:</label>
+				  		<label for="usr">Yaşadığı yer:</label>
 						<input class="form-control" size="7" value="{{mekan}}" form ="update" type="text" placeholder="Mekan" name="mekan">
 				  </div>
 				  <div class="form-group">
-				  		<label for="usr">Yas:</label>
+				  		<label for="usr">Yaş:</label>
 		                <input class="form-control" size="7" value="{{yas}}" form ="update" type="text" placeholder = "Yas" name="yas">
 				  </div>
 				  <div class="form-group">
-				  		<label for="usr">Universite:</label>
-		          		<input class="form-control" size="7" value="{{universite}}" form ="update" type="text" placeholder="Universite" name="universite">
+				  		<label for="usr">Üniversite:</label>
+		          		<input class="form-control" size="7" value="{{universite}}" form ="update" type="text" placeholder="üniversite" name="universite">
                   </div>
                   <div class="form-group">
-				  		<label for="usr">Calistigi yer:</label>
-		          		<input class="form-control" size="7" value="{{work}}" form ="update" type="text" placeholder="Work" name="work">
+				  		<label for="usr">Çalıştığı yer:</label>
+		          		<input class="form-control" size="7" value="{{work}}" form ="update" type="text" placeholder="çalıştığı yer" name="work">
                   </div>
                   <input type="hidden" name="kisi_id" value="{{id}}">
                   <input class="add" form="update" id="kisiler_form_update" value="Kisiyi Guncelle" name="update" type="submit">

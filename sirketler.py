@@ -22,7 +22,7 @@ def init_sirketler_db(cursor):
     query = """DROP TABLE IF EXISTS SIRKET"""
     cursor.execute(query)
     query = """CREATE TABLE SIRKET (
-        ID SERIAL,
+        ID SERIAL PRIMARY KEY,
         NAME varchar(100) NOT NULL,
         DATE varchar NOT NULL,
         LOCATION varchar(80) NOT NULL,
