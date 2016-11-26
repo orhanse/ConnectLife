@@ -24,12 +24,20 @@
 		                <input class="form-control" size="7" value="{{yas}}" form ="update" type="text" placeholder = "Yas" name="yas">
 				  </div>
 				  <div class="form-group">
-				  		<label for="usr">Üniversite:</label>
-		          		<input class="form-control" size="7" value="{{universite}}" form ="update" type="text" placeholder="üniversite" name="universite">
+				  		<label for="sel1">Üniversite:</label>
+				  		<select class="form-control" id="sel1" name="universite" form="update">
+ +					 	{%for id, name in university%}
+ +					    	<option value = "{{id}}" >{{name}}</option>
+ +					    {%endfor%}
+ 						</select>
                   </div>
                   <div class="form-group">
-				  		<label for="usr">Çalıştığı yer:</label>
-		          		<input class="form-control" size="7" value="{{work}}" form ="update" type="text" placeholder="çalıştığı yer" name="work">
+				  		<label for="sel1">Çalıştığı yer:</label>
+				  		<select class="form-control" id="sel1" name="work" form="update">
+ +					 	{%for id, name in sirket%}
+ +					    	<option value = "{{id}}" >{{name}}</option>
+ +					    {%endfor%}
+ 						</select>
                   </div>
                   <input type="hidden" name="kisi_id" value="{{id}}">
                   <input class="add" form="update" id="kisiler_form_update" value="Kisiyi Guncelle" name="update" type="submit">

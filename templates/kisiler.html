@@ -45,7 +45,7 @@
 				  </div>
                   <div class="form-group">
 				  		<label for="usr">Resim URL'si:</label>
-						<input class="form-control" size="7" form ="add" type="text" placeholder="Resim" name="resim" required="required">
+						<input class="form-control" size="7" form ="add" type="text" placeholder="Resim" name="(resim girmek istemiyorsanuz defaultprofil.png yazınız.)" required="required">
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Yas</label>
@@ -56,12 +56,20 @@
 		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Mekan (Zorunlu)" name="mekan" required="required">
                   </div>
 				  <div class="form-group">
-				  		<label for="usr">Universite:</label>
-		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Universite" name="universite">
+  						<label for="usr">Universite:</label>
+					 	<select class="form-control" id="sel1" name="universite" form="add">
+					 	{%for id, name in university%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 				  <div class="form-group">
 				  		<label for="usr">Calistigi yer:</label>
-		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Work" name="work">
+		          		<select class="form-control" id="sel1" name="work" form ="add">
+		          		{%for id, name in sirket%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 
                   <input class="add" form="add" id="kisiler_form_add" value="Ekle!" name="add" type="submit">

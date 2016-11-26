@@ -383,7 +383,7 @@ def sirketler_sayfasi():
     cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT S.ID,S.NAME,S.DATE,S.LOCATION,K.ISIM FROM KISILER AS K RIGHT JOIN SIRKET AS S ON S.CEO_ID = K.ID,S.WORK_AREA,S.PHOTO"
+        query = "SELECT S.ID,S.NAME,S.DATE,S.LOCATION,K.ISIM, S.WORK_AREA,S.PHOTO FROM KISILER AS K RIGHT JOIN SIRKET AS S ON S.CEO_ID = K.ID"
         cursor.execute(query)
         sirket=cursor.fetchall()
         query = "SELECT ID,ISIM FROM KISILER"
@@ -423,7 +423,7 @@ def sirketler_update_page(sirket_id):
         query = "SELECT ID,ISIM FROM KISILER"
         cursor.execute(query)
         kisiler =cursor.fetchall()
-        return render_template('sirket_guncelle.html', sirket = cursor, current_time=now.ctime(),kisiler = kisiler)
+        return render_template('sirket_guncelle.html', sirket = cursor, current_time=now.ctime(), kisiler = kisiler)
     elif request.method == 'POST':
         if "update" in request.form:
             sirket1 = Sirket(request.form['name'],
