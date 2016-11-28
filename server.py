@@ -213,12 +213,18 @@ def isilanlari_sayfasi():
     cursor = connection.cursor()
     now = datetime.datetime.now()
     if request.method == 'GET':
-        query = "SELECT ID, SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI"
+        query = """SELECT I.ID, S.NAME, I.POZISYON, I.LOKASYON, I.BASVURU, I.TARIH
+                    FROM ISILANLARI AS I, SIRKET AS S
+                    WHERE(
+                        (I.SIRKETNAME = S.ID)
+                    ) """
         cursor.execute(query)
         isilanlari=cursor.fetchall()
-        return render_template('isilanlari.html', isilanlari = isilanlari, current_time=now.ctime())
+        cursor.execute("SELECT ID, NAME FROM SIRKET")
+        sirket=cursor.fetchall()
+        return render_template('isilanlari.html', isilanlari = isilanlari, current_time=now.ctime(), sirketname = sirket)
     elif "add" in request.form:
-        ilan1 = Isilanlari(request.form['sirket'],
+        ilan1 = Isilanlari(request.form['sirket_name'],
                             request.form['pozisyon'],
                             request.form['lokasyon'],
                             request.form['basvuru'],
@@ -228,7 +234,12 @@ def isilanlari_sayfasi():
         return redirect(url_for('isilanlari_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID, SIRKET, POZISYON, LOKASYON, BASVURU, TARIH FROM ISILANLARI WHERE SIRKET LIKE %s"""
+
+        query = """SELECT I.ID, S.NAME, I.POZISYON, I.LOKASYON, I.BASVURU, I.TARIH
+                    FROM ISILANLARI AS I, SIRKET AS S
+                    WHERE((
+                        (I.SIRKETNAME = S.ID)
+                    ) AND (S.NAME LIKE %s))"""
         cursor.execute(query,[aranan])
         isilanlari=cursor.fetchall()
         now = datetime.datetime.now()
@@ -243,11 +254,14 @@ def isilanlari_update_page(ilan_id):
         cursor = connection.cursor()
         query = """SELECT * FROM ISILANLARI WHERE (ID = %s)"""
         cursor.execute(query,ilan_id)
+        ilan=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('ilan_guncelle.html', ilan = cursor, current_time=now.ctime())
+        cursor.execute("SELECT ID, NAME FROM SIRKET")
+        sirket=cursor.fetchall()
+        return render_template('ilan_guncelle.html', ilan = ilan,  current_time=now.ctime(), sirketler = sirket)
     elif request.method == 'POST':
         if "update" in request.form:
-            ilan1 = Isilanlari(request.form['sirket'],
+            ilan1 = Isilanlari(request.form['sirket_name'],
                             request.form['pozisyon'],
                             request.form['lokasyon'],
                             request.form['basvuru'],
@@ -259,6 +273,7 @@ def isilanlari_update_page(ilan_id):
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
+
 
 
 @app.route('/')
@@ -429,7 +444,7 @@ def sirketler_update_page(sirket_id):
         query = "SELECT ID,ISIM FROM KISILER"
         cursor.execute(query)
         kisiler =cursor.fetchall()
-        return render_template('sirket_guncelle.html', sirket = cursor, current_time=now.ctime(), kisiler = kisiler)
+        return render_template('sirket_guncelle.html', sirket = sirket, current_time=now.ctime(), kisiler = kisiler)
     elif request.method == 'POST':
         if "update" in request.form:
             sirket1 = Sirket(request.form['name'],
@@ -458,6 +473,6 @@ if __name__ == '__main__':
     if VCAP_SERVICES is not None:
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
-        app.config['dsn'] = """user='vagrant' password='vagrant'
+        app.config['dsn'] = """user='postgres' password='vagrant'
                                host='localhost' port=5432 dbname='itucsdb'"""
     app.run(host='0.0.0.0', port=port, debug=debug)
