@@ -90,10 +90,14 @@ def kisiler_update_page(kisi_id):
     if request.method == 'GET':
         cursor.close()
         cursor = connection.cursor()
+        cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+        universiteler = cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM SIRKET")
+        sirket = cursor.fetchall()
         query = """SELECT * FROM KISILER WHERE (ID = %s)"""
         cursor.execute(query, kisi_id)
         now = datetime.datetime.now()
-        return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime())
+        return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime(), universiteler= universiteler, sirketler=sirket)
     elif request.method == 'POST':
         if "update" in request.form:
             kisi1 = Kisiler(request.form['isim'],
