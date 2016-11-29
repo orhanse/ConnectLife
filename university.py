@@ -4,12 +4,6 @@ import re
 import os
 import psycopg2 as dbapi2
 
-from flask import Flask
-from flask import render_template
-from flask import redirect
-from flask import request
-from flask.helpers import url_for
-
 class University:
     def __init__(self, name, foundation_date, location, small_info, photo, rector_id):
         self.name = name
@@ -96,4 +90,4 @@ def update_university(cursor, id, university1):
         WHERE ID=%s
         """
 
-    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo,university1.rector_id, id))
+    cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo, university1.rector_id, id))
