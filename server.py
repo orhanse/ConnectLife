@@ -343,7 +343,7 @@ def universiteler_sayfasi():
                     request.form['location'],
                     request.form['small_info'],
                     request.form['photo'],
-                    request.form['rector_isim'])
+                    request.form['rector_name'])
         add_university(cursor, request, university1)
         connection.commit()
         return redirect(url_for('universiteler_sayfasi'))
@@ -366,10 +366,10 @@ def university_update_page(university_id):
         cursor.execute(query,university_id)
         university = cursor.fetchall()
         now = datetime.datetime.now()
-        query = "SELECT ID, ISIM FROM KISILER"
-        cursor.execute(query)
-        rector = cursor.fetchall()
-        return render_template('universiteler_guncelle.html', university = university, current_time=now.ctime(), rector = rector)
+        query2 = "SELECT ID, ISIM FROM KISILER"
+        cursor.execute(query2)
+        rektor = cursor.fetchall()
+        return render_template('universiteler_guncelle.html', university = university, current_time=now.ctime(), rektor = rektor)
     elif request.method == 'POST':
         if "update" in request.form:
             university1 = University(request.form['name'],
@@ -377,7 +377,7 @@ def university_update_page(university_id):
                             request.form['location'],
                             request.form['small_info'],
                             request.form['photo'],
-                            request.form['rector_isim'])
+                            request.form['rector_name'])
             update_university(cursor, request.form['university_id'], university1)
             connection.commit()
             return redirect(url_for('universiteler_sayfasi'))
