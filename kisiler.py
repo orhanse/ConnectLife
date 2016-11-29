@@ -35,7 +35,11 @@ def fill_kisiler_db(cursor):
                 INSERT INTO KISILER (ISIM, MEKAN, YAS, UNIVERSITE, WORK)
                     VALUES ('Cagri Gokce', 'Ankara', 22, 2, 2);
                 INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
-                    VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 2, 1);"""
+                    VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 2, 1);
+                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
+                    VALUES ('Kemal Hazım Ekenel', 'ekenel.png','Istanbul', 38, 2, 1);
+                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK)
+                    VALUES ('Jeo Kaeser', 'kaeser.jpg','Almanya', 59, 2, 1);"""
 
     cursor.execute(query)
 

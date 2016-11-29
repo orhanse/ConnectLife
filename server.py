@@ -368,7 +368,7 @@ def university_update_page(university_id):
         now = datetime.datetime.now()
         query = "SELECT ID, ISIM FROM KISILER"
         cursor.execute(query)
-        rector = fetchall()
+        rector = cursor.fetchall()
         return render_template('universiteler_guncelle.html', university = university, current_time=now.ctime(), rector = rector)
     elif request.method == 'POST':
         if "update" in request.form:

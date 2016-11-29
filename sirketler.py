@@ -40,7 +40,7 @@ def insert_sirket(cursor):
         'SiMiT Lab',
         2010,
         'Istanbul/Türkiye',
-        1,
+        4,
         'Akıllı Etkileşim, Mobil İstihbarat, Multimedya Teknolojileri',
         'itulogo.png'
         )"""
@@ -50,9 +50,39 @@ def insert_sirket(cursor):
         'Siemens AG',
         1847,
         'Berlin/Almanya',
-        2,
+        5,
         'Endüstri, Enerji, Sağlık',
         'siemens1.png'
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO SIRKET
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
+        'Vestel',
+        1984,
+        'Manisa/Türkiye',
+        2,
+        'Beyaz eşya, Elektrikli ev gereçleri, Otel ürünleri üretimi',
+        'vestel1.png'
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO SIRKET
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
+        'Ülker Bisküvi Sanayi A.Ş.',
+        1944,
+        'Istanbul/Türkiye',
+        2,
+        'İçecek, Çikolata, Bisküvi, Dondurma',
+        'ülker.png'
+        )"""
+    cursor.execute(query)
+    query = """INSERT INTO SIRKET
+        (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
+        'Koç Holding',
+        1926,
+        'Istanbul/Türkiye',
+        2,
+        'Beyaz eşya, Otomotiv, Bankacılık, Akaryakıt',
+        'koc.png'
         )"""
     cursor.execute(query)
 
