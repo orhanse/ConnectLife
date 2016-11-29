@@ -115,5 +115,5 @@ def update_sirketler(cursor, id, sirket):
             PHOTO=%s
             WHERE ID=%s
             """
-            cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.work_area, sirket.photo, id))
+            cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo, id))
 

@@ -427,9 +427,9 @@ def sirketler_sayfasi():
         aranan = request.form['aranan'];
         query = """SELECT ID,NAME, DATE, LOCATION, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
         cursor.execute(query,[aranan])
-        sirketler=cursor.fetchall()
+        sirket=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('sirket_ara.html', sirketler = sirketler, current_time=now.ctime(), sorgu = aranan)
+        return render_template('sirket_ara.html', sirket = sirket, current_time=now.ctime(), sorgu = aranan)
 
 
 @app.route('/sirketler/<sirket_id>', methods=['GET', 'POST'])
