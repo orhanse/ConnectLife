@@ -17,7 +17,7 @@ class University:
         self.location = location
         self.small_info = small_info
         self.photo = photo
-        self.rector_id =rector_id
+        self.rector_id = rector_id
 
 def init_universities_db(cursor):
     query = """CREATE TABLE UNIVERSITY (
@@ -86,14 +86,14 @@ def delete_university(cursor, id):
 
 def update_university(cursor, id, university1):
     query = """
-    UPDATE UNIVERSITY
-    SET NAME=INITCAP(%s),
-    FOUNDATION_DATE=%s,
-    LOCATION=INITCAP(%s),
-    SMALL_INFO=INITCAP(%s),
-    PHOTO=%s,
-    RECTOR_ID =%s
-    WHERE ID=%s
-    """
+        UPDATE UNIVERSITY
+        SET NAME=INITCAP(%s),
+        FOUNDATION_DATE=%s,
+        LOCATION=INITCAP(%s),
+        SMALL_INFO=INITCAP(%s),
+        PHOTO=%s,
+        RECTOR_ID =%s
+        WHERE ID=%s
+        """
 
     cursor.execute(query, (university1.name, university1.foundation_date, university1.location, university1.small_info, university1.photo,university1.rector_id, id))

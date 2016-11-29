@@ -335,8 +335,8 @@ def universiteler_sayfasi():
         university = cursor.fetchall()
         query = "SELECT ID, ISIM FROM KISILER"
         cursor.execute(query)
-        kisiler = cursor.fetchall()
-        return render_template('universiteler.html', university = university, current_time=now.ctime(), kisiler = kisiler)
+        rector = cursor.fetchall()
+        return render_template('universiteler.html', university = university, current_time=now.ctime(), rector = rector)
     elif "add" in request.form:
         university1 = University(request.form['name'],
                     request.form['foundation_date'],

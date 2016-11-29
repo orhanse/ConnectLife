@@ -14,8 +14,8 @@
 				  <div class="form-group">
   						<label for="sel1">Rektor:</label>
 				  		<select class="form-control" id="sel1" name=rector_name" form ="update">
-				  			{%for id, rector in kisiler%}
-				  				<option value "{{id}}">{{rector}}</option>
+				  			{%for id, isim in rector%}
+				  				<option value "{{id}}">{{isim}}</option>
 				  			{%endfor%}
 				  		</select>
 				  </div>
