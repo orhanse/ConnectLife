@@ -343,7 +343,7 @@ def universiteler_sayfasi():
                     request.form['location'],
                     request.form['small_info'],
                     request.form['photo'],
-                    request.form['rector_name'])
+                    request.form['rector_isim'])
         add_university(cursor, request, university1)
         connection.commit()
         return redirect(url_for('universiteler_sayfasi'))
@@ -377,7 +377,7 @@ def university_update_page(university_id):
                             request.form['location'],
                             request.form['small_info'],
                             request.form['photo'],
-                            request.form['rector_name'])
+                            request.form['rector_isim'])
             update_university(cursor, request.form['university_id'], university1)
             connection.commit()
             return redirect(url_for('universiteler_sayfasi'))

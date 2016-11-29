@@ -4,7 +4,7 @@
 {% block content %}
     <h2>Universiteler Guncelleme Sayfasi</h2>
 
-		{%for id, name, foundation_date, location, small_info, photo, rector in universite%}
+		{%for id, name, foundation_date, location, small_info, photo, rector in university%}
             <p> UNIVERSITY ID: {{id}} </p>
             <form id="update" action="{{ url_for('university_update_page',university_id=id) }}" method = "post">
                   <div class="form-group">
