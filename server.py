@@ -425,7 +425,7 @@ def sirketler_sayfasi():
         return redirect(url_for('sirketler_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID,NAME, DATE, LOCATION, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
+        query = """SELECT ID,NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
         cursor.execute(query,[aranan])
         sirket=cursor.fetchall()
         now = datetime.datetime.now()
