@@ -1,0 +1,53 @@
+{% extends "home.html" %}
+
+{% block title %} Meslekler {% endblock %}
+
+{% block content %}
+
+	<h1>Meslekler</h1>
+	<hr>
+	<div class = "row">
+
+		{%for id, isim in meslekler%}
+
+			<div class = "col-md-3">
+			<!-- Name -->
+			<h2>{{isim}}</h2>
+			<a class="btn btn-large btn-info" href= "{{ url_for('meslekler_update_page',meslek_id=id)}}">Mesleği Düzenle</a>
+			<!-- Like Button -->
+			<button type="button" class="btn btn-success">Beğen!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+	<hr>
+
+	<div class = "row">
+
+		<!-- Yeni meslek ekleme sayfası  -->
+		    <h2>Yeni Meslek Ekle!</h2>
+            <form id="add" action="{{ url_for('meslekler_sayfasi')}}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">Meslek:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Meslek (Zorunlu)" name="isim" required="required">
+				  </div>
+
+                  <input class="add" form="add" id="meslekler_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Meslek Ara!</h2>
+			<form id="search" action="{{ url_for('meslekler_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Meslek Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="arananmeslek">
+				  </div>
+                  <input class="search" form="search" id="meslekler_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
+
+{% endblock %}

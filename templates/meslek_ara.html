@@ -1,0 +1,27 @@
+{% extends "home.html" %}
+
+{% block title %} Meslekler {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Meslekler ekranda gosteren kisim -->
+		{%for id, isim in meslekler%}
+
+			<div class = "col-md-3">
+			<!-- Isim -->
+			<h2>{{isim}}</h2>
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('meslekler_update_page',meslek_id=id)}}">Meslegi Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Begen!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

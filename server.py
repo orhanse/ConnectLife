@@ -15,6 +15,8 @@ from sirketler import *
 from gruplar import *
 from kisiler import *
 from isilanlari import *
+from meslekler import *
+
 
 app = Flask(__name__)
 
@@ -39,7 +41,7 @@ def initialize_database_kisiler():
     ''')
     init_kisiler_db(cursor)
     connection.commit()
-    return redirect(url_for('home_page'))
+    return redirect(url_for('kisiler_sayfasi'))
 
 
 @app.route('/kisiler',methods=['GET', 'POST'])
@@ -113,6 +115,71 @@ def kisiler_update_page(kisi_id):
             delete_kisiler(cursor, kisi_id)
             connection.commit()
             return redirect(url_for('kisiler_sayfasi'))
+
+
+
+#MESLEKLER
+@app.route('/meslekler/initdb')
+def initialize_database_meslekler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS MESLEKLER CASCADE;
+    ''')
+    init_meslekler_db(cursor)
+    connection.commit()
+    return redirect(url_for('meslekler_sayfasi'))
+
+
+@app.route('/meslekler',methods=['GET', 'POST'])
+def meslekler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+
+    if request.method == 'GET':
+        query = """SELECT ID, ISIM FROM MESLEKLER"""
+        cursor.execute(query)
+        meslek2 = cursor.fetchall()
+        return render_template('meslekler.html', meslekler = meslek2)
+
+
+    elif "add" in request.form:
+        meslek1 = Meslekler(request.form['isim'])
+        add_meslekler(cursor, request, meslek1)
+        connection.commit()
+        return redirect(url_for('meslekler_sayfasi'))
+
+    elif "search" in request.form:
+        arananmeslek = request.form['arananmeslek'];
+        query = """SELECT ID, ISIM FROM MESLEKLER WHERE ISIM LIKE %s"""
+        cursor.execute(query,[arananmeslek])
+        meslekler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('meslek_ara.html', meslekler = meslekler, current_time=now.ctime(), sorgu = arananmeslek)
+
+
+@app.route('/meslekler/<meslek_id>', methods=['GET', 'POST'])
+def meslekler_update_page(meslek_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM MESLEKLER WHERE (ID = %s)"""
+        cursor.execute(query, meslek_id)
+        now = datetime.datetime.now()
+        return render_template('meslek_guncelle.html', meslek = cursor, current_time=now.ctime() )
+    elif request.method == 'POST':
+        if "update" in request.form:
+            meslek1 = Meslekler(request.form['isim'])
+            update_meslekler(cursor, request.form['meslek_id'], meslek1)
+            connection.commit()
+            return redirect(url_for('meslekler_sayfasi'))
+        elif "delete" in request.form:
+            delete_meslekler(cursor, meslek_id)
+            connection.commit()
+            return redirect(url_for('meslekler_sayfasi'))
 
 
 

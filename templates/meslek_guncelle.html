@@ -1,0 +1,23 @@
+{% extends "home.html"%}
+{% block title %}Meslek Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Meslek Guncelleme Sayfasi</h2>
+
+		{%for id, isim in meslek%}
+            <p> Meslek ID: {{id}} </p>
+            <form id="update" action="{{ url_for('meslekler_update_page',meslek_id=id) }}" method = "post">
+                  <div class="form-group">
+  						<label for="usr">İsim:</label>
+				  		<input class="form-control" size="7" value="{{isim}}" form ="update" type="text" placeholder="Isim" name="isim">
+				  </div>
+
+                  <input type="hidden" name="meslek_id" value="{{id}}">
+                  <input class="add" form="update" id="meslekler_form_update" value="Meslegi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('meslekler_update_page',meslek_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Mesleği Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}
