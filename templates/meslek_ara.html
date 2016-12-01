@@ -10,14 +10,16 @@
 
 
 		<!-- Meslekler ekranda gosteren kisim -->
-		{%for id, isim in meslekler%}
+		{%for id, isim, tanim in meslekler%}
 
 			<div class = "col-md-3">
 			<!-- Isim -->
 			<h2>{{isim}}</h2>
+			<!-- Tanim -->
+			<p>{{tanim}}</hp>
 			<!-- Update Page URL -->
 			<a class="btn btn-large btn-info" href= "{{ url_for('meslekler_update_page',meslek_id=id)}}">Meslegi Duzenle</a>
-			<button type="button" action=" class="btn btn-success">Begen!</button>
+			<button type="button" class="btn btn-success">Begen!</button>
 			</div>
 
 		{%endfor%}

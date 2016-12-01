@@ -8,11 +8,13 @@
 	<hr>
 	<div class = "row">
 
-		{%for id, isim in meslekler%}
+		{%for id, isim, tanim in meslekler%}
 
 			<div class = "col-md-3">
-			<!-- Name -->
+			<!-- Isim -->
 			<h2>{{isim}}</h2>
+			<!-- Tanim -->
+			<p>{{tanim}}</p>
 			<a class="btn btn-large btn-info" href= "{{ url_for('meslekler_update_page',meslek_id=id)}}">Mesleği Düzenle</a>
 			<!-- Like Button -->
 			<button type="button" class="btn btn-success">Beğen!</button>
@@ -32,6 +34,10 @@
                   <div class="form-group">
   						<label for="usr">Meslek:</label>
 				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Meslek (Zorunlu)" name="isim" required="required">
+				  </div>
+				  <div class="form-group">
+  						<label for="usr">Tanim:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Meslek Tanımı" name="tanim">
 				  </div>
 
                   <input class="add" form="add" id="meslekler_form_add" value="Ekle!" name="add" type="submit">

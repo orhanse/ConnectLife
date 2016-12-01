@@ -138,21 +138,22 @@ def meslekler_sayfasi():
     now = datetime.datetime.now()
 
     if request.method == 'GET':
-        query = """SELECT ID, ISIM FROM MESLEKLER"""
+        query = """SELECT ID, ISIM, TANIM FROM MESLEKLER"""
         cursor.execute(query)
         meslek2 = cursor.fetchall()
         return render_template('meslekler.html', meslekler = meslek2)
 
 
     elif "add" in request.form:
-        meslek1 = Meslekler(request.form['isim'])
+        meslek1 = Meslekler(request.form['isim'],
+                            request.form['tanim'])
         add_meslekler(cursor, request, meslek1)
         connection.commit()
         return redirect(url_for('meslekler_sayfasi'))
 
     elif "search" in request.form:
         arananmeslek = request.form['arananmeslek'];
-        query = """SELECT ID, ISIM FROM MESLEKLER WHERE ISIM LIKE %s"""
+        query = """SELECT ID, ISIM, TANIM FROM MESLEKLER WHERE ISIM LIKE %s"""
         cursor.execute(query,[arananmeslek])
         meslekler=cursor.fetchall()
         now = datetime.datetime.now()
@@ -172,7 +173,8 @@ def meslekler_update_page(meslek_id):
         return render_template('meslek_guncelle.html', meslek = cursor, current_time=now.ctime() )
     elif request.method == 'POST':
         if "update" in request.form:
-            meslek1 = Meslekler(request.form['isim'])
+            meslek1 = Meslekler(request.form['isim'],
+                                request.form['tanim'])
             update_meslekler(cursor, request.form['meslek_id'], meslek1)
             connection.commit()
             return redirect(url_for('meslekler_sayfasi'))
