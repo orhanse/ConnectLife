@@ -17,7 +17,7 @@ from kisiler import *
 from isilanlari import *
 from meslekler import *
 from mailler import *
-
+from makaleler import *
 
 app = Flask(__name__)
 
@@ -430,6 +430,87 @@ def isilanlari_update_page(ilan_id):
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
 
+#MAKALELER
+@app.route('/makaleler/initdb')
+def initialize_database_makaleler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS MAKALELER CASCADE;
+    ''')
+    init_makaleler_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+
+@app.route('/makaleler', methods=['GET', 'POST'])
+def makaleler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+    
+    if request.method == 'GET':
+        query = """SELECT M.ID, M.KONU, M.BASLIK, M.YAZAR, M.TARIH, U.NAME 
+                    FROM MAKALELER AS M, UNIVERSITY AS U
+                    WHERE(
+                        (M.UNINAME= U.ID)
+                    ) """
+        cursor.execute(query)
+        makaleler=cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+        university=cursor.fetchall()
+        return render_template('makaleler.html', makaleler = makaleler, current_time=now.ctime(), uniname = university)
+    elif "add" in request.form:
+        
+        makale1 = Makaleler(request.form['konu'],
+                            request.form['baslik'],
+                            request.form['yazar'],
+                            request.form['tarih'],
+                            request.form['university_name'])
+        add_makaleler(cursor, request, makale1)
+        connection.commit()
+        return redirect(url_for('makaleler_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+
+        query = """SELECT M.ID, M.KONU,M.BASLIK, M.YAZAR, M.TARIH, U.NAME
+                    FROM MAKALELER AS M, UNIVERSITY AS U
+                    WHERE((
+                        (M.UNINAME = U.ID)
+                    ) AND (M.KONU LIKE %s))"""
+        cursor.execute(query,[aranan])
+        makaleler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('makale_ara.html', makaleler = makaleler, current_time=now.ctime(), sorgu = aranan)
+
+@app.route('/makaleler/<makale_id>', methods=['GET', 'POST'])
+def makaleler_update_page(makale_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM MAKALELER WHERE (ID = %s)"""
+        cursor.execute(query,makale_id)
+        makale=cursor.fetchall()
+        now = datetime.datetime.now()
+        cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+        universiteler=cursor.fetchall()
+        return render_template('makale_guncelle.html', makale = makale,  current_time=now.ctime(), universiteler = universiteler)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            makale1 = Makaleler(request.form['konu'],
+                            request.form['baslik'],
+                            request.form['yazar'],
+                            request.form['tarih'],
+                            request.form['university_name'])
+            update_makaleler(cursor, request.form['makale_id'], makale1)
+            connection.commit()
+            return redirect(url_for('makaleler_sayfasi'))
+        elif "delete" in request.form:
+            delete_makaleler(cursor, makale_id)
+            connection.commit()
+            return redirect(url_for('makaleler_sayfasi'))
 
 
 @app.route('/')
