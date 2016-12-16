@@ -1,0 +1,42 @@
+{% extends "home.html"%}
+{% block title %}Makale Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Makale Guncelleme Sayfasi</h2>
+
+		{%for id, konu, baslik , yazar, tarih, uniname in makale%}
+            <p> MAKALE ID: {{id}} </p>
+            <form id="update" action="{{ url_for('makaleler_update_page',makale_id=id) }}" method = "post">
+            	<div class="form-group">
+				  		<label for="usr">Makalenin Konusu:</label>
+						<input class="form-control" size="7" value="{{konu}}" form ="update" type="text" placeholder="Makalenin Konusu" name="konu">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Makale Adi:</label>
+						<input class="form-control" size="7" value="{{baslik}}" form ="update" type="text" placeholder="Makale Adi" name="baslik">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Yazar Adi:</label>
+		                <input class="form-control" rows ="5" size="7" value="{{yazar}}" form ="update" type="text" placeholder = "Yazar Adi" name="yazar">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Tarih:</label>
+		          		<input class="form-control" size="7" value="{{tarih}}" form ="update" type="text" placeholder="Tarih (yyyy)" name="tarih">
+				  </div>
+				    <div class="form-group">
+  						<label for="sell">Universite Ismi:</label>
+				  		<select class="form-control" id="sel1" name="university_name" form="update">
+					 	{%for id, name in universiteler%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+                  <input type="hidden" name="makale_id" value="{{id}}">
+                  <input class="add" form="update" id="makaleler_form_update" value="Makaleyi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('makaleler_update_page',makale_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Makaleyi Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

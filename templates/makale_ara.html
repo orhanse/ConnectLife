@@ -1,0 +1,35 @@
+{% extends "home.html" %}
+
+{% block title %} Makale Arama {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		{%for id, konu, baslik , yazar, tarih, uniname in makaleler%}
+
+			<div class = "col-md-3">
+			<!-- Makalenin konusu -->
+			<h2>{{konu}}</h2>
+			<!-- Makale adı -->
+			<p>{{baslik}}</p>
+			<!-- Yazar adı -->
+			<p>{{yazar}}</p>
+			<!-- Date -->
+			<p style= "font-size: 13pt;color: #00CED1;">Yayın tarihi: </p>
+			<p>{{tarih}}</p>
+			<!-- Yayınlandığı üni. -->
+			<p style= "font-size: 13pt;color: #00CED1;">Üniversite: </p>
+			<p>{{uniname}}</p>		
+			<a class="btn btn-large btn-info" href= "{{ url_for('makaleler_update_page',makale_id=id)}}">Makaleyi Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Tam metin!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}
