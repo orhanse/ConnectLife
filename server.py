@@ -79,7 +79,11 @@ def kisiler_sayfasi():
         return redirect(url_for('kisiler_sayfasi'))
     elif "search" in request.form:
         aranankisi = request.form['aranankisi'];
-        query = """SELECT ID, ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK FROM KISILER WHERE ISIM LIKE %s"""
+        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME
+                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S
+                    WHERE(
+                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID)
+                    ) AND (K.ISIM LIKE %s)"""
         cursor.execute(query,[aranankisi])
         kisiler=cursor.fetchall()
         now = datetime.datetime.now()
@@ -230,7 +234,11 @@ def mailler_sayfasi():
 
     elif "search" in request.form:
         arananmail = request.form['arananmail'];
-        query = """SELECT ID, ISIM, MAIL, SIFRE FROM MAILLER WHERE MAIL LIKE %s"""
+        query = """SELECT M.ID, K.ISIM, M.MAIL, M.SIFRE
+                    FROM MAILLER AS M, KISILER AS K
+                    WHERE(
+                        (M.ISIM = K.ID)
+                    ) AND (M.MAIL LIKE %s)"""
         cursor.execute(query,[arananmail])
         mailler=cursor.fetchall()
         now = datetime.datetime.now()
