@@ -1,0 +1,31 @@
+{% extends "home.html" %}
+
+{% block title %} Mailler {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Kisiler ekranda gosteren kisim -->
+		{%for id, isim, mail, sifre in mailler%}
+
+			<div class = "col-md-3">
+			<!-- Mail -->
+			<h2>{{mail}}</h2>
+			<!-- Isim -->
+			<p style= "font-size: 13pt;color: #00CED1;">{{isim}}</p>
+			<!-- Sifre -->
+			<p>***</p>
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('mailler_update_page',mail_id=id)}}">Maili Duzenle</a>
+			<button type="button" class="btn btn-success">Davet et!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

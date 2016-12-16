@@ -16,6 +16,7 @@ from gruplar import *
 from kisiler import *
 from isilanlari import *
 from meslekler import *
+from mailler import *
 
 
 app = Flask(__name__)
@@ -183,6 +184,84 @@ def meslekler_update_page(meslek_id):
             connection.commit()
             return redirect(url_for('meslekler_sayfasi'))
 
+
+
+#MAILLER SAYFASI
+@app.route('/mailler/initdb')
+def initialize_database_mailler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS MAILLER CASCADE;
+    ''')
+    init_mailler_db(cursor)
+    connection.commit()
+    return redirect(url_for('mailler_sayfasi'))
+
+
+@app.route('/mailler',methods=['GET', 'POST'])
+def mailler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+
+    if request.method == 'GET':
+        query2 = """SELECT ID, ISIM FROM KISILER"""
+        cursor.execute(query2)
+        kisi = cursor.fetchall()
+        query = """SELECT M.ID, K.ISIM, M.MAIL, M.SIFRE
+                    FROM MAILLER AS M, KISILER AS K
+                    WHERE(
+                        (M.ISIM = K.ID)
+                    )"""
+        cursor.execute(query)
+        mail2 = cursor.fetchall()
+        return render_template('mailler.html', mailler = mail2, isim = kisi)
+
+
+
+    elif "add" in request.form:
+        mail1 = Mailler(request.form['kisi_adi'],
+                            request.form['mail'],
+                            request.form['sifre'])
+        add_mailler(cursor, request, mail1)
+        connection.commit()
+        return redirect(url_for('mailler_sayfasi'))
+
+    elif "search" in request.form:
+        arananmail = request.form['arananmail'];
+        query = """SELECT ID, ISIM, MAIL, SIFRE FROM MAILLER WHERE MAIL LIKE %s"""
+        cursor.execute(query,[arananmail])
+        mailler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('mail_ara.html', mailler = mailler, current_time=now.ctime(), sorgu = arananmail)
+
+
+@app.route('/mailler/<mail_id>', methods=['GET', 'POST'])
+def mailler_update_page(mail_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler = cursor.fetchall()
+        query = """SELECT * FROM MAILLER WHERE (ID = %s)"""
+        cursor.execute(query, mail_id)
+        now = datetime.datetime.now()
+        return render_template('mail_guncelle.html', mail = cursor, current_time=now.ctime(), isimler = kisiler )
+    elif request.method == 'POST':
+        if "update" in request.form:
+            mail1 = Mailler(request.form['kisi_adi'],
+                                request.form['mail'],
+                                request.form['sifre'])
+            update_mailler(cursor, request.form['mail_id'], mail1)
+            connection.commit()
+            return redirect(url_for('mailler_sayfasi'))
+        elif "delete" in request.form:
+            delete_mailler(cursor, mail_id)
+            connection.commit()
+            return redirect(url_for('mailler_sayfasi'))
 
 
 #GRUPLAR SAYFASI

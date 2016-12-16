@@ -1,0 +1,34 @@
+{% extends "home.html"%}
+{% block title %}Mail Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Mail Guncelleme Sayfasi</h2>
+
+		{%for id, isim, mail, sifre in mail%}
+            <p> Mail ID: {{id}} </p>
+            <form id="update" action="{{ url_for('mailler_update_page',mail_id=id) }}" method = "post">
+            	  <div class="form-group">
+				  		<label for="sel1">İsim:</label>
+				  		<select class="form-control" id="sel1" name="kisi_adi" form="update">
+ +					 	{%for id, isim in isimler %}
+ +					    	<option value = "{{id}}" >{{isim}}</option>
+ +					    {%endfor%}
+ 						</select>
+                  </div>
+                  <div class="form-group">
+  						<label for="usr">Mail:</label>
+				  		<input class="form-control" size="7" value="{{mail}}" form ="update" type="text" placeholder="Mail" name="mail">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Sifre:</label>
+						<input class="form-control" size="7" value="{{sifre}}" form ="update" type="password" placeholder="Sifre" name="sifre">
+				  </div>
+                  <input type="hidden" name="mail_id" value="{{id}}">
+                  <input class="add" form="update" id="mailler_form_update" value="Maili Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('mailler_update_page',mail_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Maili Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

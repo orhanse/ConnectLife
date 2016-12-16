@@ -1,0 +1,69 @@
+{% extends "home.html" %}
+
+{% block title %} Mailler {% endblock %}
+
+{% block content %}
+
+	<h1>Mailler</h1>
+	<hr>
+	<div class = "row">
+
+		{%for id, isim, mail, sifre in mailler%}
+
+			<div class = "col-md-3">
+			<!-- Isim -->
+			<h2>{{isim}}</h2>
+			<!-- Mail -->
+			<p style= "font-size: 13pt;color: #00CED1;">{{mail}}</p>
+			<!-- Sifre -->
+			<p>***</p>
+			<a class="btn btn-large btn-info" href= "{{ url_for('mailler_update_page',mail_id=id)}}">Maili Düzenle</a>
+			<!-- Add Button -->
+			<button type="button" class="btn btn-success">Davet et!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+	<hr>
+
+	<div class = "row">
+
+		<!-- Yeni mail ekleme sayfası  -->
+		    <h2>Yeni Mail Ekle!</h2>
+            <form id="add" action="{{ url_for('mailler_sayfasi')}}" method = "post">
+				  <div class="form-group">
+  						<label for="usr">Isim:</label>
+					 	<select class="form-control" id="sel1" name="kisi_adi" form="add">
+					 	{%for id, isim in isim%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+  						<label for="usr">Mail:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Mail (Zorunlu)" name="mail" required="required">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Sifre:</label>
+		                <input class="form-control" size="7" form ="add" type="password" placeholder="Sifre (Zorunlu)" name="sifre" required="required">
+				  </div>
+
+                  <input class="add" form="add" id="mailler_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Mail Ara!</h2>
+			<form id="search" action="{{ url_for('mailler_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Mail Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="arananmail">
+				  </div>
+                  <input class="search" form="search" id="mailler_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
+
+{% endblock %}
