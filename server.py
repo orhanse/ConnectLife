@@ -431,6 +431,7 @@ def oneriler_update_page(oneri_id):
         elif "delete" in request.form:
             delete_oneriler(cursor, oneri_id)
             connection.commit()
+ 
             return redirect(url_for('oneriler_sayfasi'))
 
 
