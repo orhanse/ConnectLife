@@ -8,7 +8,7 @@
 	<hr>
 	<div class = "row">
 
-		{%for id, isim, resim, mekan, yas, universite, work in kisiler%}
+		{%for id, isim, resim, mekan, yas, universite, work, pozisyon, dil in kisiler%}
 
 			<div class = "col-md-3">
 			<!-- Name -->
@@ -23,6 +23,10 @@
 			<p>{{universite}}</p>
 			<!-- Work -->
 			<p>{{work}}</p>
+			<!-- Meslek -->
+			<p>{{pozisyon}}</p>
+			<!-- Dil -->
+			<p>{{dil}}</p>
 			<a class="btn btn-large btn-info" href= "{{ url_for('kisiler_update_page',kisi_id=id)}}">Kisiyi Duzenle</a>
 			<!-- Add Button -->
 			<button type="button" class="btn btn-success">Ekle!</button>
@@ -71,6 +75,22 @@
 					    {%endfor%}
 					 </select>
 				  </div>
+				  <div class="form-group">
+  						<label for="usr">Meslegi:</label>
+					 	<select class="form-control" id="sel1" name="pozisyon_adi" form="add">
+					 	{%for id, isim in pozisyon%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="sel1">Diller:</label>
+				  		<select class="form-control" id="sel1" name="dil_adi" form="add">
+ +					 	{%for id, name in diller %}
+ +					    	<option value = "{{id}}" >{{name}}</option>
+ +					    {%endfor%}
+ 						</select>
+                  </div>
 
                   <input class="add" form="add" id="kisiler_form_add" value="Ekle!" name="add" type="submit">
 			</form>

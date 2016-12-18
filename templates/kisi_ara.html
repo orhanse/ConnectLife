@@ -10,7 +10,7 @@
 
 
 		<!-- Kisiler ekranda gosteren kisim -->
-		{%for id, isim, resim, mekan, yas, universite, work in kisiler%}
+		{%for id, isim, resim, mekan, yas, universite, work, pozisyon, dil in kisiler%}
 
 			<div class = "col-md-3">
 			<!-- Isim -->
@@ -25,6 +25,10 @@
 			<p>{{universite}}</p>
 			<!-- Calistigi yer -->
 			<p>{{work}}</p>
+			<!-- Meslek -->
+			<p>{{pozisyon}}</p>
+			<!-- Dil -->
+			<p>{{dil}}</p>
 			<!-- Update Page URL -->
 			<a class="btn btn-large btn-info" href= "{{ url_for('kisiler_update_page',kisi_id=id)}}">Kisiyi Duzenle</a>
 			<button type="button" class="btn btn-success">Ekle!</button>

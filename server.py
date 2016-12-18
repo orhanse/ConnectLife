@@ -58,34 +58,40 @@ def kisiler_sayfasi():
         query2 = "SELECT ID, NAME FROM UNIVERSITY"
         cursor.execute(query2)
         university = cursor.fetchall()
-        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME
-                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S
+        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME, M.ISIM, D.NAME
+                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S, MESLEKLER AS M, DIL AS D
                     WHERE(
-                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID)
-                    ) """
+                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID) AND (K.POZISYON = M.ID) AND (K.DIL = D.ID)
+                    )"""
         cursor.execute(query)
         kisi2 = cursor.fetchall()
         cursor.execute("SELECT ID, NAME FROM SIRKET")
         sirket = cursor.fetchall()
-        return render_template('kisiler.html', kisiler = kisi2, universite = university, work = sirket)
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        pozisyon = cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM DIL")
+        diller = cursor.fetchall()
+        return render_template('kisiler.html', kisiler = kisi2, universite = university, work = sirket, pozisyon = pozisyon, diller = diller)
 
 
     elif "add" in request.form:
         kisi1 = Kisiler(request.form['isim'],
-                        request.form['resim'],
-                        request.form['mekan'],
-                        request.form['yas'],
-                        request.form['university_name'],
-                        request.form['work_name'])
+                            request.form['resim'],
+                            request.form['mekan'],
+                            request.form['yas'],
+                            request.form['university_name'],
+                            request.form['work_name'],
+                            request.form['pozisyon_adi'],
+                            request.form['dil_adi'])
         add_kisiler(cursor, request, kisi1)
         connection.commit()
         return redirect(url_for('kisiler_sayfasi'))
     elif "search" in request.form:
         aranankisi = request.form['aranankisi'];
-        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME
-                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S
+        query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME, M.ISIM, D.NAME
+                    FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S, MESLEKLER AS M, DIL AS D
                     WHERE(
-                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID)
+                        (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID) AND (K.POZISYON = M.ID) AND (K.DIL = D.ID)
                     ) AND (K.ISIM LIKE %s)"""
         cursor.execute(query,[aranankisi])
         kisiler=cursor.fetchall()
@@ -103,11 +109,15 @@ def kisiler_update_page(kisi_id):
         cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
         universiteler = cursor.fetchall()
         cursor.execute("SELECT ID, NAME FROM SIRKET")
-        sirket = cursor.fetchall()
+        sirketler = cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        pozisyonlar = cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM DIL")
+        diller = cursor.fetchall()
         query = """SELECT * FROM KISILER WHERE (ID = %s)"""
         cursor.execute(query, kisi_id)
         now = datetime.datetime.now()
-        return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime(), universiteler= universiteler, sirketler=sirket)
+        return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime(), universiteler = universiteler, sirketler=sirketler, pozisyonlar = pozisyonlar, diller = diller)
     elif request.method == 'POST':
         if "update" in request.form:
             kisi1 = Kisiler(request.form['isim'],
@@ -115,7 +125,9 @@ def kisiler_update_page(kisi_id):
                             request.form['mekan'],
                             request.form['yas'],
                             request.form['university_name'],
-                            request.form['work_name'])
+                            request.form['work_name'],
+                            request.form['pozisyon_adi'],
+                            request.form['dil_adi'])
             update_kisiler(cursor, request.form['kisi_id'], kisi1)
             connection.commit()
             return redirect(url_for('kisiler_sayfasi'))
