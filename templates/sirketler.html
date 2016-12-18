@@ -1,22 +1,22 @@
 {% extends "home.html" %}
 
-{% block title %} Sirketler {% endblock %}
+{% block title %} Şirketler {% endblock %}
 
 {% block content %}
 
-	<h1>Sirketler</h1>
+	<h1>Şirketler</h1>
 	<form action="{{ url_for('sirketler_sayfasi')}}" method = "post">
 
 <hr>
 <div class = "row">
-	{% for id, name, date, location, kisi, work_area, photo in sirket%}
+	{% for id, name, date, location, ceo_id, work_area, photo in sirket%}
 	<div class = "col-md-2">
 		<!-- Title -->
 		<h2>{{name}}</h2>
 		<!-- Description -->
 		<p style= "font-size: 13pt;color: #00CED1;">Kuruluş Yılı: {{date}}</p>
 		<p style= "font-size: 13pt;color: #00CED1;">Lokasyon: {{location}}</p>
-		<p style= "font-size: 13pt;color: #00CED1;">CEO: {{kisi}}</p>
+		<p style= "font-size: 13pt;color: #00CED1;">CEO: {{ceo_id}}</p>
 		<p>{{work_area}}</p>
 		<!-- Sirket Image -->
 		<img style= "width:300px;heigth=300px"src = "static/images/{{photo}}" class="img-responsive">
@@ -40,8 +40,12 @@
 						<input class="form-control" size="7" form ="add" type="text" placeholder="Kuruluş Yılı (Zorunlu)" name="date">
 				  </div>
 				  <div class="form-sirket">
-				  		<label for="usr">Lokasyonu</label>
-		                <input class="form-control" size="7" form ="add" type="text" placeholder = "Lokasyonu (Zorunlu)" name="location" required="required">
+  						<label for="sel1">Lokasyon</label>
+					 	<select class="form-control" id="sel1" name="location_name" required="required" form="add">
+					 	{%for id, name in lokasyon%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 				   <div class="form-sirket">
   						<label for="sel1">CEO</label>

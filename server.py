@@ -688,7 +688,8 @@ def universiteler_sayfasi():
         return redirect(url_for('universiteler_sayfasi'))
     elif "search" in request.form:
         searched = request.form['searched'];
-        query = """SELECT ID, NAME, FOUNDATION_DATE, LOCATION, SMALL_INFO, PHOTO, RECTOR_ID FROM UNIVERSITY WHERE NAME LIKE %s"""
+        query = """SELECT U.ID, U.NAME, U.FOUNDATION_DATE, U.LOCATION, U.SMALL_INFO, U.PHOTO, K.ISIM FROM UNIVERSITY AS U,
+                   KISILER AS K WHERE((U.RECTOR_ID = K.ID) AND (U.NAME LIKE %s))"""
         cursor.execute(query,[searched])
         university=cursor.fetchall()
         now = datetime.datetime.now()
@@ -923,17 +924,21 @@ def sirketler_sayfasi():
     cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT S.ID,S.NAME,S.DATE,S.LOCATION,K.ISIM, S.WORK_AREA,S.PHOTO FROM KISILER AS K RIGHT JOIN SIRKET AS S ON S.CEO_ID = K.ID"
+        query = """SELECT S.ID,S.NAME,S.DATE,L.NAME,K.ISIM, S.WORK_AREA,S.PHOTO FROM KISILER AS K,
+                 SIRKET AS S, LOKASYON AS L WHERE ((S.LOCATION = L.ID) AND (S.CEO_ID = K.ID))"""
         cursor.execute(query)
         sirket=cursor.fetchall()
         query = "SELECT ID,ISIM FROM KISILER"
         cursor.execute(query)
         kisiler =cursor.fetchall()
-        return render_template('sirketler.html', sirket = sirket, current_time=now.ctime(),kisiler=kisiler)
+        query = "SELECT ID,NAME FROM LOKASYON"
+        cursor.execute(query)
+        lokasyon =cursor.fetchall()
+        return render_template('sirketler.html', sirket = sirket, current_time=now.ctime(),kisiler=kisiler, lokasyon = lokasyon)
     elif "add" in request.form:
         sirket = Sirket(request.form['name'],
                      request.form['date'],
-                     request.form['location'],
+                     request.form['location_name'],
                      request.form['kisiler_isim'],
                      request.form['work_area'],
                      request.form['photo'])
@@ -944,7 +949,8 @@ def sirketler_sayfasi():
         return redirect(url_for('sirketler_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID,NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO FROM SIRKET WHERE NAME LIKE %s"""
+        query = """SELECT S.ID,S.NAME,S.DATE,L.NAME,K.ISIM, S.WORK_AREA,S.PHOTO FROM KISILER AS K,
+                 SIRKET AS S, LOKASYON AS L WHERE ((S.LOCATION = L.ID) AND (S.CEO_ID = K.ID) AND (S.NAME LIKE %s))"""
         cursor.execute(query,[aranan])
         sirket=cursor.fetchall()
         now = datetime.datetime.now()
@@ -963,12 +969,15 @@ def sirketler_update_page(sirket_id):
         query = "SELECT ID,ISIM FROM KISILER"
         cursor.execute(query)
         kisiler =cursor.fetchall()
-        return render_template('sirket_guncelle.html', sirket = sirket, current_time=now.ctime(), kisiler = kisiler)
+        query = "SELECT ID,NAME FROM LOKASYON"
+        cursor.execute(query)
+        lokasyon =cursor.fetchall()
+        return render_template('sirket_guncelle.html', sirket = sirket, current_time=now.ctime(), kisiler = kisiler, lokasyon=lokasyon)
     elif request.method == 'POST':
         if "update" in request.form:
             sirket1 = Sirket(request.form['name'],
                             request.form['date'],
-                            request.form['location'],
+                            request.form['location_name'],
                             request.form['kisiler_isim'],
                             request.form['work_area'],
                             request.form['photo'])

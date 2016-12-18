@@ -26,7 +26,7 @@ def init_sirketler_db(cursor):
         ID SERIAL PRIMARY KEY,
         NAME varchar(100) NOT NULL,
         DATE varchar NOT NULL,
-        LOCATION varchar(80) NOT NULL,
+        LOCATION INTEGER NOT NULL REFERENCES LOKASYON(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         CEO_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
         WORK_AREA varchar(500),
         PHOTO varchar(80)
@@ -39,7 +39,7 @@ def insert_sirket(cursor):
         (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'SiMiT Lab',
         2010,
-        'Türkiye',
+        1,
         4,
         'Akıllı Etkileşim, Mobil İstihbarat, Multimedya Teknolojileri',
         'itulogo.png'
@@ -49,7 +49,7 @@ def insert_sirket(cursor):
         (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'Siemens AG',
         1847,
-        'Almanya',
+        5,
         5,
         'Endüstri, Enerji, Sağlık',
         'siemens1.png'
@@ -59,7 +59,7 @@ def insert_sirket(cursor):
         (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'Vestel',
         1984,
-        'Türkiye',
+        1,
         2,
         'Beyaz eşya, Elektrikli ev gereçleri, Otel ürünleri üretimi',
         'vestel1.png'
@@ -69,7 +69,7 @@ def insert_sirket(cursor):
         (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'Ülker Bisküvi Sanayi A.Ş.',
         1944,
-        'Türkiye',
+        1,
         2,
         'İçecek, Çikolata, Bisküvi, Dondurma',
         'ülker.png'
@@ -79,7 +79,7 @@ def insert_sirket(cursor):
         (NAME, DATE, LOCATION, CEO_ID, WORK_AREA, PHOTO) VALUES (
         'Koç Holding',
         1926,
-        'Türkiye',
+        1,
         2,
         'Beyaz eşya, Otomotiv, Bankacılık, Akaryakıt',
         'koc.png'
@@ -105,15 +105,15 @@ def delete_sirketler(cursor, id):
 
 
 def update_sirketler(cursor, id, sirket):
-            query="""
-            UPDATE SIRKET
-            SET NAME=INITCAP(%s),
-            DATE=%s,
-            LOCATION=INITCAP(%s),
-            CEO_ID=%s,
-            WORK_AREA=%s,
-            PHOTO=%s
-            WHERE ID=%s
-            """
-            cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo, id))
+    query="""
+         UPDATE SIRKET
+         SET NAME=INITCAP(%s),
+         DATE=%s,
+         LOCATION=%s,
+         CEO_ID=%s,
+         WORK_AREA=%s,
+         PHOTO=%s
+         WHERE ID=%s
+         """
+    cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo, id))
 

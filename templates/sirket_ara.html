@@ -10,7 +10,7 @@
 
 
 		<!-- Şirketleri ekranda gosteren kisim -->
-		{%for id, name, date, location, kisi, work_area, photo in sirket%}
+		{%for id, name, date, location, ceo_id, work_area, photo in sirket%}
 
 			<div class = "col-md-3">
 			<!-- Title -->
@@ -20,13 +20,13 @@
 			<!-- Description -->
 			<p>{{location}}</p>
 			<!-- CEO -->
-			<p>{{kisi}}</p>
+			<p>{{ceo_id}}</p>
 			<!-- Icerik -->
 			<p>{{work_area}}</p>
 			<!-- Group Image -->
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{photo}}" class="img-responsive">
 			<!-- Update Page URL -->
-			<a class="btn btn-large btn-info" href= "{{ url_for('sirketler_update_page',sirket_id=id)}}">Şirketi Duzenle</a>
+			<a class="btn btn-large btn-info" href= "{{ url_for('sirketler_update_page',sirket_id=id)}}">Şirketi Düzenle</a>
 			</div>
 
 		{%endfor%}

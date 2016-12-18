@@ -1,10 +1,10 @@
 {% extends "home.html"%}
-{% block title %}Sirket Guncelle{% endblock %}
+{% block title %}Şirket Güncelle{% endblock %}
 
 {% block content %}
-    <h2>Sirket Guncelleme Sayfasi</h2>
+    <h2>Şirket Güncelleme Sayfasi</h2>
 
-		{%for id, name, date, location, kisi, work_area, photo in sirket%}
+		{%for id, name, date, location, ceo_id, work_area, photo in sirket%}
             <p> SIRKET ID: {{id}} </p>
             <form id="update" action="{{ url_for('sirketler_update_page',sirket_id=id) }}" method = "post">
                   <div class="form-sirket">
@@ -16,8 +16,12 @@
 						<input class="form-control" size="7" value="{{date}}" form ="update" type="text" placeholder="Yıl" name="date">
 				  </div>
 				  <div class="form-sirket">
-				  		<label for="usr">Lokasyonu</label>
-		                <input class="form-control" size="7" value="{{location}}" form ="update" type="text" placeholder = "Lokasyonu" name="location">
+  						<label for="sel1">Lokasyon</label>
+					 	<select class="form-control" id="sel1" name="location_name" required="required" form="update">
+					 	{%for id, name in lokasyon%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 				  <div class="form-sirket">
   						<label for="sel1">CEO</label>
