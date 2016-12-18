@@ -1,0 +1,54 @@
+{% extends "home.html" %}
+
+{% block title %} Diller {% endblock %}
+
+{% block content %}
+
+	<h1>Diller</h1>
+	<form action="{{ url_for('diller_sayfasi')}}" method = "post">
+
+<hr>
+<div class = "row">
+	{% for id, name, ulkesi in dil%}
+	<div class = "col-md-3">
+		<!-- Title -->
+		<h2>{{name}}</h2>
+		<!-- Description -->
+		<p style= "font-size: 13pt;color: #00CED1;">Ülkesi: {{ulkesi}}</p>
+		<a class="btn btn-large btn-info" href= "{{ url_for('diller_update_page',dil_id=id)}}">Dili Düzenle</a>
+	</div>
+	{% endfor %}
+</div>
+</form>
+	<hr>
+	<div class = "row">
+
+		<!-- Yeni Dil ekleme sayfası  -->
+		    <h2>Yeni Dil Ekle!</h2>
+            <form id="add" action="{{ url_for('diller_sayfasi')}}" method = "post">
+                  <div class="form-dil">
+  						<label for="usr">Dil Adı</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Dil Adı (Zorunlu)" name="name" required="required">
+				  </div>
+                  <div class="form-dil">
+				  		<label for="usr">Kullanıldığı Ülke</label>
+						<input class="form-control" size="7" form ="add" type="text" placeholder="Ülkesi (Zorunlu)" name="ulkesi">
+				  </div>
+
+                  <input class="add" form="add" id="diller_form_add" value="Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Dil Ara!</h2>
+			<form id="search" action="{{ url_for('diller_sayfasi')}}" method = "post">
+				<div class="form-dil">
+				  		<label for="usr">Dil Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="diller_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
+
+{% endblock %}

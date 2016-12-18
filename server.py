@@ -19,6 +19,7 @@ from meslekler import *
 from mailler import *
 from makaleler import *
 from oneriler import *
+from diller import *
 
 app = Flask(__name__)
 
@@ -782,6 +783,70 @@ def sirketler_update_page(sirket_id):
             delete_sirketler(cursor, sirket_id)
             connection.commit()
             return redirect(url_for('sirketler_sayfasi'))
+
+@app.route('/diller/initdb')
+def initialize_database_dil():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS DIL CASCADE;
+    ''')
+
+    init_diller_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+@app.route('/diller', methods = ['GET', 'POST'])
+def diller_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+        query = "SELECT ID, NAME, ULKESI FROM DIL"
+
+        cursor.execute(query)
+        dil=cursor.fetchall()
+        return render_template('diller.html', dil = dil, current_time=now.ctime())
+    elif "add" in request.form:
+        dil = Dil(request.form['name'],
+                     request.form['ulkesi'])
+
+        add_dil(cursor, request, dil)
+
+        connection.commit()
+        return redirect(url_for('diller_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT ID,NAME, ULKESI FROM DIL WHERE NAME LIKE %s"""
+
+
+        cursor.execute(query,[aranan])
+        dil=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('dil_ara.html', dil = dil, current_time=now.ctime(), sorgu = aranan)
+
+
+@app.route('/diller/<dil_id>', methods=['GET', 'POST'])
+def diller_update_page(dil_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = """SELECT * FROM DIL WHERE (ID = %s)"""
+        cursor.execute(query,dil_id)
+        dil = cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('dil_guncelle.html', dil = dil, current_time=now.ctime())
+    elif request.method == 'POST':
+        if "update" in request.form:
+            dil1 = Dil(request.form['name'],
+                     request.form['ulkesi'])
+            update_diller(cursor, request.form['dil_id'], dil1)
+            connection.commit()
+            return redirect(url_for('diller_sayfasi'))
+        elif "delete" in request.form:
+            delete_diller(cursor, dil_id)
+            connection.commit()
+            return redirect(url_for('diller_sayfasi'))
 
 
 

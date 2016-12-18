@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+
+{% block title %} Diller {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Dilleri ekranda gosteren kisim -->
+		{%for id, name, ulkesi in dil%}
+
+			<div class = "col-md-3">
+			<!-- Dilin Adı -->
+			<h2>{{name}}</h2>
+			<!-- Kullanıldığı Ülke -->
+			<p>{{ulkesi}}</p>
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('diller_update_page',dil_id=id)}}">Dili Düzenle</a>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

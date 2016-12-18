@@ -1,0 +1,26 @@
+{% extends "home.html"%}
+{% block title %}Dil Güncelle{% endblock %}
+
+{% block content %}
+    <h2>Dil Güncelleme Sayfasi</h2>
+
+		{%for id, name, ulkesi in dil%}
+            <form id="update" action="{{ url_for('diller_update_page',dil_id=id) }}" method = "post">
+                  <div class="form-dil">
+  						<label for="usr">Dil Adı</label>
+				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Dil Adı" name="name">
+				  </div>
+                  <div class="form-dil">
+				  		<label for="usr">Kullanıldığı Ülke</label>
+						<input class="form-control" size="7" value="{{date}}" form ="update" type="text" placeholder="Kullanıldığı Ülke" name="ulkesi">
+				  </div>
+
+                  <input type="hidden" name="dil_id" value="{{id}}">
+                  <input class="add" form="update" id="diller_form_update" value="Dili Güncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('diller_update_page',dil_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Dili Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}
