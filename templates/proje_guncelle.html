@@ -1,0 +1,54 @@
+{% extends "home.html"%}
+{% block title %}Proje Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Proje Guncelleme Sayfasi</h2>
+
+		{%for id, baslik , konu, sahip, tarih, uniname, aciklama in projeler%}
+            <form id="update" action="{{ url_for('projeler_update_page',proje_id=id) }}" method = "post">
+
+            	<div class="form-group">
+				  		<label for="usr">Projenin Adi:</label>
+						<input class="form-control" size="7" value="{{baslik}}" form ="update" type="text" placeholder="Projenin Adi" name="baslik">
+				  </div>
+				  <div class="form-group">
+  						<label for="sell">Projenin Konusu:</label>
+				  		<select class="form-control" id="sel1" name="meslekler_isim" form="update">
+					 	{%for id, isim in meslekler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+  						<label for="sell">Projenin Sahibi:</label>
+				  		<select class="form-control" id="sel1" name="kisiler_isim" form="update">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Baslangic Tarihi:</label>
+		          		<input class="form-control" size="7" value="{{tarih}}" form ="update" type="text" placeholder="Tarih (yyyy)" name="tarih">
+				  </div>
+				    <div class="form-group">
+  						<label for="sell">Universite Ismi:</label>
+				  		<select class="form-control" id="sel1" name="university_name" form="update">
+					 	{%for id, name in universiteler%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Aciklama:</label>
+						<input class="form-control" size="7" value="{{aciklama}}" form ="update" type="text" placeholder="Projenin Aciklamasi" name="baslik">
+				  </div>
+                  <input type="hidden" name="proje_id" value="{{id}}">
+                  <input class="add" form="update" id="proje_form_update" value="Projeyi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('projeler_update_page', proje_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Projeyi Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

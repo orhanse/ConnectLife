@@ -1,0 +1,99 @@
+{% extends "home.html" %}
+
+{% block title %}Projeler{% endblock %}
+
+{% block content %}
+
+	<h1>Projeler</h1>
+	<hr>
+	<div class = "row">
+
+		{%for id, baslik, konu, sahip, tarih, uniname, aciklama in projeler%}
+
+			<div class = "col-md-3">
+			<!-- Prejenin adı -->
+			<h2>{{baslik}}</h2>
+			<!-- Projenin konusu -->
+			<p>{{konu}}</p>
+			<!-- Projenin Sahibi -->
+			<p style= "font-size: 13pt;color: #00CED1;">Proje Koordinatoru: </p>
+			<p>{{sahip}}</p>
+			<!-- Baslangic Tarihi -->
+			<p style= "font-size: 13pt;color: #00CED1;">Baslangic Tarihi: </p>
+			<p>{{tarih}}</p>
+			<!-- Yapildigi universite -->
+			<p style= "font-size: 13pt;color: #00CED1;"> Projenin Yapildigi Universite: </p>
+			<p>{{uniname}}</p>
+			<p style= "font-size: 13pt;color: #00CED1;"> Kisa Aciklama: </p>
+			<p>{{aciklama}}</p>
+
+			<a class="btn btn-large btn-info" href= "{{ url_for('projeler_update_page', proje_id=id)}}">Projeyi Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Daha Fazla!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+	<hr>
+	<div class = "row">
+
+		<!-- Yeni proje ekleme kismi  -->
+		
+		    <h2>Yeni Proje Ekle!</h2>
+            <form id="add" action="{{ url_for('projeler_sayfasi')}}" method = "post">
+            	 <div class="form-group">
+				  		<label for="usr">Projenin Adi:</label>
+						<input class="form-control" size="7" value="{{baslik}}" form ="add" type="text" placeholder="Projenin Adi" name="baslik">
+				  </div>
+				  <div class="form-group">
+  						<label for="sell">Projenin Konusu:</label>
+				  		<select class="form-control" id="sel1" name="meslekler_isim" form="add">
+					 	{%for id, isim in meslekler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+  						<label for="sell">Projenin Sahibi:</label>
+				  		<select class="form-control" id="sel1" name="kisiler_isim" form="add">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Baslangic Tarihi:</label>
+		          		<input class="form-control" size="7" value="{{tarih}}" form ="add" type="text" placeholder="Tarih (yyyy)" name="tarih">
+				  </div>
+				    <div class="form-group">
+  						<label for="sell">Universite Ismi:</label>
+				  		<select class="form-control" id="sel1" name="university_name" form="add">
+					 	{%for id, name in universiteler%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Aciklama:</label>
+						<input class="form-control" size="7" value="{{aciklama}}" form ="add" type="text" placeholder="Projenin Aciklamasi" name="baslik">
+				  </div>
+                  <input class="add" form="add" id="projeler_form_add" value="Proje Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			
+			<h2>Proje Ara!</h2>
+			<form id="search" action="{{ url_for('projeler_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Proje Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Projenin adini giriniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="projeler_form_add" value="Ara!" name="search" type="submit">
+            </form>
+            
+		</div>
+		
+{% endblock %}

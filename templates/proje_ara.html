@@ -1,0 +1,39 @@
+{% extends "home.html" %}
+
+{% block title %} Proje Arama {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		{%for id, baslik, konu, sahip, tarih, uniname, aciklama in projeler%}
+
+			<div class = "col-md-3">
+			<!-- Prejenin adı -->
+			<h2>{{baslik}}</h2>
+			<!-- Projenin konusu -->
+			<p>{{konu}}</p>
+			<!-- Projenin Sahibi -->
+			<p style= "font-size: 13pt;color: #00CED1;">Proje Koordinatoru: </p>
+			<p>{{sahip}}</p>
+			<!-- Baslangic Tarihi -->
+			<p style= "font-size: 13pt;color: #00CED1;">Baslangic Tarihi: </p>
+			<p>{{tarih}}</p>
+			<!-- Yapildigi universite -->
+			<p style= "font-size: 13pt;color: #00CED1;"> Projenin Yapildigi Universite: </p>
+			<p>{{uniname}}</p>
+			<p style= "font-size: 13pt;color: #00CED1;"> Kisa Aciklama: </p>
+			<p>{{aciklama}}</p>
+
+			<a class="btn btn-large btn-info" href= "{{ url_for('projeler_update_page', proje_id=id)}}">Projeyi Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Daha Fazla!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

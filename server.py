@@ -20,6 +20,7 @@ from mailler import *
 from makaleler import *
 from oneriler import *
 from diller import *
+from projeler import *
 
 app = Flask(__name__)
 
@@ -634,6 +635,7 @@ def counter_page():
     count = cursor.fetchone()[0]
     return "This page was accessed %d times." % count
 
+#UNIVERSITELER - by Selman Orhan
 @app.route('/universiteler/initdb')
 def initialize_database_university():
     connection = dbapi2.connect(app.config['dsn'])
@@ -709,6 +711,106 @@ def university_update_page(university_id):
             connection.commit()
             return redirect(url_for('universiteler_sayfasi'))
 
+#PROJELER - by Selman Orhan
+@app.route('/projeler/initdb')
+def initialize_database_projeler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+        DROP TABLE IF EXISTS PROJELER CASCADE;
+        ''')
+    init_projeler_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+@app.route('/projeler', methods=['GET', 'POST'])
+def projeler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+
+    if request.method == 'GET':
+        query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
+                FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
+                WHERE(
+                (M.KONU = M.ID)
+                AND(
+                (M.SAHIP = K.ID)
+                AND(
+                (M.UNINAME = U.ID)
+                ) """
+        cursor.execute(query)
+        projeler=cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        meslekler =cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler =cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+        universiteler=cursor.fetchall()
+        return render_template('projeler.html', projeler = projeler, current_time=now.ctime(), meslekler = meslekler, kisiler = kisiler, universiteler = universiteler)
+    elif "add" in request.form:
+
+        proje1 = Projeler(request.form['baslik'],
+                            request.form['meslekler_isim'],
+                            request.form['kisiler_isim'],
+                            request.form['tarih'],
+                            request.form['university_name'],
+                            request.form['aciklama'])
+        add_projeler(cursor, request, proje1)
+        connection.commit()
+        return redirect(url_for('projeler_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+
+        query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
+            FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
+            WHERE(
+            (M.KONU = M.ID)
+            AND(
+            (M.SAHIP = K.ID)
+            AND(
+            (M.UNINAME= U.ID)
+            ) AND (P.BASLIK LIKE %s))"""
+        cursor.execute(query,[aranan])
+        projeler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('proje_ara.html', projeler = projeler, current_time=now.ctime(), sorgu = aranan)
+
+@app.route('/projeler/<proje_id>', methods=['GET', 'POST'])
+def projeler_update_page(proje_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM PROJELER WHERE (ID = %s)"""
+        cursor.execute(query,proje_id)
+        projeler =cursor.fetchall()
+        now = datetime.datetime.now()
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        meslekler =cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler =cursor.fetchall()
+        cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+        universiteler=cursor.fetchall()
+        return render_template('proje_guncelle.html', projeler = projeler,  current_time=now.ctime(), meslekler = meslekler, kisiler = kisiler, universiteler = universiteler)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            proje1 = Projeler(request.form['baslik'],
+                              request.form['meslekler_isim'],
+                              request.form['kisiler_isim'],
+                              request.form['tarih'],
+                              request.form['university_name'],
+                              request.form['aciklama'])
+            update_projeler(cursor, request.form['proje_id'], proje1)
+            connection.commit()
+            return redirect(url_for('projeler_sayfasi'))
+        elif "delete" in request.form:
+            delete_projeler(cursor, proje_id)
+            connection.commit()
+            return redirect(url_for('projeler_sayfasi'))
+
+#SIRKETLER
 @app.route('/sirketler/initdb')
 def initialize_database_sirket():
     connection = dbapi2.connect(app.config['dsn'])
