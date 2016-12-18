@@ -72,7 +72,7 @@ def counter_page():
     count = cursor.fetchone()[0]
     return "This page was accessed %d times." % count
 
-#KISILER++
+#KISILER
 @app.route('/kisiler/initdb')
 def initialize_database_kisiler():
     connection = dbapi2.connect(app.config['dsn'])
@@ -82,7 +82,7 @@ def initialize_database_kisiler():
     ''')
     init_kisiler_db(cursor)
     connection.commit()
-    return redirect(url_for('home_page'))
+    return redirect(url_for('kisiler_sayfasi'))
 
 
 @app.route('/kisiler',methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def kisiler_update_page(kisi_id):
 
 
 
-#MESLEKLER++
+#MESLEKLER
 @app.route('/meslekler/initdb')
 def initialize_database_meslekler():
     connection = dbapi2.connect(app.config['dsn'])
@@ -242,7 +242,7 @@ def meslekler_update_page(meslek_id):
 
 
 
-#MAILLER SAYFASI
+#MAILLER
 @app.route('/mailler/initdb')
 def initialize_database_mailler():
     connection = dbapi2.connect(app.config['dsn'])
