@@ -868,9 +868,7 @@ def hobiler_sayfasi():
 
         query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA
                     FROM HOBILER AS H, KISILER AS K
-                    WHERE(
-                        (H.KOORDINATOR = K.ID)
-                    ) AND (H.ISIM LIKE %s))"""
+                    WHERE((H.KOORDINATOR = K.ID) AND (H.ISIM LIKE %s))"""
         cursor.execute(query,[aranan])
         hobiler=cursor.fetchall()
         now = datetime.datetime.now()
