@@ -9,7 +9,7 @@
 
 <hr>
 <div class = "row">
-	{% for id, name, ulkesi, photo in dil%}
+	{% for id, name, ulkesi, photo, bilenler in dil%}
 	<div class = "col-md-2">
 		<!-- Title -->
 		<h2>{{name}}</h2>
@@ -17,6 +17,9 @@
 		<img style= "width:300px;heigth=300px"src = "static/images/{{photo}}" class="img-responsive">
 		<!-- Description -->
 		<p style= "font-size: 13pt;color: #00CED1;">Ülkesi: {{ulkesi}}</p>
+		<!-- Bilen Kişiler -->
+		<p style= "font-size: 13pt;color: #00CED1;">Bilenler: </p>
+		<p>{{bilenler}}</p>
 		<a class="btn btn-large btn-info" href= "{{ url_for('diller_update_page',dil_id=id)}}">Dili Düzenle</a>
 	</div>
 	{% endfor %}
@@ -30,15 +33,27 @@
             <form id="add" action="{{ url_for('diller_sayfasi')}}" method = "post">
                   <div class="form-dil">
   						<label for="usr">Dil Adı</label>
-				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Dil Adı (Zorunlu)" name="name" required="required">
+				  		<input class="form-control" size="7" value="{{name}}" form ="add" type="text" placeholder="Dil Adı" name="name">
 				  </div>
 				  <div class="form-dil">
 				  		<label for="usr">Resim URL'si:</label>
 		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: türkçe.jpeg" name="photo">
 				  </div>
-                  <div class="form-dil">
-				  		<label for="usr">Kullanıldığı Ülke</label>
-						<input class="form-control" size="7" form ="add" type="text" placeholder="Ülkesi (Zorunlu)" name="ulkesi">
+   				  <div class="form-dil">
+  						<label for="sel1">Kullanıldığı Ülke</label>
+					 	<select class="form-control" id="sel1" name="lokasyon_name" required="required" form="add">
+					 	{%for id, name in lokasyon%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+					<div class="form-dil">
+  						<label for="sel1">Bilen Kişiler</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" required="required" form="add">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
 
                   <input class="add" form="add" id="diller_form_add" value="Ekle!" name="add" type="submit">

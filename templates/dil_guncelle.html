@@ -4,7 +4,7 @@
 {% block content %}
     <h2>Dil Güncelleme Sayfasi</h2>
 
-		{%for id, name, ulkesi, photo in dil%}
+		{%for id, name, ulkesi, photo, bilenler in dil%}
             <form id="update" action="{{ url_for('diller_update_page',dil_id=id) }}" method = "post">
                   <div class="form-dil">
   						<label for="usr">Dil Adı</label>
@@ -12,13 +12,24 @@
 				  </div>
 				  <div class="form-dil">
 				  		<label for="usr">Resim URL'si:</label>
-		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: türkçe.jpeg" name="photo">
+		          		<input class="form-control" size="7" form ="update" type="text" placeholder="Örnek: türkçe.jpeg" name="photo">
 				  </div>
-                  <div class="form-dil">
-				  		<label for="usr">Kullanıldığı Ülke</label>
-						<input class="form-control" size="7" value="{{date}}" form ="update" type="text" placeholder="Kullanıldığı Ülke" name="ulkesi">
+   				  <div class="form-dil">
+  						<label for="sel1">Kullanıldığı Ülke</label>
+					 	<select class="form-control" id="sel1" name="lokasyon_name" required="required" form="update">
+					 	{%for id, name in lokasyon%}
+					    	<option value = "{{id}}" >{{name}}</option>
+					    {%endfor%}
+					 </select>
 				  </div>
-
+					<div class="form-dil">
+  						<label for="sel1">Bilen Kişiler</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" required="required" form="update">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
                   <input type="hidden" name="dil_id" value="{{id}}">
                   <input class="add" form="update" id="diller_form_update" value="Dili Güncelle" name="update" type="submit">
 			</form>

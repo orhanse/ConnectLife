@@ -10,7 +10,7 @@
 
 
 		<!-- Dilleri ekranda gosteren kisim -->
-		{%for id, name, ulkesi, photo in dil%}
+		{%for id, name, ulkesi, photo, bilenler in dil%}
 
 			<div class = "col-md-3">
 			<!-- Dilin Adı -->
@@ -19,6 +19,9 @@
 			<img style= "width:300px;heigth=300px;" src = "static/images/{{photo}}" class="img-responsive">
 			<!-- Kullanıldığı Ülke -->
 			<p>{{ulkesi}}</p>
+			<!-- Bilenler -->
+			<p style= "font-size: 13pt;color: #00CED1;">Bilenler: </p>
+			<p>{{bilenler}}</p>
 			<!-- Update Page URL -->
 			<a class="btn btn-large btn-info" href= "{{ url_for('diller_update_page',dil_id=id)}}">Dili Düzenle</a>
 			</div>

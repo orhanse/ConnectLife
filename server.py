@@ -1007,15 +1007,23 @@ def diller_sayfasi():
     cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT ID, NAME, ULKESI, PHOTO FROM DIL"
+        query = """SELECT D.ID, D.NAME, L.NAME, D.PHOTO, K.ISIM FROM KISILER AS K,
+                LOKASYON AS L, DIL AS D WHERE((D.ULKESI = L.ID) AND (D.BILENLER = K.ID))"""
 
         cursor.execute(query)
         dil=cursor.fetchall()
-        return render_template('diller.html', dil = dil, current_time=now.ctime())
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        query = "SELECT ID,NAME FROM LOKASYON"
+        cursor.execute(query)
+        lokasyon =cursor.fetchall()
+        return render_template('diller.html', dil = dil, current_time=now.ctime(), kisiler = kisiler, lokasyon = lokasyon)
     elif "add" in request.form:
         dil = Dil(request.form['name'],
-                  request.form['ulkesi'],
-                  request.form['photo'])
+                  request.form['lokasyon_name'],
+                  request.form['photo'],
+                  request.form['kisiler_isim'])
 
         add_dil(cursor, request, dil)
 
@@ -1023,7 +1031,8 @@ def diller_sayfasi():
         return redirect(url_for('diller_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID,NAME, ULKESI, PHOTO FROM DIL WHERE NAME LIKE %s"""
+        query = """SELECT D.ID, D.NAME, L.NAME, D.PHOTO, K.ISIM FROM KISILER AS K,
+                LOKASYON AS L, DIL AS D WHERE((D.ULKESI = L.ID) AND (D.BILENLER = K.ID) AND (D.NAME LIKE %s))"""
 
 
         cursor.execute(query,[aranan])
@@ -1041,12 +1050,19 @@ def diller_update_page(dil_id):
         cursor.execute(query,dil_id)
         dil = cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('dil_guncelle.html', dil = dil, current_time=now.ctime())
+        query = "SELECT ID,ISIM FROM KISILER"
+        cursor.execute(query)
+        kisiler =cursor.fetchall()
+        query = "SELECT ID,NAME FROM LOKASYON"
+        cursor.execute(query)
+        lokasyon =cursor.fetchall()
+        return render_template('dil_guncelle.html', dil = dil, current_time=now.ctime(), kisiler = kisiler, lokasyon = lokasyon )
     elif request.method == 'POST':
         if "update" in request.form:
             dil1 = Dil(request.form['name'],
-                     request.form['ulkesi'],
-                     request.form['photo'])
+                     request.form['lokasyon_name'],
+                     request.form['photo'],
+                     request.form['kisiler_isim'])
             update_diller(cursor, request.form['dil_id'], dil1)
             connection.commit()
             return redirect(url_for('diller_sayfasi'))

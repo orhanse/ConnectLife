@@ -23,7 +23,7 @@ def init_lokasyonlar_db(cursor):
     cursor.execute(query)
     query = """CREATE TABLE LOKASYON (
         ID SERIAL PRIMARY KEY,
-        NAME varchar(100) NOT NULL,
+        NAME varchar(100) UNIQUE NOT NULL,
         BASKENT varchar(100) NOT NULL,
         GPS varchar(100) NOT NULL,
         YEREL_DIL INTEGER NOT NULL REFERENCES DIL(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
