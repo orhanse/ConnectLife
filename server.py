@@ -22,6 +22,7 @@ from oneriler import *
 from diller import *
 from projeler import *
 from lokasyonlar import *
+from hobiler import *
 
 app = Flask(__name__)
 
@@ -822,6 +823,88 @@ def projeler_update_page(proje_id):
             delete_projeler(cursor, proje_id)
             connection.commit()
             return redirect(url_for('projeler_sayfasi'))
+
+#HOBILER - By Selman Orhan
+@app.route('/hobiler/initdb')
+def initialize_database_hobiler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS HOBILER CASCADE;
+    ''')
+    init_hobiler_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+@app.route('/hobiler', methods=['GET', 'POST'])
+def hobiler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+
+    if request.method == 'GET':
+        query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA
+                    FROM HOBILER AS H, KISILER AS K
+                    WHERE(
+                        (H.KOORDINATOR = K.ID)
+                    ) """
+        cursor.execute(query)
+        hobiler=cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler=cursor.fetchall()
+        return render_template('hobiler.html', hobiler = hobiler, current_time=now.ctime(), kisiler = kisiler)
+    elif "add" in request.form:
+
+        hobi1 = Hobiler(request.form['isim'],
+                            request.form['resim'],
+                            request.form['alan'],
+                            request.form['kisiler_isim'],
+                            request.form['aciklama'])
+        add_hobiler(cursor, request, hobi1)
+        connection.commit()
+        return redirect(url_for('hobiler_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+
+        query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA
+                    FROM HOBILER AS H, KISILER AS K
+                    WHERE(
+                        (H.KOORDINATOR = K.ID)
+                    ) AND (H.ISIM LIKE %s))"""
+        cursor.execute(query,[aranan])
+        hobiler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('hobi_ara.html', hobiler = hobiler, current_time=now.ctime(), sorgu = aranan)
+
+@app.route('/hobiler/<hobi_id>', methods=['GET', 'POST'])
+def hobiler_update_page(hobi_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM HOBILER WHERE (ID = %s)"""
+        cursor.execute(query,hobi_id)
+        hobiler=cursor.fetchall()
+        now = datetime.datetime.now()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler=cursor.fetchall()
+        return render_template('hobi_guncelle.html', hobiler = hobiler,  current_time=now.ctime(), kisiler = kisiler)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            hobi1 = Hobiler(request.form['isim'],
+                            request.form['resim'],
+                            request.form['alan'],
+                            request.form['kisiler_isim'],
+                            request.form['aciklama'])
+            update_hobiler(cursor, request.form['hobi_id'], hobi1)
+            connection.commit()
+            return redirect(url_for('hobiler_sayfasi'))
+        elif "delete" in request.form:
+            delete_hobiler(cursor, hobi_id)
+            connection.commit()
+            return redirect(url_for('hobiler_sayfasi'))
+
 
 #SIRKETLER
 @app.route('/sirketler/initdb')

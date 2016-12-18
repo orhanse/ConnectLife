@@ -1,0 +1,34 @@
+{% extends "home.html" %}
+
+{% block title %} Hobi Arama {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		{%for id, isim, resim , alan, koordinator, aciklama in hobiler%}
+
+			<div class = "col-md-3">
+			<!-- Hobi Adi -->
+			<h2>{{isim}}</h2>
+			<!-- Hobi resmi -->
+			<img style= "width:300px;heigth=300px"src = "static/images/hobiler/{{resim}}" class="img-responsive">
+			<!-- Aciklamar-->
+			<p style= "font-size: 13pt;color: #00CED1;"> Alan Grubu: </p>
+			<p>{{alan}}</p>
+			<p style= "font-size: 13pt;color: #00CED1;">Koordinator: </p>
+			<p>{{koordinator}}</p>
+			<p style= "font-size: 13pt;color: #00CED1;">Aciklama: </p>
+			<p>{{aciklama}}</p>		
+			<a class="btn btn-large btn-info" href= "{{ url_for('hobiler_update_page',hobi_id=id)}}">Ilgi Alanini Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Daha Fazla!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

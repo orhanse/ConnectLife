@@ -1,0 +1,41 @@
+{% extends "home.html"%}
+{% block title %}Hobi Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Ilgi Alani Guncelleme Sayfasi</h2>
+
+		{%for id, isim, resim , alan, koordinator, aciklama in hobiler%}
+            <form id="update" action="{{ url_for('hobiler_update_page',hobi_id=id) }}" method = "post">
+            	<div class="form-group">
+				  		<label for="usr">Ilgi Alani:</label>
+						<input class="form-control" size="7" value="{{isim}}" form ="update" type="text" placeholder="Ilgi alani ismi" name="isim">
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" value="{{resim}}" form ="update" type="text" placeholder="Resim url'si" name="resim">
+				  </div>
+                  <div class="form-group">
+				  		<label for="usr">Alan Adi:</label>
+						<input class="form-control" size="7" value="{{alan}}" form ="update" type="text" placeholder="Alan Adi" name="alan">
+				  </div>
+				    <div class="form-group">
+  						<label for="sell">Koordinator:</label>
+				  		<select class="form-control" id="sel1" name="kisiler_isim" form="update">
+					 	{%for id, isim in kisiler%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				  <div class="form-group">
+				  		<label for="usr">Aciklama:</label>
+						<input class="form-control" size="7" value="{{aciklama}}" form ="update" type="text" placeholder="Aciklama" name="aciklama">
+				  </div>
+                  <input type="hidden" name="hobi_id" value="{{id}}">
+                  <input class="add" form="update" id="hobiler_form_update" value="Ilgi Alanini Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('hobiler_update_page',hobi_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Ilgi Alanini Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}
