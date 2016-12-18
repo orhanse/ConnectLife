@@ -10,11 +10,13 @@
 
 
 		<!-- Dilleri ekranda gosteren kisim -->
-		{%for id, name, ulkesi in dil%}
+		{%for id, name, ulkesi, photo in dil%}
 
 			<div class = "col-md-3">
 			<!-- Dilin Adı -->
 			<h2>{{name}}</h2>
+			<!-- Bayrak Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{photo}}" class="img-responsive">
 			<!-- Kullanıldığı Ülke -->
 			<p>{{ulkesi}}</p>
 			<!-- Update Page URL -->

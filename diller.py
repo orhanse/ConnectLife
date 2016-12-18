@@ -11,9 +11,10 @@ from flask import request
 from flask.helpers import url_for
 
 class Dil:
-    def __init__(self, name, ulkesi):
+    def __init__(self, name, ulkesi, photo):
         self.name = name
         self.ulkesi = ulkesi
+        self.photo = photo
 
 def init_diller_db(cursor):
     query = """DROP TABLE IF EXISTS DIL"""
@@ -21,51 +22,58 @@ def init_diller_db(cursor):
     query = """CREATE TABLE DIL (
         ID SERIAL PRIMARY KEY,
         NAME varchar(100) NOT NULL,
-        ULKESI varchar(100) NOT NULL
+        ULKESI varchar(100) NOT NULL,
+        PHOTO varchar(80)
         )"""
     cursor.execute(query)
     insert_dil(cursor)
 
 def insert_dil(cursor):
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
         'Türkçe',
-        'Türkiye'
+        'Türkiye',
+        'türkçe.jpeg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
         'İngilizce',
-        'İngiltere'
+        'İngiltere',
+        'ingilizce.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
         'Fransızca',
-        'Fransa'
+        'Fransa',
+        'fransızca.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
         'İtalyanca',
-        'İtalya'
+        'İtalya',
+        'italyanca.jpg'
         )"""
     cursor.execute(query)
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
         'Almanca',
-        'Almanya'
+        'Almanya',
+        'almanca.png'
         )"""
     cursor.execute(query)
 
 
 def add_dil(cursor, request, dil):
     query = """INSERT INTO DIL
-        (NAME, ULKESI) VALUES (
+        (NAME, ULKESI, PHOTO) VALUES (
+        %s,
         %s,
         %s
         )"""
-    cursor.execute(query, (dil.name, dil.ulkesi))
+    cursor.execute(query, (dil.name, dil.ulkesi, dil.photo))
 
 def delete_diller(cursor, id):
         query="""DELETE FROM DIL WHERE ID = %s"""
@@ -76,8 +84,9 @@ def update_diller(cursor, id, dil):
             query="""
             UPDATE DIL
             SET NAME=INITCAP(%s),
-            ULKESI=INITCAP(%s)
+            ULKESI=INITCAP(%s),
+            PHOTO=INITCAP(%s)
             WHERE ID=%s
             """
-            cursor.execute(query,(dil.name, dil.ulkesi, id))
+            cursor.execute(query,(dil.name, dil.ulkesi, dil.photo, id))
 

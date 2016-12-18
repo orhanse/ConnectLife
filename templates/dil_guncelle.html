@@ -4,11 +4,15 @@
 {% block content %}
     <h2>Dil Güncelleme Sayfasi</h2>
 
-		{%for id, name, ulkesi in dil%}
+		{%for id, name, ulkesi, photo in dil%}
             <form id="update" action="{{ url_for('diller_update_page',dil_id=id) }}" method = "post">
                   <div class="form-dil">
   						<label for="usr">Dil Adı</label>
 				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Dil Adı" name="name">
+				  </div>
+				  <div class="form-dil">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" form ="add" type="text" placeholder="Örnek: türkçe.jpeg" name="photo">
 				  </div>
                   <div class="form-dil">
 				  		<label for="usr">Kullanıldığı Ülke</label>

@@ -74,7 +74,7 @@ def insert_lokasyon(cursor):
         'Almanya',
         'Berlin',
         '52° 31dk 12.025sn N 13° 24dk 17.834sn E',
-        4,
+        5,
         'almanya.svg'
         )"""
     cursor.execute(query)

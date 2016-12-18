@@ -51,7 +51,7 @@
 				   <div class="form-lokasyon">
   						<label for="sel1">Yerel Dili</label>
 					 	<select class="form-control" id="sel1" name="diller_isim" required="required" form="add">
-					 	{%for id, isim in lokasyonler%}
+					 	{%for id, isim in diller%}
 					    	<option value = "{{id}}" >{{isim}}</option>
 					    {%endfor%}
 					 </select>

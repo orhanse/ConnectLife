@@ -917,14 +917,15 @@ def diller_sayfasi():
     cursor = connection.cursor()
     if request.method == 'GET':
         now = datetime.datetime.now()
-        query = "SELECT ID, NAME, ULKESI FROM DIL"
+        query = "SELECT ID, NAME, ULKESI, PHOTO FROM DIL"
 
         cursor.execute(query)
         dil=cursor.fetchall()
         return render_template('diller.html', dil = dil, current_time=now.ctime())
     elif "add" in request.form:
         dil = Dil(request.form['name'],
-                     request.form['ulkesi'])
+                  request.form['ulkesi'],
+                  request.form['photo'])
 
         add_dil(cursor, request, dil)
 
@@ -932,7 +933,7 @@ def diller_sayfasi():
         return redirect(url_for('diller_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT ID,NAME, ULKESI FROM DIL WHERE NAME LIKE %s"""
+        query = """SELECT ID,NAME, ULKESI, PHOTO FROM DIL WHERE NAME LIKE %s"""
 
 
         cursor.execute(query,[aranan])
@@ -954,7 +955,8 @@ def diller_update_page(dil_id):
     elif request.method == 'POST':
         if "update" in request.form:
             dil1 = Dil(request.form['name'],
-                     request.form['ulkesi'])
+                     request.form['ulkesi'],
+                     request.form['photo'])
             update_diller(cursor, request.form['dil_id'], dil1)
             connection.commit()
             return redirect(url_for('diller_sayfasi'))
