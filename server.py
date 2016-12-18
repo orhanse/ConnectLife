@@ -282,6 +282,7 @@ def initialize_database_gruplar():
     DROP TABLE IF EXISTS GRUPLAR CASCADE;
     ''')
     init_gruplar_db(cursor)
+    init_tag_hastag_db(cursor)
     connection.commit()
     return redirect(url_for('home_page'))
 

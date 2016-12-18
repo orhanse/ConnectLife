@@ -28,6 +28,49 @@ def init_gruplar_db(cursor):
     cursor.execute(query)
     fill_gruplar_db(cursor)
 
+def init_tag_hastag_db(cursor):
+    query = """CREATE TABLE IF NOT EXISTS TAGS (
+    ID SERIAL,
+    ISIM VARCHAR(80) NOT NULL,
+    PRIMARY KEY(ID)
+    )"""
+    cursor.execute(query)
+
+    query = """CREATE TABLE IF NOT EXISTS HASTAG (
+    ID SERIAL,
+    GRUPLAR_ID INTEGER NOT NULL REFERENCES GRUPLAR(ID) DEFAULT 1,
+    TAGS_ID INTEGER NOT NULL REFERENCES TAGS(ID) DEFAULT 1,
+    PRIMARY KEY(ID)
+    )"""
+    cursor.execute(query)
+    query="""INSERT INTO TAGS
+        (ISIM) VALUES (
+        'Teknoloji'
+        );
+        INSERT INTO TAGS
+        (ISIM) VALUES (
+        'Bilim '
+        );
+        INSERT INTO TAGS
+        (ISIM) VALUES (
+        'Guncel'
+        );"""
+    cursor.execute(query)
+    query="""INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '1',
+        '1');
+        INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '1',
+        '2');
+        INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '2',
+        '1');"""
+    cursor.execute(query)
+
+
 def fill_gruplar_db(cursor):
     query="""INSERT INTO GRUPLAR
         (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
