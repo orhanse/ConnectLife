@@ -281,6 +281,7 @@ def initialize_database_gruplar():
     DROP TABLE IF EXISTS GRUPLAR CASCADE;
     ''')
     init_gruplar_db(cursor)
+    init_tag_hastag_db(cursor)
     connection.commit()
     return redirect(url_for('home_page'))
 
@@ -448,9 +449,9 @@ def makaleler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     now = datetime.datetime.now()
-    
+
     if request.method == 'GET':
-        query = """SELECT M.ID, M.KONU, M.BASLIK, M.YAZAR, M.TARIH, U.NAME 
+        query = """SELECT M.ID, M.KONU, M.BASLIK, M.YAZAR, M.TARIH, U.NAME
                     FROM MAKALELER AS M, UNIVERSITY AS U
                     WHERE(
                         (M.UNINAME= U.ID)
@@ -461,7 +462,7 @@ def makaleler_sayfasi():
         university=cursor.fetchall()
         return render_template('makaleler.html', makaleler = makaleler, current_time=now.ctime(), uniname = university)
     elif "add" in request.form:
-        
+
         makale1 = Makaleler(request.form['konu'],
                             request.form['baslik'],
                             request.form['yazar'],
