@@ -1,0 +1,35 @@
+{% extends "home.html" %}
+
+{% block title %} Lokasyonlar {% endblock %}
+
+{% block content %}
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+
+
+		<!-- Lokasyonları ekranda gösteren kısım -->
+		{%for id, name, baskent, gps, yerel_dili, photo in lokasyon%}
+
+			<div class = "col-md-3">
+			<!-- Lokasyonun Adı -->
+			<h2>{{name}}</h2>
+			<!-- Bayrak Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{photo}}" class="img-responsive">
+			<!-- Başkenti -->
+			<p>{{baskent}}</p>
+			<!-- GPS Koordinatı -->
+			<p>{{gps}}</p>
+			<!-- Yerel Dili -->
+			<p>{{yerel_dili}}</p>
+
+			<!-- Update Page URL -->
+			<a class="btn btn-large btn-info" href= "{{ url_for('lokasyonlar_update_page',lokasyon_id=id)}}">Lokasyonu Düzenle</a>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+{% endblock %}

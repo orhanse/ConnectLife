@@ -1,0 +1,42 @@
+{% extends "home.html"%}
+{% block title %}Lokasyon Güncelle{% endblock %}
+
+{% block content %}
+    <h2>Lokasyon Güncelleme Sayfasi</h2>
+
+		{%for id, name, baskent, gps, yerel_dili, photo in lokasyon%}
+            <form id="update" action="{{ url_for('lokasyonlar_update_page',lokasyon_id=id) }}" method = "post">
+                  <div class="form-lokasyon">
+  						<label for="usr">Lokasyon Adı</label>
+				  		<input class="form-control" size="7" value="{{name}}" form ="update" type="text" placeholder="Lokasyon Adı" name="name">
+				  </div>
+                  <div class="form-lokasyon">
+				  		<label for="usr">Başkenti</label>
+						<input class="form-control" size="7" value="{{baskent}}" form ="update" type="text" placeholder="Başkenti " name="baskent">
+				  </div>
+		<div class="form-lokasyon">
+				  		<label for="usr">GPS Koordinatı</label>
+						<input class="form-control" size="7" value="{{gps}}" form ="update" type="text" placeholder="GPS Koordinatı " name="gps">
+				  </div>
+				  <div class="form-lokasyon">
+  						<label for="sel1">Yerel Dili</label>
+					 	<select class="form-control" id="sel1" name="diller_isim" required="required" form="update">
+					 	{%for id, isim in diller%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+		<div class="form-lokasyon">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" value="{{photo}}" form ="update" type="text" placeholder="Resim url'si" name="photo">
+				  </div>
+
+                  <input type="hidden" name="lokasyon_id" value="{{id}}">
+                  <input class="add" form="update" id="lokasyonlar_form_update" value="Lokasyonu Güncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('lokasyonlar_update_page',lokasyon_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Lokasyonu Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

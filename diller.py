@@ -51,6 +51,12 @@ def insert_dil(cursor):
         'İtalya'
         )"""
     cursor.execute(query)
+    query = """INSERT INTO DIL
+        (NAME, ULKESI) VALUES (
+        'Almanca',
+        'Almanya'
+        )"""
+    cursor.execute(query)
 
 
 def add_dil(cursor, request, dil):

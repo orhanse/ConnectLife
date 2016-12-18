@@ -21,6 +21,7 @@ from makaleler import *
 from oneriler import *
 from diller import *
 from projeler import *
+from lokasyonlar import *
 
 app = Flask(__name__)
 
@@ -745,11 +746,11 @@ def projeler_sayfasi():
         query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
                 FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
                 WHERE(
-                (M.KONU = M.ID)
-                AND(
-                (M.SAHIP = K.ID)
-                AND(
-                (M.UNINAME = U.ID)
+                (P.KONU = M.ID)
+                AND
+                (P.SAHIP = K.ID)
+                AND
+                (P.UNINAME = U.ID)
                 ) """
         cursor.execute(query)
         projeler=cursor.fetchall()
@@ -777,12 +778,12 @@ def projeler_sayfasi():
         query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
             FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
             WHERE(
-            (M.KONU = M.ID)
-            AND(
-            (M.SAHIP = K.ID)
-            AND(
-            (M.UNINAME= U.ID)
-            ) AND (P.BASLIK LIKE %s))"""
+            (P.KONU = M.ID)
+            AND
+            (P.SAHIP = K.ID)
+            AND
+            (P.UNINAME= U.ID)
+            AND (P.BASLIK LIKE %s))"""
         cursor.execute(query,[aranan])
         projeler=cursor.fetchall()
         now = datetime.datetime.now()
@@ -961,6 +962,92 @@ def diller_update_page(dil_id):
             delete_diller(cursor, dil_id)
             connection.commit()
             return redirect(url_for('diller_sayfasi'))
+
+
+@app.route('/lokasyonlar/initdb')
+def initialize_database_lokasyon():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor =connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS LOKASYON CASCADE;
+    ''')
+
+    init_lokasyonlar_db(cursor)
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+@app.route('/lokasyonlar', methods = ['GET', 'POST'])
+def lokasyonlar_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        now = datetime.datetime.now()
+
+        query = """SELECT L.ID, L.NAME, L.BASKENT, L.GPS, D.NAME, L.PHOTO
+                    FROM LOKASYON AS L, DIL AS D
+                    WHERE(
+                (L.YEREL_DIL = D.ID)
+            )"""
+
+        cursor.execute(query)
+        lokasyon=cursor.fetchall()
+        query = "SELECT ID,NAME FROM DIL"
+        cursor.execute(query)
+        diller =cursor.fetchall()
+        return render_template('lokasyonlar.html', lokasyon = lokasyon, current_time=now.ctime(),diller=diller)
+    elif "add" in request.form:
+        lokasyon = Lokasyon(request.form['name'],
+                     request.form['baskent'],
+                     request.form['gps'],
+                     request.form['diller_isim'],
+             request.form['photo'])
+
+        add_lokasyon(cursor, request, lokasyon)
+
+        connection.commit()
+        return redirect(url_for('lokasyonlar_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+
+        query = """SELECT L.ID, L.NAME, L.BASKENT, L.GPS, D.NAME , L.PHOTO
+                    FROM LOKASYON AS L, DIL AS D
+                    WHERE(
+                        (L.YEREL_DIL = D.ID)
+                    ) AND (L.NAME LIKE %s)"""
+
+        cursor.execute(query,[aranan])
+        lokasyon=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('lokasyon_ara.html', lokasyon = lokasyon, current_time=now.ctime(), sorgu = aranan)
+
+
+@app.route('/lokasyonlar/<lokasyon_id>', methods=['GET', 'POST'])
+def lokasyonlar_update_page(lokasyon_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        query = """SELECT * FROM LOKASYON WHERE (ID = %s)"""
+        cursor.execute(query,lokasyon_id)
+        lokasyon = cursor.fetchall()
+        now = datetime.datetime.now()
+        query = "SELECT ID,NAME FROM DIL"
+        cursor.execute(query)
+        diller =cursor.fetchall()
+        return render_template('lokasyon_guncelle.html', lokasyon = lokasyon, current_time=now.ctime(), diller = diller)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            lokasyon1 = Lokasyon(request.form['name'],
+                     request.form['baskent'],
+                     request.form['gps'],
+                     request.form['diller_isim'],
+             request.form['photo'])
+            update_lokasyonlar(cursor, request.form['lokasyon_id'], lokasyon1)
+            connection.commit()
+            return redirect(url_for('lokasyonlar_sayfasi'))
+        elif "delete" in request.form:
+            delete_lokasyonlar(cursor, lokasyon_id)
+            connection.commit()
+            return redirect(url_for('lokasyonlar_sayfasi'))
 
 
 

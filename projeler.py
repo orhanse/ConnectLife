@@ -33,7 +33,7 @@ def init_projeler_db(cursor):
 def insert_projeler(cursor):
     query = """INSERT INTO PROJELER
         (BASLIK, KONU, SAHIP, TARIH, UNINAME, ACIKLAMA) VALUES (
-        'Haptik Koltuk Kullanici Arayuzu'
+        'Haptik Koltuk Kullanici Arayuzu',
         2,
         2,
         2016,
@@ -42,7 +42,7 @@ def insert_projeler(cursor):
         );
         INSERT INTO PROJELER
         (BASLIK, KONU, SAHIP, TARIH, UNINAME, ACIKLAMA) VALUES (
-        'Goruntu Isleme Projesi'
+        'Goruntu Isleme Projesi',
         2,
         4,
         2015,
@@ -51,7 +51,7 @@ def insert_projeler(cursor):
         );
         INSERT INTO PROJELER
         (BASLIK, KONU, SAHIP, TARIH, UNINAME, ACIKLAMA) VALUES (
-        'Gelecek Teknolojisi'
+        'Gelecek Teknolojisi',
         3,
         1,
         2015,
@@ -60,7 +60,7 @@ def insert_projeler(cursor):
         );
         INSERT INTO PROJELER
         (BASLIK, KONU, SAHIP, TARIH, UNINAME, ACIKLAMA) VALUES (
-        'Ucan Arabalar ve Yururyen Ucaklar'
+        'Ucan Arabalar ve Yururyen Ucaklar',
         3,
         1,
         2021,
