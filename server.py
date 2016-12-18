@@ -55,67 +55,6 @@ def initialize_database():
     query = """INSERT INTO COUNTER(N) VALUES(0)"""
     cursor.execute(query)
 
-    cursor.execute('''
-    DROP TABLE IF EXISTS KISILER CASCADE;
-    ''')
-    init_kisiler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS MESLEKLER CASCADE;
-    ''')
-    init_meslekler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS MAILLER CASCADE;
-    ''')
-    init_mailler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS GRUPLAR CASCADE;
-    ''')
-    init_gruplar_db(cursor)
-    init_tag_hastag_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS ONERILER CASCADE;
-    ''')
-    init_oneriler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS ISILANLARI CASCADE;
-    ''')
-    init_isilanlari_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS MAKALELER CASCADE;
-    ''')
-    init_makaleler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS UNIVERSITY CASCADE;
-    ''')
-    init_universities_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS PROJELER CASCADE;
-    ''')
-    init_projeler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS SIRKET CASCADE;
-    ''')
-    init_sirketler_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS DIL CASCADE;
-    ''')
-    init_diller_db(cursor)
-
-    cursor.execute('''
-    DROP TABLE IF EXISTS LOKASYON CASCADE;
-    ''')
-    init_lokasyonlar_db(cursor)
-
     connection.commit()
     return redirect(url_for('home_page'))
 
