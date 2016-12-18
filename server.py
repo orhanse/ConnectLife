@@ -36,7 +36,104 @@ def get_elephantsql_dsn(vcap_services):
     return dsn
 
 
-#KISILER
+#Anasayfa
+@app.route('/')
+def home_page():
+    now = datetime.datetime.now()
+    return render_template('home.html', current_time=now.ctime())
+
+#Database Initializition
+@app.route('/initdb')
+def initialize_database():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    query = """DROP TABLE IF EXISTS COUNTER"""
+    cursor.execute(query)
+    query = """CREATE TABLE COUNTER (N INTEGER)"""
+    cursor.execute(query)
+    query = """INSERT INTO COUNTER(N) VALUES(0)"""
+    cursor.execute(query)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS KISILER CASCADE;
+    ''')
+    init_kisiler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS MESLEKLER CASCADE;
+    ''')
+    init_meslekler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS MAILLER CASCADE;
+    ''')
+    init_mailler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS GRUPLAR CASCADE;
+    ''')
+    init_gruplar_db(cursor)
+    init_tag_hastag_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS ONERILER CASCADE;
+    ''')
+    init_oneriler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS ISILANLARI CASCADE;
+    ''')
+    init_isilanlari_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS MAKALELER CASCADE;
+    ''')
+    init_makaleler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS UNIVERSITY CASCADE;
+    ''')
+    init_universities_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS PROJELER CASCADE;
+    ''')
+    init_projeler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS SIRKET CASCADE;
+    ''')
+    init_sirketler_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS DIL CASCADE;
+    ''')
+    init_diller_db(cursor)
+
+    cursor.execute('''
+    DROP TABLE IF EXISTS LOKASYON CASCADE;
+    ''')
+    init_lokasyonlar_db(cursor)
+
+    connection.commit()
+    return redirect(url_for('home_page'))
+
+@app.route('/count')
+def counter_page():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+
+    query = "UPDATE COUNTER SET N = N + 1"
+    cursor.execute(query)
+    connection.commit()
+
+    query = "SELECT N FROM COUNTER"
+    cursor.execute(query)
+    count = cursor.fetchone()[0]
+    return "This page was accessed %d times." % count
+
+#KISILER++
 @app.route('/kisiler/initdb')
 def initialize_database_kisiler():
     connection = dbapi2.connect(app.config['dsn'])
@@ -139,7 +236,7 @@ def kisiler_update_page(kisi_id):
 
 
 
-#MESLEKLER
+#MESLEKLER++
 @app.route('/meslekler/initdb')
 def initialize_database_meslekler():
     connection = dbapi2.connect(app.config['dsn'])
@@ -611,42 +708,6 @@ def makaleler_update_page(makale_id):
             delete_makaleler(cursor, makale_id)
             connection.commit()
             return redirect(url_for('makaleler_sayfasi'))
-
-
-@app.route('/')
-def home_page():
-    now = datetime.datetime.now()
-    return render_template('home.html', current_time=now.ctime())
-
-
-@app.route('/initdb')
-def initialize_database():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    query = """DROP TABLE IF EXISTS COUNTER"""
-    cursor.execute(query)
-    query = """CREATE TABLE COUNTER (N INTEGER)"""
-    cursor.execute(query)
-    query = """INSERT INTO COUNTER(N) VALUES(0)"""
-    cursor.execute(query)
-
-    connection.commit()
-    return redirect(url_for('home_page'))
-
-@app.route('/count')
-def counter_page():
-    connection = dbapi2.connect(app.config['dsn'])
-    cursor = connection.cursor()
-
-    query = "UPDATE COUNTER SET N = N + 1"
-    cursor.execute(query)
-    connection.commit()
-
-    query = "SELECT N FROM COUNTER"
-    cursor.execute(query)
-    count = cursor.fetchone()[0]
-    return "This page was accessed %d times." % count
 
 #UNIVERSITELER - by Selman Orhan
 @app.route('/universiteler/initdb')
