@@ -1,0 +1,80 @@
+{% extends "home.html" %}
+
+{% block title %} Oneriler {% endblock %}
+
+{% block content %}
+
+	<h1>Öneriler</h1>
+	<hr>
+	<div class = "row">
+		<h2>Tanıyor Olabileceğiniz Kişiler</h2>
+		{%for id, resim, kname, kpozisyon, baglanti in oneriler%}
+
+			<div class = "col-md-2">
+			<!-- Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<!-- Name -->
+			<p>{{kname}}</p>
+			<!-- Pozition -->
+			<p>{{kpozisyon}}</p>
+			<!-- Baglanti -->
+			<p style= "font-size: 13pt;color: #00CED1;">Ortak bağlantı: </p>
+			<p>{{baglanti}}</p>
+			<a class="btn btn-large btn-info" href= "{{ url_for('oneriler_update_page',oneri_id=id)}}">Profili Duzenle</a>
+			<!-- Add Button -->
+			<button type="button" class="btn btn-success">Bağlantı kur!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+
+	<hr>
+
+	<div class = "row">
+
+		<!-- Yeni kisi ekleme sayfası  -->
+		    <h2>Yeni Öneri Ekle!</h2>
+            <form id="add" action="{{ url_for('oneriler_sayfasi')}}" method = "post">
+                 <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+						<input class="form-control" size="7" form ="add" type="text" placeholder="Resim(resim girmek istemiyorsanız defaultprofil.png yazınız.)" name="resim" required="required">
+				  </div>
+                    <div class="form-group">
+  						<label for="usr">Isim:</label>
+					 	<select class="form-control" id="sel1" name="kisiler_isim" form="add">
+					 	{%for id, isim in kname%}
+					    	<option value = "{{id}}" >{{isim}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+				     <div class="form-group">
+  						<label for="usr">Pozisyon:</label>
+					 	<select class="form-control" id="sel1" name="kpozisyon" form="add">
+					 	{%for id, kpozisyon in pozisyon%}
+					    	<option value = "{{id}}" >{{kpozisyon}}</option>
+					    {%endfor%}
+					 </select>
+				  </div>
+                  <div class="form-group">
+  						<label for="usr">Bağlantı:</label>
+				  		<input class="form-control" size="7" form ="add" type="text" placeholder="Ortak baglanti sayısı" name="baglanti" required="required">
+				  </div>
+
+                  <input class="add" form="add" id="oneriler_form_add" value="Öneri Ekle!" name="add" type="submit">
+			</form>
+
+		</div>
+		<hr>
+		<div class = "row">
+			<h2>Öneri Ara!</h2>
+			<form id="search" action="{{ url_for('oneriler_sayfasi')}}" method = "post">
+				<div class="form-group">
+				  		<label for="usr">Öneri Arama:</label>
+		          		<input class="form-control" size="7" form ="search" type="text" placeholder="Aranacak anahtar kelimeyi yaziniz." name="aranan">
+				  </div>
+                  <input class="search" form="search" id="oneriler_form_add" value="Ara!" name="search" type="submit">
+            </form>
+		</div>
+
+{% endblock %}

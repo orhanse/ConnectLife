@@ -1,0 +1,34 @@
+{% extends "home.html" %}
+
+{% block title %} Oneriler {% endblock %}
+
+{% block content %}
+
+	<h1>Öneriler</h1>
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+	
+		{%for id, resim, kname, kpozisyon, baglanti in oneriler%}
+
+			<div class = "col-md-2">
+			<!-- Image -->
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<!-- Name -->
+			<p>{{kname}}</p>
+			<!-- Pozition -->
+			<p>{{kpozisyon}}</p>
+			<!-- Baglanti -->
+			<p style= "font-size: 13pt;color: #00CED1;">Başvuru sayısı: </p>
+			<p>{{baglanti}}</p>
+			<a class="btn btn-large btn-info" href= "{{ url_for('oneriler_update_page',oneri_id=id)}}">Profili Duzenle</a>
+			<!-- Add Button -->
+			<button type="button" class="btn btn-success">Bağlantı kur!</button>
+			</div>
+
+		{%endfor%}
+
+	</div>
+	
+{%endblock%}
+	

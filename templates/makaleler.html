@@ -34,11 +34,12 @@
 	<div class = "row">
 
 		<!-- Yeni makale ekleme kismi  -->
+		
 		    <h2>Yeni Makale Ekle!</h2>
             <form id="add" action="{{ url_for('makaleler_sayfasi')}}" method = "post">
             	 <div class="form-group">
 				  		<label for="usr">Makalenin Konusu:</label>
-						<input class="form-control" size="7" form ="add" type="text" placeholder=" Makalenin başlığı" required="required" name="konu">
+						<input class="form-control" size="7" form ="add" type="text" placeholder=" Makalenin konusu" required="required" name="konu">
 				  </div>
                   <div class="form-group">
 				  		<label for="usr">Makale Adi:</label>
@@ -66,6 +67,7 @@
 		</div>
 		<hr>
 		<div class = "row">
+			
 			<h2>Makale Ara!</h2>
 			<form id="search" action="{{ url_for('makaleler_sayfasi')}}" method = "post">
 				<div class="form-group">
@@ -74,6 +76,7 @@
 				  </div>
                   <input class="search" form="search" id="makaleler_form_add" value="Ara!" name="search" type="submit">
             </form>
+            
 		</div>
 		
 {% endblock %}

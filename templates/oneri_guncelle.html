@@ -1,0 +1,43 @@
+{% extends "home.html"%}
+{% block title %}Oneri Guncelle{% endblock %}
+
+{% block content %}
+    <h2>Öneri Güncelleme Sayfası</h2>
+
+		{%for id, resim, kname, kpozisyon, baglanti in oneri%}
+            <p> Oneri ID: {{id}} </p>
+            <form id="update" action="{{ url_for('oneriler_update_page',oneri_id=id) }}" method = "post">
+                   <div class="form-group">
+				  		<label for="usr">Resim URL'si:</label>
+		          		<input class="form-control" size="7" value="{{resim}}" form ="update" type="text" placeholder="Resim url'si" name="resim">
+				  </div>
+                    <div class="form-group">
+				  		<label for="sel1">Isim:</label>
+				  		<select class="form-control" id="sel1" name="kisiler_isim" form="update">
+ 					 	{%for id, isim in kisiler %}
+ 				    	<option value = "{{id}}" >{{isim}}</option>
+ 					    {%endfor%}
+ 						</select>
+                  </div>
+                   <div class="form-group">
+				  		<label for="sel1">Pozisyon:</label>
+				  		<select class="form-control" id="sel1" name="kpozisyon" form="update">
+ 					 	{%for id, pozisyon in isilanlari %}
+ 				    	<option value = "{{id}}" >{{pozisyon}}</option>
+ 					    {%endfor%}
+ 						</select>
+                  </div>
+                  <div class="form-group">
+				  		<label for="usr">Baglanti:</label>
+						<input class="form-control" size="7" value="{{baglanti}}" form ="update" type="text" placeholder="Ortak bağlantı sayısı" name="baglanti">
+				  </div>
+
+                  <input type="hidden" name="oneri_id" value="{{id}}">
+                  <input class="add" form="update" id="oneriler_form_update" value="Öneriyi Guncelle" name="update" type="submit">
+			</form>
+        	<form id="delete" action="{{ url_for('oneriler_update_page',oneri_id=id) }}" method = "post">
+        		  <input class="delete" form="delete" Value="Oneriyi Sil" name="delete" type="submit">
+            </form>
+        {% endfor %}
+
+{% endblock %}

@@ -18,6 +18,7 @@ from isilanlari import *
 from meslekler import *
 from mailler import *
 from makaleler import *
+from oneriler import *
 
 app = Flask(__name__)
 
@@ -349,6 +350,88 @@ def gruplar_update_page(grup_id):
             connection.commit()
             return redirect(url_for('gruplar_sayfasi'))
 
+#ÖNERİLER
+@app.route('/oneriler/initdb')
+def initialize_database_oneriler():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    cursor.execute('''
+    DROP TABLE IF EXISTS ONERILER CASCADE;
+    ''')
+    init_oneriler_db(cursor)
+    connection.commit()
+    return redirect(url_for('oneriler_sayfasi'))
+
+
+@app.route('/oneriler', methods=['GET', 'POST'])
+def oneriler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+    if request.method == 'GET':
+        query2 = "SELECT ID, ISIM FROM KISILER"
+        cursor.execute(query2)
+        kisiler = cursor.fetchall()
+        query = """SELECT O.ID, O.RESIM, K.ISIM, I.POZISYON, O.BAGLANTI
+                    FROM ONERILER AS O, ISILANLARI AS I, KISILER AS K
+                    WHERE(
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = I.ID)
+                     ) """
+        cursor.execute(query)
+        oneriler=cursor.fetchall()
+        cursor.execute("SELECT ID, POZISYON FROM ISILANLARI")
+        isilanlari=cursor.fetchall()
+        return render_template('oneriler.html', oneriler = oneriler, current_time=now.ctime(), kname = kisiler, pozisyon=isilanlari)
+    elif "add" in request.form:
+        oneri1 = Oneriler( request.form['resim'],
+                            request.form['kisiler_isim'],
+                            request.form['kpozisyon'],
+                            request.form['baglanti'])
+        add_oneriler(cursor, request, oneri1)
+        connection.commit()
+        return redirect(url_for('oneriler_sayfasi'))
+    elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT O.ID, O.RESIM, K.ISIM, I.POZISYON, O.BAGLANTI
+                    FROM ONERILER AS O, ISILANLARI AS I, KISILER AS K
+                    WHERE(
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = I.ID)
+                    )AND (K.ISIM LIKE %s)"""
+        cursor.execute(query,[aranan])
+        oneriler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('oneri_ara.html', oneriler = oneriler, current_time=now.ctime(), sorgu = aranan)
+
+@app.route('/oneriler/<oneri_id>', methods=['GET', 'POST'])
+def oneriler_update_page(oneri_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM ONERILER WHERE (ID = %s)"""
+        cursor.execute(query,oneri_id)
+        oneri=cursor.fetchall()
+        now = datetime.datetime.now()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler=cursor.fetchall()
+        cursor.execute("SELECT ID, POZISYON FROM ISILANLARI")
+        isilanlari=cursor.fetchall()
+        return render_template('oneri_guncelle.html', oneri = oneri,  current_time=now.ctime(), kisiler= kisiler,isilanlari= isilanlari)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            oneri1 = Oneriler( request.form['resim'],
+                            request.form['kisiler_isim'],
+                            request.form['kpozisyon'],
+                            request.form['baglanti'])
+            update_oneriler(cursor, request.form['oneri_id'], oneri1)
+            connection.commit()
+            return redirect(url_for('oneriler_sayfasi'))
+        elif "delete" in request.form:
+            delete_oneriler(cursor, oneri_id)
+            connection.commit()
+            return redirect(url_for('oneriler_sayfasi'))
+
 
 #ISILANLARI
 @app.route('/isilanlari/initdb')
@@ -448,9 +531,9 @@ def makaleler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
     cursor = connection.cursor()
     now = datetime.datetime.now()
-    
+
     if request.method == 'GET':
-        query = """SELECT M.ID, M.KONU, M.BASLIK, M.YAZAR, M.TARIH, U.NAME 
+        query = """SELECT M.ID, M.KONU, M.BASLIK, M.YAZAR, M.TARIH, U.NAME
                     FROM MAKALELER AS M, UNIVERSITY AS U
                     WHERE(
                         (M.UNINAME= U.ID)
@@ -461,7 +544,7 @@ def makaleler_sayfasi():
         university=cursor.fetchall()
         return render_template('makaleler.html', makaleler = makaleler, current_time=now.ctime(), uniname = university)
     elif "add" in request.form:
-        
+
         makale1 = Makaleler(request.form['konu'],
                             request.form['baslik'],
                             request.form['yazar'],
