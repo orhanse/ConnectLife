@@ -45,7 +45,7 @@ def initialize_database_kisiler():
     ''')
     init_kisiler_db(cursor)
     connection.commit()
-    return redirect(url_for('kisiler_sayfasi'))
+    return redirect(url_for('home_page'))
 
 
 @app.route('/kisiler',methods=['GET', 'POST'])
