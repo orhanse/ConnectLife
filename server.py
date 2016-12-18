@@ -373,16 +373,16 @@ def oneriler_sayfasi():
         query2 = "SELECT ID, ISIM FROM KISILER"
         cursor.execute(query2)
         kisiler = cursor.fetchall()
-        query = """SELECT O.ID, O.RESIM, K.ISIM, I.POZISYON, O.BAGLANTI
-                    FROM ONERILER AS O, ISILANLARI AS I, KISILER AS K
+        query = """SELECT O.ID, O.RESIM, K.ISIM, M.ISIM, O.BAGLANTI
+                    FROM ONERILER AS O, MESLEKLER AS M, KISILER AS K
                     WHERE(
-                        (O.KNAME = K.ID) AND (O.KPOZISYON = I.ID)
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = M.ID)
                      ) """
         cursor.execute(query)
         oneriler=cursor.fetchall()
-        cursor.execute("SELECT ID, POZISYON FROM ISILANLARI")
-        isilanlari=cursor.fetchall()
-        return render_template('oneriler.html', oneriler = oneriler, current_time=now.ctime(), kname = kisiler, pozisyon=isilanlari)
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        meslekler=cursor.fetchall()
+        return render_template('oneriler.html', oneriler = oneriler, current_time=now.ctime(), kname = kisiler, pozisyon=meslekler)
     elif "add" in request.form:
         oneri1 = Oneriler( request.form['resim'],
                             request.form['kisiler_isim'],
@@ -393,10 +393,10 @@ def oneriler_sayfasi():
         return redirect(url_for('oneriler_sayfasi'))
     elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT O.ID, O.RESIM, K.ISIM, I.POZISYON, O.BAGLANTI
-                    FROM ONERILER AS O, ISILANLARI AS I, KISILER AS K
+        query = """SELECT O.ID, O.RESIM, K.ISIM, M.ISIM, O.BAGLANTI
+                    FROM ONERILER AS O, MESLEKLER AS M, KISILER AS K
                     WHERE(
-                        (O.KNAME = K.ID) AND (O.KPOZISYON = I.ID)
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = M.ID)
                     )AND (K.ISIM LIKE %s)"""
         cursor.execute(query,[aranan])
         oneriler=cursor.fetchall()
@@ -416,7 +416,7 @@ def oneriler_update_page(oneri_id):
         now = datetime.datetime.now()
         cursor.execute("SELECT ID, ISIM FROM KISILER")
         kisiler=cursor.fetchall()
-        cursor.execute("SELECT ID, POZISYON FROM ISILANLARI")
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
         isilanlari=cursor.fetchall()
         return render_template('oneri_guncelle.html', oneri = oneri,  current_time=now.ctime(), kisiler= kisiler,isilanlari= isilanlari)
     elif request.method == 'POST':
@@ -431,7 +431,7 @@ def oneriler_update_page(oneri_id):
         elif "delete" in request.form:
             delete_oneriler(cursor, oneri_id)
             connection.commit()
- 
+
             return redirect(url_for('oneriler_sayfasi'))
 
 

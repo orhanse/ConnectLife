@@ -19,7 +19,7 @@ def init_oneriler_db(cursor):
     ID SERIAL PRIMARY KEY,
     RESIM varchar(100) NOT NULL DEFAULT 'defaultprofil.png',
     KNAME INTEGER REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    KPOZISYON INTEGER REFERENCES ISILANLARI(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    KPOZISYON INTEGER REFERENCES MESLEKLER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
     BAGLANTI INTEGER DEFAULT 0
    )"""
 
@@ -31,7 +31,7 @@ def insert_oneriler(cursor):
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
         'profil1.jpg',1, 1,11);
         INSERT INTO ONERILER
-        (KNAME,KPOZISYON,BAGLANTI) VALUES (        
+        (KNAME,KPOZISYON,BAGLANTI) VALUES (
         2,2,7);
         INSERT INTO ONERILER
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
@@ -41,7 +41,7 @@ def insert_oneriler(cursor):
         'ekenel.png',4,4,15);
         INSERT INTO ONERILER
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
-        'kaeser.jpg',5,1,8);"""
+        'kaeser.jpg',5,5,8);"""
 
     cursor.execute(query)
 
