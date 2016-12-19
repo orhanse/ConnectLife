@@ -5,7 +5,6 @@
     <h2>Şirket Güncelleme Sayfasi</h2>
 
 		{%for id, name, date, location, ceo_id, work_area, photo in sirket%}
-            <p> SIRKET ID: {{id}} </p>
             <form id="update" action="{{ url_for('sirketler_update_page',sirket_id=id) }}" method = "post">
                   <div class="form-sirket">
   						<label for="usr">Şirket Adı</label>

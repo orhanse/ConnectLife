@@ -24,12 +24,12 @@ def init_sirketler_db(cursor):
     cursor.execute(query)
     query = """CREATE TABLE SIRKET (
         ID SERIAL PRIMARY KEY,
-        NAME varchar(100) NOT NULL,
+        NAME varchar(100) UNIQUE NOT NULL,
         DATE varchar NOT NULL,
         LOCATION INTEGER NOT NULL REFERENCES LOKASYON(ID) ON DELETE CASCADE ON UPDATE CASCADE,
         CEO_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
         WORK_AREA varchar(500),
-        PHOTO varchar(80)
+        PHOTO varchar(80) UNIQUE
         )"""
     cursor.execute(query)
     insert_sirket(cursor)
