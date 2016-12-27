@@ -23,6 +23,7 @@ kişiler tablosu figür 1.2.1'de gösterilmiştir.
 
 **Tablo Oluşturma**
 
+
 .. code-block:: python
 
 def init_kisiler_db(cursor):
@@ -46,14 +47,17 @@ Yukarıdaki kod diliminde kişiler tablosu oluşturulmuştur. Kişiler tablosu d
 Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE
 , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
 
+
 |
+
 ** Başlangıç Eklemeleri***
+
 
 Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklular eklenir.
 
+
 .. code-block:: python
 
-|
 def fill_kisiler_db(cursor):
     query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
                    VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 1, 1, 1, 3);
@@ -69,10 +73,14 @@ def fill_kisiler_db(cursor):
     cursor.execute(query)
 
 |
+
+
 **Yeni Kişi Ekleme**
+
 
 Aşağıdaki kod dilimi, yeni kişi ekleme fonksiyonudur.
 |
+
 
 .. code-block:: python
 
@@ -96,6 +104,7 @@ Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan kişi1 çoklus
 |
 kisi1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
 |
+
 
 .. code-block:: python
 
@@ -143,6 +152,7 @@ GET metoduyla alınan bilgiler, html kodlarında belirtilen 'add' metoduyla ilgi
 **Arama Fonksiyonu**
 Arama fonksiyonunda kişinin ismi arama barına girilerek arama yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
 
+
 .. code-block:: python
 
 elif "search" in request.form:
@@ -183,7 +193,7 @@ def update_kisiler(cursor, id, kisi1):
             cursor.execute(query,(kisi1.isim, kisi1.resim, kisi1.mekan, kisi1.yas,
                                   kisi1.universite, kisi1.work, kisi1.pozisyon, kisi1.dil, id))
 
-|
+
 
 .. code-block:: python
 
@@ -224,12 +234,14 @@ def kisiler_update_page(kisi_id):
 **Silme Fonksiyonu**
 Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
 
+
 .. code-block:: python
 
 elif "delete" in request.form:
             delete_kisiler(cursor, kisi_id)
             connection.commit()
             return redirect(url_for('kisiler_sayfasi'))
+
 
 .. code-block:: python
 
