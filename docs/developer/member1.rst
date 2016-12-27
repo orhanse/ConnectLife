@@ -48,7 +48,7 @@ Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağ
 , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
 
 
-** Başlangıç Eklemeleri***
+**Başlangıç Eklemeleri**
 
 
 Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklular eklenir.
@@ -146,6 +146,7 @@ kisi1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
 GET metoduyla alınan bilgiler, html kodlarında belirtilen 'add' metoduyla ilgili niteliklere gönderilir.
 
 **Arama Fonksiyonu**
+
 Arama fonksiyonunda kişinin ismi arama barına girilerek arama yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
 
 
