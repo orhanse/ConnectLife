@@ -48,11 +48,6 @@ Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağ
 , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
 
 
-<<<<<<< HEAD
-============
-|
-
->>>>>>> branch 'master' of https://github.com/itucsdb1606/itucsdb1606.git
 ** Başlangıç Eklemeleri***
 
 
@@ -61,7 +56,6 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklul
 
 .. code-block:: python
 
-<<<<<<< HEAD
    def fill_kisiler_db(cursor):
        query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
                       VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 1, 1, 1, 3);
@@ -72,22 +66,7 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklul
                    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
                        VALUES ('Kemal Hazım Ekenel', 'ekenel.png','Istanbul', 38, 2, 1, 4, 2);
                    INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-VALUES ('Jeo Kaeser', 'kaeser.jpg','Almanya', 59, 2, 1, 5, 4);"""
-=================================================================
-def fill_kisiler_db(cursor):
-    query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-                   VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 1, 1, 1, 3);
-                INSERT INTO KISILER (ISIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-                    VALUES ('Cagri Gokce', 'Ankara', 22, 2, 2, 2, 1);
-                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-                    VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 2, 1, 3, 1);
-                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-                    VALUES ('Kemal Hazım Ekenel', 'ekenel.png','Istanbul', 38, 2, 1, 4, 2);
-                INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
-                    VALUES ('Jeo Kaeser', 'kaeser.jpg','Almanya', 59, 2, 1, 5, 4);"""
->>>>>>> branch 'master' of https://github.com/itucsdb1606/itucsdb1606.git
-
-       cursor.execute(query)
+                       VALUES ('Jeo Kaeser', 'kaeser.jpg','Almanya', 59, 2, 1, 5, 4);"""
 
 |
 
