@@ -5,6 +5,7 @@ General View
 ------------
 
 Kişiler, mailler ve meslekler tablolarının içerikleri ve yeni çoklu ekleme, varolan çokluyu silme, güncelleme arama gibi veritabanı işlemleri bu kısımda açıklanmıştır.
+
 |
 
 1. Kişiler
@@ -19,6 +20,7 @@ kişiler tablosu figür 1.2.1'de gösterilmiştir.
    figure 1.2.1
 
 |
+
 Üniversite, çalıştığı yer, dil ve meslek bilgileri diğer tablolardan dış anahtarla alınır.
 
 **Tablo Oluşturma**
@@ -43,6 +45,7 @@ kişiler tablosu figür 1.2.1'de gösterilmiştir.
 
 
 |
+
 Yukarıdaki kod diliminde kişiler tablosu oluşturulmuştur. Kişiler tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur.
 Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE
 , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
@@ -75,6 +78,7 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklul
 
 
 Aşağıdaki kod dilimi, yeni kişi ekleme fonksiyonudur.
+
 |
 
 
@@ -96,9 +100,13 @@ Aşağıdaki kod dilimi, yeni kişi ekleme fonksiyonudur.
                                   kisi1.universite, kisi1.work, kisi1.pozisyon, kisi1.dil))
 
 |
+
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan kişi1 çoklusu alınır ve içeriği uygun niteliklere eklenir.
+
 |
+
 kisi1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
+
 |
 
 
@@ -165,10 +173,12 @@ Arama fonksiyonunda kişinin ismi arama barına girilerek arama yapılabilir. Ar
            return render_template('kisi_ara.html', kisiler = kisiler, current_time=now.ctime(), sorgu = aranankisi)
 
 |
+
 **Güncelleme Fonksiyonu**
 
 Aşağıdaki kod diliminde yeni kişi ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan kisi1 etiketiyle çekilir ve
 ilgili niteliklere güncellenen bilgiler eklenir.
+
 |
 
 
@@ -228,6 +238,7 @@ ilgili niteliklere güncellenen bilgiler eklenir.
                return redirect(url_for('kisiler_sayfasi'))
 
 |
+
 **Silme Fonksiyonu**
 
 Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
