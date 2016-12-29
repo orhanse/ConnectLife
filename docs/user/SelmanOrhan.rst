@@ -196,7 +196,7 @@ Kayıtlı projeler içerisinde proje bilgileri güncellenecek bir proje varsa li
    :scale: 100%
    :alt: project update and delete page screenshot
    
-   figure 2.4 - Proje güncelleme ve silme sayfası görüntüsü
+   figure 3.4 - Proje güncelleme ve silme sayfası görüntüsü
 
 **Proje Silme Fonksiyonu**
 
