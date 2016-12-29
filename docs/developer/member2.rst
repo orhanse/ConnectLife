@@ -91,7 +91,7 @@ Kişiler ID dış anahtarına silme operasyonu için *ON DELETE CASCADE* ve gün
 
 **c. Grup Listeleme(SELECT)**
 
-Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */gruplar* sayfasının GET metodu ile çağrılması sonucu yapılmaktadır. Yapılan SELECT query'si sonucunda veritabanından gelen satırlar html sorgusunda yazdırılmaktadır. Ayrıca bir başka SELECT query yapısı da dış anahtar için yazıldı. 
+Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */gruplar* sayfasının GET metodu ile çağrılması sonucu yapılmaktadır. Yapılan SELECT query'si sonucunda veritabanından gelen satırlar html sorgusunda yazdırılmaktadır. 
 
 .. code-block:: python
 
@@ -108,25 +108,123 @@ Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */grupl
            query = "SELECT ID,ISIM FROM KISILER"
            cursor.execute(query)
            kisiler =cursor.fetchall()
-   return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime(),kisiler=kisiler)
-|   
+   return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime(),kisiler=kisiler)   
 
-.. code-block:: html
-   #HTML
+   #Gruplar.html
    {%for id, baslik, zaman, aciklama, icerik, resim, kisi in gruplar%}
-
-			<h2>{{baslik}}</h2>
-			<p>{{zaman}}</p>
-			<p>{{aciklama}}</p>
-			<p>{{icerik}}</p>
-			<p>{{kisi}}</p>
-			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
-			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
-			<button type="button" action=" class="btn btn-success">Katıl!</button>
-			</div>
-		{%endfor%}
+		<h2>{{baslik}}</h2>
+		<p>{{zaman}}</p>
+		<p>{{aciklama}}</p>
+		<p>{{icerik}}</p>
+		<p>{{kisi}}</p>
+		<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+		<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
+		<button type="button" action=" class="btn btn-success">Katıl!</button>
+		</div>
+	{%endfor%}
 
 |
 
 **c. Grup Ekleme(ADD)**
-Kişiler tablosundan tüm kişi isimleri alınıp kullanıcıya gösterilmiştir ve kullanıcının dış anahtarı liste halinde rahatça seçebilmesi sağlanmıştır.
+
+Gruplar tablosu içerisine grup ekleme işlemi */gruplar* sayfasında gerçeklenmiştir. Grupların listelendiği bölümün hemen altında grup ekleme bölümü bulunmaktadır. Bu bölümde database satırları için input formları ve dış anahtar için selection box yapısı bulunur. Bu bölümde kişiler tablosundan tüm kişi isimleri alınıp kullanıcıya gösterilmiştir ve kullanıcının dış anahtarı liste halinde rahatça seçebilmesi sağlanmıştır. Aşağıdaki kod satırında gruplar için hazırlanan input formlar ve kişilerin select yapısı içerisinde eklenmesi gösterilmiştir.
+
+.. code-block:: python
+	<form id="add" action="{{ url_for('gruplar_sayfasi')}}" method = "post">
+                <div class="form-group">
+  			<label for="usr">Başlık:</label>
+			<input class="form-control" ... name="baslik" required="required">
+		</div>
+                <div class="form-group">
+			<label for="usr">Kuruluş Tarihi (GG-AA-YYYY)</label>
+			<input class="form-control" ... type="date" name="zaman">
+	        </div>
+		...
+		...
+		<label for="sel1">Olusturan Kisi:</label>
+		<select class="form-control" id="sel1" name="kisiler_isim" form="add">
+		    {%for id, isim in kisiler%}
+			    	<option value = "{{id}}" >{{isim}}</option>
+		    {%endfor%}
+		</select>
+	</form>	
+	
+|
+*Ekle* butonuna basıldığında verilen formdaki veriler */gruplar* sayfasından *POST* metodu ile alınmaktadır. Alınan değerleri doğru bir şekilde saklamak için database ile benzer içeriği olan bir python sınıfı oluşturulmuştur. Bu sınıftan bir nesne oluşturularak alınan input verileri nesnenin ilgili alanlarına atılmıştır.
+
+.. code-block:: python
+
+	#Gruplar sınıfı olusturuluyor ve yapi tanimlaniyor.
+	class Gruplar:
+	    def __init__(self, baslik, zaman, aciklama, icerik, resim, kisiler_id):
+		self.baslik = baslik
+		self.zaman = zaman
+		self.aciklama = aciklama
+		self.icerik = icerik
+		self.resim = resim
+		self.kisiler_id = kisiler_id
+	..
+	
+	#Grup1 adında yeni bir grup oluşturuluyor ve form verileri aktarılıyor.
+	#add_gruplar() fonksiyonu çağrılarak veritabanına ekleme işlemi tamamlanıyor.
+	elif "add" in request.form:
+		grup1 = Gruplar(request.form['baslik'],
+				    request.form['zaman'],
+				    request.form['aciklama'],
+				    request.form['icerik'],
+				    request.form['resim'],
+				    request.form['kisiler_isim'])
+		add_gruplar(cursor, request, grup1)
+		connection.commit()
+		return redirect(url_for('gruplar_sayfasi'))
+		
+|
+
+Gelen verinin bir nesne içerisine aktarılmasından sonra bu nesne *gruplar.py* sayfasında tanımlanmış *add_gruplar()* fonksiyonu çağrılmaktadır. Bu fonksiyonun içerisinde verilen nesne içerisindeki bilgiler *INSERT* komutu ile veritabanına eklenir. Fonksiyon içeriği aşağıda verilmiştir.
+
+.. code-block:: python
+
+	def add_gruplar(cursor, request, grup1):
+		query = """INSERT INTO GRUPLAR
+		(BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM, KISILER_ID) VALUES (
+		INITCAP(%s),
+		to_date(%s, 'DD-MM-YYYY'),
+		INITCAP(%s),
+		INITCAP(%s),
+		%s,
+		%s
+		)"""
+		cursor.execute(query, (grup1.baslik, grup1.zaman, grup1.aciklama,
+	grup1.icerik, grup1.resim, grup1.kisiler_id))
+	
+|	
+
+**c. Grup Güncelleme(UPDATE)**
+
+Grup güncelleme işleminin yapılabilmesi için gruptaki her elemanın kendine ait bir sayfası olması gerekti. Bu amaçla */gruplar/<grup_id>* adlı bir route oluşturuldu. Grupların listelenme sayfasına *Güncelle* isimli bir button oluşturuldu ve grup_id'leri de kullanılarak bu yeni sayfaya yönlendirildi. Güncelleme sayfası için ayrıca bir html sayfası oluşturuldu ve ekleme formuna benzer şekilde input ve selection boxlar kullanıldı. Ekleme işleminden farklı olarak, bu input kutularının içerisine düzenlenecek verilerin önceki bilgileri yerleştirildi ve kullanıcının kolayca güncelleme işlemini yapması sağlandı. Önceki bilgilerin forma yerleştirme işi aşağıda verilen kodda görülmektedir. 
+
+.. code-block:: python
+
+	<form id="update" action="{{ url_for('gruplar_update_page',grup_id=id) }}" method = "post">
+		#VALUE değerine atanan ilk değerler dolu olarak geliyor ve kullanıcıya gösteriliyor. 
+                <label for="usr">Baslik:</label>
+		<input class="form-control" value="{{baslik}}" form ="update" type="text" name="baslik">
+		<label for="usr">Tarih:</label>
+		<input class="form-control" value="{{zaman}}" form ="update" type="date" name="zaman">
+		...		 
+		#Dış anahtar listesi için önceden atanmış kişi formda seçili olarak geliyor.
+		<label for="sel1">Olusturan Kisi:</label>
+		<select class="form-control" id="sel1" name="kisiler_isim" form="update">
+			{%for id, isim in kisiler%}
+				<option value = "{{id}}" >{{isim}}</option>
+			{%endfor%}
+		</select>
+		#Güncelleme işleminde ID değerini rahatça tespit etmek için görünmeyen bir form açılıp
+		#initial değer olarak güncellenen grubun ID değeri atanıyor.
+		<input type="hidden" name="grup_id" value="{{id}}">
+                <input id="gruplar_form_update" value="Grubu Guncelle" name="update" type="submit">
+	</form>
+
+|	
+
+Forma yerleştirilen bilgiler kullanıcı düzenlemesinden geçtikten sonra *POST* metodu ile kullanıcıdan alınıyor.
