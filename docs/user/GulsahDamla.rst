@@ -54,14 +54,14 @@ Sayfada yer alan makaleler arasından bir makale aranmak istendiğinde sayfanın
    
 **Makale Güncelleme ve Silme**
 
-Kayıtlı makaleler içerisinde güncellenmesi gereken makale için bilgilerinin altında yer alan *Makaleyi Duzenle* butonuyla makale güncelleme sayfasına geçiş yapılır. Makalenin yayınlandığı üniversite otomatik olarak boşluklara yazılır. Güncellenmek istenilen bilgi değiştirilir ve *Makaleyi Guncelle** butonuyla makale bilgileri güncellenmiş olur. Sonrasında kullanıcı Makaleler sayfasına yönlendirilir ve sonuçlar güncellenmiş haliyle listelenir. İlgili bölüm figür 1.5'de gösterilmiştir.
+Kayıtlı makaleler içerisinde güncellenmesi gereken makale için bilgilerinin altında yer alan *Makaleyi Duzenle* butonuyla makale güncelleme sayfasına geçiş yapılır. Makalenin yayınlandığı üniversite otomatik olarak boşluklara yazılır. Güncellenmek istenilen bilgi değiştirilir ve *Makaleyi Guncelle* butonuyla makale bilgileri güncellenmiş olur. Sonrasında kullanıcı Makaleler sayfasına yönlendirilir ve sonuçlar güncellenmiş haliyle listelenir. İlgili bölüm figür 1.5'de gösterilmiştir.
  
 .. figure:: gulsah/makaleguncelleme.png
    :figclass: align-center 
    
    figure 1.5
 
-Eğer bir makale silinmek isteniyorsa *Makaleyi Duzenle** butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Makaleyi Sil** butonuna basılarak makale silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı Makaleler sayfasına yönlendirilir ve makaleler listesinin son hali gösterilir.
+Eğer bir makale silinmek isteniyorsa *Makaleyi Duzenle* butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Makaleyi Sil* butonuna basılarak makale silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı Makaleler sayfasına yönlendirilir ve makaleler listesinin son hali gösterilir.
 
 
 2. İş ilanları
@@ -85,7 +85,7 @@ Anasayfadan *\isilanlari* sekmesine gidilerek işilanları sayfasına ulaşılı
 
 **İlan Ekleme**
 
-İşilanları sayfasına yeni bir ilna eklenmek istendiğinde listeli halde bulunan ilanların alt kısmında bulunan *Yeni İlan Ekle!* bölümü kullanılır. Eklenecek ilanların ilgili bilgileri girildikten sonra *İlan Ekle* butonuyla yeni ilan, işilanları sayfasına eklenmiş olur. İlgili bölüm figür 2.2'de gösterilmiştir.
+İşilanları sayfasına yeni bir ilan eklenmek istendiğinde listeli halde bulunan ilanların alt kısmında bulunan *Yeni İlan Ekle!* bölümü kullanılır. Eklenecek ilanların ilgili bilgileri girildikten sonra *İlan Ekle* butonuyla yeni ilan, işilanları sayfasına eklenmiş olur. İlgili bölüm figür 2.2'de gösterilmiştir.
 
 .. figure:: gulsah/ilanekle.png
    :figclass: align-center 
@@ -112,7 +112,7 @@ Kayıtlı işilanları içerisinde güncellenmesi gereken ilan için bilgilerini
      
    figure 2.4
    
-Eğer bir ilan silinmek isteniyorsa *İlani Duzenle** butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Ilani Sil** butonuna basılarak ilan silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı İşilanları sayfasına yönlendirilir ve işilanları listesinin son hali gösterilir. 
+Eğer bir ilan silinmek isteniyorsa *İlani Duzenle* butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Ilani Sil* butonuna basılarak ilan silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı İşilanları sayfasına yönlendirilir ve işilanları listesinin son hali gösterilir. 
 
 
 3. Öneriler
@@ -155,13 +155,13 @@ Sayfada yer alan öneriler arasından bir öneri aranmak istendiğinde sayfanın
   
 **Öneri Güncelleme ve Silme**
 
-Kayıtlı öneriler içerisinde güncellenmesi gereken öneri için bilgilerinin altında yer alan *Profili Düzenle* butonuyla öneri güncelleme sayfasına geçiş yapılır. Öneri bilgilerinden kişi ismi ve meslek bilgisi otomatik olarak boşluklara yazılır. Güncellenmek istenilen bilgi değiştirilir ve *Oneriyi Güncelle** butonuyla öneri bilgileri güncellenmiş olur. Sonrasında kullanıcı Öneriler sayfasına yönlendirilir ve sonuçlar güncellenmiş haliyle listelenir. İlgili bölüm figür 3.4'de gösterilmiştir.
+Kayıtlı öneriler içerisinde güncellenmesi gereken öneri için bilgilerinin altında yer alan *Profili Düzenle* butonuyla öneri güncelleme sayfasına geçiş yapılır. Öneri bilgilerinden kişi ismi ve meslek bilgisi otomatik olarak boşluklara yazılır. Güncellenmek istenilen bilgi değiştirilir ve *Oneriyi Güncelle* butonuyla öneri bilgileri güncellenmiş olur. Sonrasında kullanıcı Öneriler sayfasına yönlendirilir ve sonuçlar güncellenmiş haliyle listelenir. İlgili bölüm figür 3.4'de gösterilmiştir.
 
 .. figure:: gulsah/oneriguncelleme.png
    :figclass: align-center
    
    figür 3.4
 
-Eğer bir öneri silinmek isteniyorsa *Profili Duzenle** butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Oneriyi Sil** butonuna basılarak öneri silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı Öneriler sayfasına yönlendirilir ve öneriler listesinin son hali gösterilir.
+Eğer bir öneri silinmek isteniyorsa *Profili Duzenle* butonuyla geçiş yapacağı güncelleme sayfası alt kısmında yer alan *Oneriyi Sil* butonuna basılarak öneri silme işlemi gerçekleştirilir. Silme işleminden sonra kullanıcı Öneriler sayfasına yönlendirilir ve öneriler listesinin son hali gösterilir.
 
   
