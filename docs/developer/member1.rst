@@ -485,3 +485,232 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
 "DELETE FROM {table}" komutu tablodaki çoklunun silinmesini sağlar. Hangi çoklunun silineceği "WHERE ID = %s" komutuyla belirlenir.
 
 |
+
+
+
+3. Mailler
+----------
+
+
+ID, isim, mail ve kişi özelliklerini içeren mailler tablosu figür 3.2.1'de gösterilmiştir.
+
+.. figure:: tugba/mailler.png
+   :figclass: align-center
+
+   figure 3.2.1
+
+|
+
+ID, mail ve şifre sütunları varlık içerisinde tanımlanmıştır. İsim ise mailin kime ait olduğunu bildirir ve kişiler tablosundan dış anahtar
+bağlantısıyla çekilmiştir.
+
+**Tablo Oluşturma**
+
+
+.. code-block:: python
+
+   def init_mailler_db(cursor):
+    query = """CREATE TABLE IF NOT EXISTS MAILLER (
+    ID SERIAL PRIMARY KEY,
+    ISIM INTEGER REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    MAIL VARCHAR(30) NOT NULL,
+    SIFRE VARCHAR(30) NOT NULL
+    )"""
+
+    cursor.execute(query)
+    fill_mailler_db(cursor)
+
+
+Yukarıdaki kod diliminde mailler tablosu oluşturulmuştur. Mailler tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur.
+Kodun bu partında birincil anahtar olarak ID belirlenmiştir. Başlangıçta eklenen çoklular "fill_mailler_db(cursor)" fonksiyonuyla varlığa eklenir. Mail ve şifre boş olamaz.
+Dış anahtar bağlantısıyla çekilen isim değişkeni, çekildiği tabloda güncellenirse bu tabloda da güncellenir veya kişiler tablosunda silinirse bu tabloda da silinir.
+
+
+
+**Başlangıç Eklemeleri**
+
+
+Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya başlangıç çokluları eklenir.
+
+
+.. code-block:: python
+
+   def fill_mailler_db(cursor):
+    query = """ INSERT INTO MAILLER (ISIM, MAIL, SIFRE)
+                    VALUES(1, 'ozkalt@itu.edu.tr', 'tugba123');
+                INSERT INTO MAILLER (ISIM, MAIL, SIFRE)
+                    VALUES(2, 'cagri.gokce@itu.edu.tr', 'cagri123');
+                INSERT INTO MAILLER (ISIM, MAIL, SIFRE)
+                    VALUES(3, 'furkan@arhenius.com', 'furkan123');
+                INSERT INTO MAILLER (ISIM, MAIL, SIFRE)
+                    VALUES(4, 'ekenel@itu.edu.tr', 'hazim123');
+                """
+    cursor.execute(query)
+
+|
+
+
+**Yeni Mail Ekleme**
+
+
+Aşağıdaki kod dilimi, yeni mail ekleme fonksiyonudur. SQL dilinde yazılan programa yeni çoklu eklenirken "INSERT INTO" komutu kullanılır.
+
+|
+
+
+.. code-block:: python
+
+   def add_meslekler(cursor, request, meslek1):
+        query = """INSERT INTO MESLEKLER (ISIM, TANIM)
+        VALUES( INITCAP(%s), %s )"""
+        cursor.execute(query, (meslek1.isim, meslek1.tanim))
+
+|
+
+Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan mail1 çoklusu alınır ve içeriği uygun niteliklere eklenir.
+
+|
+
+mail1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
+
+|
+
+
+.. code-block:: python
+
+   @app.route('/mailler',methods=['GET', 'POST'])
+   def mailler_sayfasi():
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       now = datetime.datetime.now()
+
+       if request.method == 'GET':
+           query2 = """SELECT ID, ISIM FROM KISILER"""
+           cursor.execute(query2)
+           kisi = cursor.fetchall()
+           query = """SELECT M.ID, K.ISIM, M.MAIL, M.SIFRE
+                       FROM MAILLER AS M, KISILER AS K
+                       WHERE(
+                           (M.ISIM = K.ID)
+                       )"""
+           cursor.execute(query)
+           mail2 = cursor.fetchall()
+           return render_template('mailler.html', mailler = mail2, isim = kisi)
+
+
+
+       elif "add" in request.form:
+           mail1 = Mailler(request.form['kisi_adi'],
+                               request.form['mail'],
+                               request.form['sifre'])
+           add_mailler(cursor, request, mail1)
+           connection.commit()
+           return redirect(url_for('mailler_sayfasi'))
+
+|
+
+GET metoduyla alınan bilgiler, html kodlarında belirtilen 'add' metoduyla ilgili niteliklere gönderilir.
+"SELECT {column} FROM {table}" komutu ile seçme işlemi yapılır. Yeni mail eklendikten sonra sayfa mailler sayfasına yönlendirilir.
+
+**Arama Fonksiyonu**
+
+Arama fonksiyonunda mailin ismi arama barına girilerek arama yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
+
+
+.. code-block:: python
+
+   elif "search" in request.form:
+        arananmail = request.form['arananmail'];
+        query = """SELECT M.ID, K.ISIM, M.MAIL, M.SIFRE
+                    FROM MAILLER AS M, KISILER AS K
+                    WHERE(
+                        (M.ISIM = K.ID)
+                    ) AND (M.MAIL LIKE %s)"""
+        cursor.execute(query,[arananmail])
+        mailler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('mail_ara.html', mailler = mailler, current_time=now.ctime(), sorgu = arananmail)
+
+|
+
+"SELECT ID, ISIM, TANIM FROM MESLEKLER WHERE ISIM LIKE %s" satırı ile isme göre arama yapılması sağlanır.
+
+|
+
+**Güncelleme Fonksiyonu**
+
+Aşağıdaki kod diliminde yeni mail ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan mail1 etiketiyle çekilir ve
+ilgili niteliklere güncellenen bilgiler eklenir. Güncelleme fonksiyonunda güncellenecek olan çoklu ID etiketi yardımıyla belirienir.
+
+|
+
+
+.. code-block:: python
+
+   def update_mailler(cursor, id, mail1):
+            query = """
+            UPDATE MAILLER
+            SET ISIM = %s,
+            MAIL = %s,
+            SIFRE = %s
+            WHERE ID=%s
+            """
+            cursor.execute(query, (mail1.isim, mail1.mail, mail1.sifre, id))
+
+|
+
+Hangi çoklunun güncelleneceği "WHERE ID=%s" komut ile belirlenir.
+
+
+.. code-block:: python
+
+   @app.route('/mailler/<mail_id>', methods=['GET', 'POST'])
+   def mailler_update_page(mail_id):
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       if request.method == 'GET':
+           cursor.close()
+           cursor = connection.cursor()
+           cursor.execute("SELECT ID, ISIM FROM KISILER")
+           kisiler = cursor.fetchall()
+           query = """SELECT * FROM MAILLER WHERE (ID = %s)"""
+           cursor.execute(query, mail_id)
+           now = datetime.datetime.now()
+           return render_template('mail_guncelle.html', mail = cursor, current_time=now.ctime(), isimler = kisiler )
+       elif request.method == 'POST':
+           if "update" in request.form:
+               mail1 = Mailler(request.form['kisi_adi'],
+                                   request.form['mail'],
+                                   request.form['sifre'])
+               update_mailler(cursor, request.form['mail_id'], mail1)
+               connection.commit()
+               return redirect(url_for('mailler_sayfasi'))
+
+|
+
+"/mailler" sayfası "mail_id"yi alarak işlem yapar.
+
+**Silme Fonksiyonu**
+
+Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
+
+
+.. code-block:: python
+
+   elif "delete" in request.form:
+               delete_mailler(cursor, mail_id)
+               connection.commit()
+               return redirect(url_for('mailler_sayfasi'))
+
+
+.. code-block:: python
+
+   def delete_mailler(cursor, id):
+        query="""DELETE FROM MAILLER WHERE ID = %s"""
+        cursor.execute(query, id)
+
+|
+
+"DELETE FROM {table}" komutu tablodaki çoklunun silinmesini sağlar. Hangi çoklunun silineceği "WHERE ID = %s" komutuyla belirlenir.
+
+|
