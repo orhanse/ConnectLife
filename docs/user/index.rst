@@ -2,7 +2,7 @@ User Guide
 ==========
 
 
-   .. figure:: connectlife.png
+   .. figure:: index_photos/connectlife.png
       :scale: 50 %
       :alt: map to buried treasure
 
