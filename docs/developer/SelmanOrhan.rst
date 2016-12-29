@@ -261,7 +261,7 @@ Arama metodu Hobi çoklusunun isim değişkeni üzerinden arama yapar. Aramak is
    :scale: 100%
    :alt: projeler table database screenshot
    
-   figure 2.1 - Projeler tablosunun database görüntüsü
+   figure 3.1 - Projeler tablosunun database görüntüsü
    
 Projeler tablosu, ID, baslik, konu, sahip, tarih, uniname ve acıklama değişkenlerini içeriyor. Burada *konu* bilgisi *dış anahtar* kullanılarak Meslekler tablosundan çekiliyor. *sahip* bilgisi *dış anahtar* kullanılarak Kisiler tablosundan çekiliyor. *uniname* bilgisi *dış anahtar* kullanılarak Universiteler tablosundan çekiliyor.
 
