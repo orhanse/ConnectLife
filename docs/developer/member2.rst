@@ -227,4 +227,160 @@ Grup güncelleme işleminin yapılabilmesi için gruptaki her elemanın kendine 
 
 |	
 
-Forma yerleştirilen bilgiler kullanıcı düzenlemesinden geçtikten sonra *POST* metodu ile kullanıcıdan alınıyor.
+Forma *GET* metodu çağrıldığında *SELECT* sayfasına benzer bir şekilde query sonuçları gönderiliyor ve formlara yerleştiriliyor. Forma yerleştirilen bilgiler kullanıcı düzenlemesinden geçtikten sonra *POST* metodu ile kullanıcıdan alınıyor. Form bilgilerini saklamak için ekleme işleminde yapıldığı gibi bir nesne oluşturuluyor ve form verileri o nesneye aktarılıyor. 
+
+.. code-block:: python
+
+	@app.route('/gruplar/<grup_id>', methods=['GET', 'POST'])
+	def gruplar_update_page(grup_id):
+	    ...
+	    #Form bilgileri hazırlanıyor
+	    if request.method == 'GET':
+		query = """SELECT * FROM GRUPLAR WHERE (ID = %s)"""
+		cursor.execute(query,grup_id)
+		grup = cursor.fetchall()
+		now = datetime.datetime.now()
+		query = "SELECT ID,ISIM FROM KISILER"
+		cursor.execute(query)
+		kisiler =cursor.fetchall()
+		return render_template('grup_guncelle.html', grup = grup, current_time=now.ctime(),kisiler=kisiler)
+	    ...	
+	    #Verilen bilgiler ile güncelleme işlemi yapılıyor.		
+	    elif request.method == 'POST':
+		if "update" in request.form:
+		    grup1 = Gruplar(request.form['baslik'],
+				    request.form['zaman'],
+				    request.form['aciklama'],
+				    request.form['icerik'],
+				    request.form['resim'],
+				    request.form['kisiler_isim'])
+		    update_gruplar(cursor, request.form['grup_id'], grup1)
+		    connection.commit()
+	return redirect(url_for('gruplar_sayfasi'))
+
+|
+
+Veritabanı üzerinde güncelleme işlemi update_gruplar() fonksiyonu ile yapılıyor. Bu fonksiyon *POST* metodunun sonunda çağırılıyor ve verilen bilgileri girilen ID numarasını referans alacak bir şekilde güncelliyor.
+
+.. code-block:: python
+
+	#Kullanıcı düzenlemeleri sonucu gruplar veritabanı üzerinde güncelleniyor.
+	def update_gruplar(cursor, id, grup1):
+		    query="""
+		    UPDATE GRUPLAR
+		    SET BASLIK=INITCAP(%s),
+		    ZAMAN=to_date(%s, 'DD-MM-YYYY'),
+		    ACIKLAMA=INITCAP(%s),
+		    ICERIK=%s,
+		    RESIM=%s,
+		    KISILER_ID=%s
+		    WHERE ID=%s
+		    """
+		    cursor.execute(query,(grup1.baslik, grup1.zaman, grup1.aciklama,
+					  grup1.icerik, grup1.resim, grup1.kisiler_id, id))
+
+|
+
+**d. Grup Silme(DELETE)**
+
+Silme işlemi her gruba ait sayfa olan */gruplar/<grup_id>* sayfasında gerçekleniyor. Bu sayfada güncelleme buttonunun altına eklenen *delete* form adlı yeni bir *Sil* butonu ile o anki seçili grubun silinmesi sağlanıyor. İşlem sonunda */gruplar* sayfasına *redirect* yapılıyor ve silme işleminin sonucu hızlı bir şekilde kullanıcıya gösteriliyor.
+
+.. code-block:: python
+
+	<form id="delete" action="{{ url_for('gruplar_update_page',grup_id=id) }}" method = "post">
+		  <input class="delete" form="delete" Value="Grubu Sil" name="delete" type="submit">
+	</form>
+
+|
+
+Gönderilen form sonucu */gruplar/<grup_id>* sayfasının POST metodu yakalanıyor. Sadece silme işlemi yapılacağından yeni bir nesneye gerek duymadan delete_gruplar(cursor, id) fonksiyonuna database session ve ID değerleri birlikte gönderiliyor. 
+
+
+.. code-block:: python
+
+	@app.route('/gruplar/<grup_id>', methods=['GET', 'POST'])
+	def gruplar_update_page(grup_id)
+	..
+	..
+	elif request.method == 'POST':
+		...
+		#Silme işlemi yapılması için delete_gruplar() fonksiyonu çağrılıyor.
+		elif "delete" in request.form:
+		    delete_gruplar(cursor, grup_id)
+		    connection.commit()
+		    return redirect(url_for('gruplar_sayfasi'))
+
+|
+
+*Gruplar.py* dosyasında tanımlanmış olan *delete_gruplar()* metodunda verilen ID değeri kullanılarak veritabanından seçilen girdi silinmektedir. *WHERE* deyimi kullanılarak gerekli ID değerli girdi bulunmuş ve o satır veritabanından tamamen silinmiştir.
+
+.. code-block:: python
+
+	def delete_gruplar(cursor, id):
+		query="""DELETE FROM GRUPLAR WHERE ID = %s"""
+		cursor.execute(query, id)
+	
+|	
+
+**e. Grup Arama(SELECT-SEARCH)**
+
+Gruplar bölümünün bulunduğu */gruplar* sayfası içerisinde kullanıcılar ayrıca grup arayabilirler. Sayfanın en altında bulunan bölümde *Grup Ara!* bölümünde grup adı ile gruplar tablosunda arama yapılabilmektedir. Bu bölüm için aranacak kelimeyi içeren bir input box oluşturulmuştur ve kullanıcının kelimeyi girip butona basması beklenmektedir.
+
+.. code-block:: python
+
+	<h2>Grup Ara!</h2>
+	#Anahtar kelimenin yazılabileceği bir input box oluşturuluyor.
+	<form id="search" action="{{ url_for('gruplar_sayfasi')}}" method = "post">
+		<div class="form-group">
+			<label for="usr">Grup Arama:</label>
+			<input class="form-control" form ="search" type="text" name="aranan">
+		</div>
+		<input class="search" form="search" id="gruplar_form_add" value="Ara!" name="search" type="submit">
+        </form>
+
+|
+
+Kullanıcı, grup aradığında arama sonuçlarının daha rahat listelenebilmesi ve karışıklığa yol açmaması için *grup_ara.html*
+ dosyası oluşturulmuştur. Arama formundan alınan anahtar kelime veritabanı içerisinde *WHERE* ve *LIKE* ifadeleri kullanılarak aranmış ve sonuçlar query olarak dönüp html'e aktarılmıştır.
+ 
+.. code-block:: python
+ 
+	@app.route('/gruplar',methods=['GET', 'POST'])
+	def gruplar_sayfasi():
+	..
+	#Kullanıcı arama formunu doldurduğunda.
+	elif "search" in request.form:
+		aranan = request.form['aranan'];
+		query = """SELECT ID,BASLIK,ZAMAN,ACIKLAMA,ICERIK,RESIM,KISILER_ID FROM GRUPLAR WHERE BASLIK LIKE %s"""
+		cursor.execute(query,[aranan])
+		gruplar=cursor.fetchall()
+		now = datetime.datetime.now()
+		return render_template('grup_ara.html', gruplar = gruplar, current_time=now.ctime(), sorgu = aranan)
+		
+|
+
+Grup arama için oluşturulan sayfada listeleme sayfasına benzer bir yapı oluşturulmuştur. Sorgu için arama sonuçları yazılmış ve div yapısı ile uygun bir şekilde sonuç listelenmiştir. Pythondan gelen arama sonucu kullanılarak gerekli bölgeler doldurulmuştur.
+
+.. code-block:: python
+
+	<h2> {{sorgu}} için arama sonucu:</h2>
+	<hr>
+	<div class = "row">
+		# Gruplari bilgilerinin bölünüp html üzerinde gösterildiği kısım.
+		{%for id, baslik, zaman, aciklama, icerik, resim, kisi in gruplar%}
+			<h2>{{baslik}}</h2>
+			<p>{{zaman}}</p>
+			<p>{{aciklama}}</p>
+			<p>{{icerik}}</p>
+			<p>Olusturan Kisi Id: {{kisi}}</p>
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Katıl!</button>
+			</div>
+		{%endfor%}
+	</div>
+|
+
+Gruplar tablosu üzerinde yapılabilen bu işlemlerle bu tablo site üzerindeki aktif ve çok işlevsel sayfalardan bir tanesi olmaktadır. Kullanıcı tarafından arayüz kullanılarak tüm işlemlerin gerçekleştirilebileceği bir sayfa olmuştur. Tüm işlemlere */gruplar* bağlantısından linklere tıklayarak ulaşılabilmektedir.
+
+
