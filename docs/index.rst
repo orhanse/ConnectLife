@@ -1,9 +1,9 @@
 Welcome to itucsdb's documentation!
 ===================================
 
-:Team: ConnectLIFE
+:Takım: ConnectLIFE
 
-:Members:
+:Üyeler:
 
    * Tuğba Özkal
    * Çağrı Gökçe
@@ -15,10 +15,26 @@ Projeyi yapmaktaki amacımız yeni bir kariyer sitesi oluşturmaktır. Üniversi
 hedefleyen sayfamız, kariyerle alakalı güncel haberlere, iş ilanlarına ve meslek grubundan insanlara kolaylıkla ulaşılmasını
 sağlar.
 
-Contents:
+İçerik:
 
 .. toctree::
    :maxdepth: 1
 
    user/index
+   -Tuğba Özkal
+      Kişiler
+      Meslekler
+      Mailler
+   -Çağrı Gökçe
+   -Ahmet Eğinkaya
+   -Selman Orhan
+   -Gülşah Damla
    developer/index
+   -Tuğba Özkal
+      Kişiler
+      Meslekler
+      Mailler
+   -Çağrı Gökçe
+   -Ahmet Eğinkaya
+   -Selman Orhan
+   -Gülşah Damla
