@@ -1,22 +1,20 @@
 User Guide
 ==========
 
-**explain how your application works from the user perspective, use
-screenshots whereever appropriate**
+
 
 **to add a picture, use the following example**::
 
-   .. figure:: picture.png
+   .. figure:: connectlife.png
       :scale: 50 %
       :alt: map to buried treasure
 
-      This is the caption of the figure (a simple paragraph).
+      connectlife logo
 
 .. toctree::
 
-   member1
-   member2
-   member3
-   member4
-   member5
-   
+   Tuğba Özkal
+   Çağrı Gökçe
+   Ahmet Eğinkaya
+   Selman Orhan
+   Gülşah Damla
