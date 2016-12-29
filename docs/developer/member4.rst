@@ -26,7 +26,7 @@ Bu veritabanı işlemleri bu kısımda açıklanmıştır. Veri tabanı ile ilgi
 |
 
 .. figure:: selman/universiteler.png
-   :figclass:: align-center
+   :figclass: align-center
    :scale: 100%
    :alt: university table database screenshot
    
@@ -134,3 +134,120 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
         sorgu = searched)
 
 Arama metodu Universite çoklusunun name değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
+
+|
+
+2. Hobiler Tablosu
+------------------------
+
+|
+
+.. figure:: selman/hobiler.png
+   :figclass: align-center
+   :scale: 100%
+   :alt: hobiler table database screenshot
+   
+   figure 2.1 - Hobiler tablosunun database görüntüsü
+   
+Hobiler tablosu, ID, isim, resim, alan, koordinator ve acıklama değişkenlerini içeriyor. Burada *koordinator* bilgisi *dış anahtar* kullanılarak Kişiler tablosundan çekiliyor.
+
+**Hobiler- Tablo Oluşturma**
+
+.. code-block:: python
+
+      class Hobiler:
+         def __init__(self, isim, resim,  alan, koordinator, aciklama):
+            self.isim = isim
+            self.resim = resim
+            self.alan = alan
+            self.koordinator = koordinator
+            self.aciklama = aciklama
+            
+Yukarıda belirtilen şekilde **class** olarak tanımlanan Hobiler tablosu, aşağıda belirtilen şekilde şekilde oluşturulur. Başlangıç değerleri için database belirli tablo verileri eklemek için *init_hobiler_db* fonksiyonu kullanılıyor.
+
+**Hobiler- Başlangıç verileri ekleme**
+
+.. code-block:: python
+
+  def init_hobiler_db(cursor):
+
+    query = """CREATE TABLE IF NOT EXISTS HOBILER (
+    ID SERIAL PRIMARY KEY,
+    ISIM varchar(100) NOT NULL,
+    RESIM VARCHAR(80) NOT NULL DEFAULT 'defaulthobi.jpg',
+    ALAN varchar(100) NOT NULL,
+    KOORDINATOR INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    ACIKLAMA varchar(1000) NOT NULL
+   )"""
+
+    cursor.execute(query)
+    insert_hobiler(cursor)
+
+Yukarıdaki kod diliminde Hobiler tablosu oluşturulmuştur. Bu tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur. Yukarıda görüldüğü üzere; birincil anahtar olarak ID ve Kisiler tablosuna bağlanmak için kullanılan dış anahtar olarak da koordinator belirlenmiştir. Ayrıca *resim* değişkeni kullanıcıdan alınmazsa, *'defaulthobi.jpg'* bilgisi atanır. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de  **(ON DELETE CASCADE, ON UPDATE CASCADE)** 
+şeklinde belirtilmiştir.
+
+**Hobiler- Çoklu Ekleme Metodu**
+
+.. code-block:: python
+
+  def add_hobiler(cursor, request, hobi1):
+        query = """INSERT INTO HOBILER
+        (ISIM, RESIM, ALAN, KOORDINATOR, ACIKLAMA) VALUES (
+        INITCAP(%s),
+        INITCAP(%s),
+        INITCAP(%s),
+        %s,
+        INITCAP(%s)
+        )"""
+        cursor.execute(query, (hobi1.isim, hobi1.resim, hobi1.alan,
+                               hobi1.koordinator, hobi1.aciklama))
+
+
+*GET* metoduyla kullanıcıdan alınan bilgiler, html sayfasındaki *'add'* metoduyla yukarıdaki fonksiyon yardımıyla databasedeki daha önceden oluşturulan Hobiler tablosuna eklenir.
+
+**Hobiler- Çoklu Silme Metodu**
+
+.. code-block:: python
+
+  def delete_hobiler(cursor, id):
+        query="""DELETE FROM HOBILER WHERE ID = %s"""
+        cursor.execute(query, id)
+  
+Databaseden silinmek istenen çoklu birincil anahtar yardımıyle (ID) databaseden seçilir ve *'delete'* metoduyla yukarıdaki fonksiyona gönderilir ve çoklu databaseden silinir.
+
+**Hobiler- Çoklu Güncelleme Metodu**
+
+.. code-block:: python
+
+  def update_hobiler(cursor, id, hobi1):
+      query="""
+            UPDATE HOBILER
+            SET ISIM=INITCAP(%s),
+            RESIM=INITCAP(%s),
+            ALAN=INITCAP(%s),
+            KOORDINATOR=%s,
+            ACIKLAMA=INITCAP(%s)
+            WHERE ID=%s
+            """
+       cursor.execute(query, (hobi1.isim, hobi1.resim, hobi1.alan,
+                              hobi1.koordinator, hobi1.aciklama, id))
+      
+Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan seçilir. *'update'* ve *GET* metodları kullanılarak kullanıcıdan alınan yeni bilgiler *POST* metodu kullanılarak database eklenir.
+
+**Hobiler- Çoklu Arama Metodu**
+
+.. code-block:: python
+  
+  elif "search" in request.form:
+        aranan = request.form['aranan'];
+
+        query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA
+                    FROM HOBILER AS H, KISILER AS K
+                    WHERE((H.KOORDINATOR = K.ID) AND (H.ISIM LIKE %s))"""
+        cursor.execute(query,[aranan])
+        hobiler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('hobi_ara.html', hobiler = hobiler, current_time=now.ctime(), sorgu = aranan)
+
+Arama metodu Hobi çoklusunun isim değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
+
