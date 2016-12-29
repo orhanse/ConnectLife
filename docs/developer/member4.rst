@@ -170,16 +170,14 @@ Yukarıda belirtilen şekilde **class** olarak tanımlanan Hobiler tablosu, aşa
 .. code-block:: python
 
   def init_hobiler_db(cursor):
-
-    query = """CREATE TABLE IF NOT EXISTS HOBILER (
-    ID SERIAL PRIMARY KEY,
-    ISIM varchar(100) NOT NULL,
-    RESIM VARCHAR(80) NOT NULL DEFAULT 'defaulthobi.jpg',
-    ALAN varchar(100) NOT NULL,
-    KOORDINATOR INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    ACIKLAMA varchar(1000) NOT NULL
-   )"""
-
+     query = """CREATE TABLE IF NOT EXISTS HOBILER (
+            ID SERIAL PRIMARY KEY,
+            ISIM varchar(100) NOT NULL,
+            RESIM VARCHAR(80) NOT NULL DEFAULT 'defaulthobi.jpg',
+            ALAN varchar(100) NOT NULL,
+            KOORDINATOR INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+            ACIKLAMA varchar(1000) NOT NULL
+            )"""
     cursor.execute(query)
     insert_hobiler(cursor)
 
@@ -192,13 +190,13 @@ Yukarıdaki kod diliminde Hobiler tablosu oluşturulmuştur. Bu tablosu daha ön
 
   def add_hobiler(cursor, request, hobi1):
         query = """INSERT INTO HOBILER
-        (ISIM, RESIM, ALAN, KOORDINATOR, ACIKLAMA) VALUES (
-        INITCAP(%s),
-        INITCAP(%s),
-        INITCAP(%s),
-        %s,
-        INITCAP(%s)
-        )"""
+                (ISIM, RESIM, ALAN, KOORDINATOR, ACIKLAMA) VALUES (
+                INITCAP(%s),
+                INITCAP(%s),
+                INITCAP(%s),
+                %s,
+                INITCAP(%s)
+                )"""
         cursor.execute(query, (hobi1.isim, hobi1.resim, hobi1.alan,
                                hobi1.koordinator, hobi1.aciklama))
 
@@ -250,4 +248,128 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
         return render_template('hobi_ara.html', hobiler = hobiler, current_time=now.ctime(), sorgu = aranan)
 
 Arama metodu Hobi çoklusunun isim değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
+
+|
+
+3. Projeler Tablosu
+------------------------
+
+|
+
+.. figure:: selman/projeler.png
+   :figclass: align-center
+   :scale: 100%
+   :alt: projeler table database screenshot
+   
+   figure 2.1 - Projeler tablosunun database görüntüsü
+   
+Projeler tablosu, ID, baslik, konu, sahip, tarih, uniname ve acıklama değişkenlerini içeriyor. Burada *konu* bilgisi *dış anahtar* kullanılarak Meslekler tablosundan çekiliyor. *sahip* bilgisi *dış anahtar* kullanılarak Kisiler tablosundan çekiliyor. *uniname* bilgisi *dış anahtar* kullanılarak Universiteler tablosundan çekiliyor.
+
+**Projeler- Tablo Oluşturma**
+
+.. code-block:: python
+
+ class Projeler:
+    def __init__(self, baslik, konu, sahip, tarih, uniname, aciklama):
+        self.baslik = baslik
+        self.konu = konu
+        self.sahip = sahip
+        self.tarih = tarih
+        self.uniname = uniname
+        self.aciklama = aciklama
+           
+Yukarıda belirtilen şekilde **class** olarak tanımlanan Projeler tablosu, aşağıda belirtilen şekilde şekilde oluşturulur. Başlangıç değerleri için database belirli tablo verileri eklemek için *init_projeler_db* fonksiyonu kullanılıyor.
+
+**Projeler- Başlangıç verileri ekleme**
+
+.. code-block:: python
+
+  def init_projeler_db(cursor):
+    query = """CREATE TABLE IF NOT EXISTS PROJELER (
+           ID SERIAL PRIMARY KEY,
+           BASLIK varchar(500) NOT NULL,
+           KONU INTEGER NOT NULL REFERENCES MESLEKLER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+           SAHIP INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+           TARIH integer NOT NULL,
+           UNINAME INTEGER NOT NULL REFERENCES UNIVERSITY(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+           ACIKLAMA varchar(1000) NOT NULL
+           )"""
+    cursor.execute(query)
+    insert_projeler(cursor)
+
+Yukarıdaki kod diliminde Projeler tablosu oluşturulmuştur. Bu tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur. Yukarıda görüldüğü üzere; birincil anahtar olarak ID değişkeni kullanılır. Dış anahtar kullanılarak Meslekler tablosundan *konu* verisini, Kisiler tablosundan *sahip* verisini ve Universiteler tablosundan da *uniname* verisini çeker. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de  **(ON DELETE CASCADE, ON UPDATE CASCADE)** şeklinde belirtilmiştir.
+
+**Projeler- Çoklu Ekleme Metodu**
+
+.. code-block:: python
+
+  def add_projeler(cursor, request, proje1):
+        query = """INSERT INTO PROJELER
+                (BASLIK, KONU, SAHIP, TARIH, UNINAME, ACIKLAMA) VALUES (
+                INITCAP(%s),
+                %s,
+                %s,
+                %s,
+                %s,
+                INITCAP(%s)
+                )"""
+        cursor.execute(query, (proje1.baslik, proje1.konu, proje1.sahip,
+                               proje1.tarih, proje1.uniname, proje1.aciklama))
+
+
+
+*GET* metoduyla kullanıcıdan alınan bilgiler, html sayfasındaki *'add'* metoduyla yukarıdaki fonksiyon yardımıyla databasedeki daha önceden oluşturulan Projeler tablosuna eklenir.
+
+**Projeler- Çoklu Silme Metodu**
+
+.. code-block:: python
+
+  def delete_projeler(cursor, id):
+        query="""DELETE FROM PROJELER WHERE ID = %s"""
+        cursor.execute(query, id)
+  
+Databaseden silinmek istenen çoklu birincil anahtar yardımıyle (ID) databaseden seçilir ve *'delete'* metoduyla yukarıdaki fonksiyona gönderilir ve çoklu databaseden silinir.
+
+**Projeler- Çoklu Güncelleme Metodu**
+
+.. code-block:: python
+
+  def update_projeler(cursor, id, proje1):
+            query="""
+                  UPDATE PROJELER
+                  SET BASLIK = INITCAP(%s),
+                  KONU= %s,
+                  SAHIP =%s,
+                  TARIH=%s,
+                  UNINAME=%s,
+                  ACIKLAMA = INITCAP(%s)
+                  WHERE ID=%s
+                  """
+            cursor.execute(query, (proje1.baslik, proje1.konu, proje1.sahip,
+                                   proje1.tarih, proje1.uniname, proje1.aciklama, id))
+      
+Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan seçilir. *'update'* ve *GET* metodları kullanılarak kullanıcıdan alınan yeni bilgiler *POST* metodu kullanılarak database eklenir.
+
+**Projeler- Çoklu Arama Metodu**
+
+.. code-block:: python
+  
+  elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
+            FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
+            WHERE(
+            (P.KONU = M.ID)
+            AND
+            (P.SAHIP = K.ID)
+            AND
+            (P.UNINAME= U.ID)
+            AND (P.BASLIK LIKE %s))"""
+        cursor.execute(query,[aranan])
+        projeler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('proje_ara.html', projeler = projeler, current_time=now.ctime(), sorgu = aranan)
+
+Arama metodu Proje çoklusunun isim değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
+
 
