@@ -633,10 +633,6 @@ Arama fonksiyonunda mailin ismi arama barına girilerek arama yapılabilir. Aram
 
 |
 
-"SELECT ID, ISIM, TANIM FROM MESLEKLER WHERE ISIM LIKE %s" satırı ile isme göre arama yapılması sağlanır.
-
-|
-
 **Güncelleme Fonksiyonu**
 
 Aşağıdaki kod diliminde yeni mail ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan mail1 etiketiyle çekilir ve
