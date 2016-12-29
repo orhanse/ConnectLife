@@ -1,17 +1,19 @@
 Welcome to itucsdb's documentation!
 ===================================
 
-:Team: Team Name
+:Team: ConnectLIFE
 
 :Members:
 
-   * Member 1
-   * Member 2
-   * Member 3
-   * Member 4
-   * Member 5
+   * Tuğba Özkal
+   * Çağrı Gökçe
+   * Ahmet Eğinkaya
+   * Selman Orhan
+   * Gülşah Damla
 
-**project description goes here (a few paragraphs)**
+Projeyi yapmaktaki amacımız yeni bir kariyer sitesi oluşturmaktır. Üniversiteleri ve şirketleri kişilerle buluşturmayı
+hedefleyen sayfamız, kariyerle alakalı güncel haberlere, iş ilanlarına ve meslek grubundan insanlara kolaylıkla ulaşılmasını
+sağlar.
 
 Contents:
 

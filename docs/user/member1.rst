@@ -43,9 +43,12 @@ Kişi ismi figür 1.1.3'te gösterilen bara girilerek aranan kişi figür 1.1.4'
    figure 1.1.4
 
 Kişi güncelleme sayfası yeni kişi ekleme sayfasına benzer. Yeni kişi ekleme bölümü '/kisiler' sekmesindeyken, kişi güncellenmesi
-için farklı sayfaya yönlendirme vardır. Sayfa görünümü figür 1.1.5'te gösterilmiştir.
+için farklı sayfaya yönlendirme vardır. Bu sayfaya ulaşmak için güncellenmek istenen kişinin altındaki 'kişiyi güncelle' butonuna
+basılması gerekir. Sayfa görünümü figür 1.1.5'te gösterilmiştir.
 
-Bu sayfada kişinin silinmesine de imkan tanınır.
+Güncellenecek bilgiler girildikten sonra 'kişiyi güncelle' butonuna tıklanır.
+
+Bu sayfada kişinin silinmesine de imkan tanınır. Silinmesi için 'kişiyi sil' butonuna tıklanması gerekir.
 
 
 .. figure:: tugba/kisiguncelleme.png
@@ -57,10 +60,17 @@ Bu sayfada kişinin silinmesine de imkan tanınır.
 2. Meslekler
 ------------
 
+Meslekler sayfasının görüntüsü 2.1.1'de gösterilmiştir. Meslekler tablosunda mesleğin adı ve tanımı bulunur.
+
+
 .. figure:: tugba/meslekler.png
    :figclass: align-center
 
    figure 2.1.1
+
+
+Sayfanın altına inildiğinde yeni meslek ekleme kısmına ulaşılır. Gerekli bilgiler girildikten sonra 'meslek ekle' butonuna
+tıklandığında sayfada yeni meslek görüntülenebilir. Yeni meslek ekleme kısmı figür 2.1.2'de gösterilmiştir.
 
 
 .. figure:: tugba/yenimeslekekle.png
