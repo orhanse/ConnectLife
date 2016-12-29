@@ -463,4 +463,216 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
 |     
-                       
+
+2. Öneriler
+-----------
+
+Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. Öneriler varlığının gerçeklenmesi için oneriler tablosu oluşturulmuştur. 
+- Id, resim, kname(kişi ismi), kpozisyon(meslek), baglanti(ortak bağlantı sayısı) sütunları bu tabloda yer alır.
+- Resim değişkeni VARCHAR türünde tanımlıdır.
+- Baglanti(ortak bağlantı sayısı), kisiler tablosuna başvuran kname(kişi ismi) ve meslekler tablosuna başvuran kpozisyon(meslek) dış anahtarları INTEGER türünde tanımlıdır.
+
+.. figure:: gulsah/oneriler.png
+   :figclass: align-center
+
+|
+
+**Tablo Oluşturma**
+
+*oneriler.py* dosyasındaki *init_oneriler_db(cursor)* fonksiyonu içerisinde tablo oluşturulmuştur. Kname ve kpozisyon dış anahtarlarına silme işlemleri için *ON DELETE CASCADE* ve günceleme işlemleri için *ON UPDATE CASCADE* tanımları eklenmiştir. Başvurulan tablodaki silme ve güncelleme işlemlerini etkilenen çoklulara yansıtmak için *CASCADE* yapısı kullanılmıştır.
+
+.. code-block:: python
+ 
+   def init_oneriler_db(cursor):
+
+    query = """CREATE TABLE IF NOT EXISTS ONERILER (
+    ID SERIAL PRIMARY KEY,
+    RESIM varchar(100) NOT NULL DEFAULT 'defaultprofil.png',
+    KNAME INTEGER REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    KPOZISYON INTEGER REFERENCES MESLEKLER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    BAGLANTI INTEGER DEFAULT 0
+   )"""
+
+    cursor.execute(query)
+    insert_oneriler(cursor)  
+ |    
+ 
+**İlk Çokluları Ekleme**
+ 
+*oneriler.py* dosyasındaki *insert_oneriler(cursor)* fonksiyonu içerisinde tabloya yeni çoklular eklenmiştir.
+ 
+.. code-block:: python
+
+   def insert_oneriler(cursor):
+    query = """INSERT INTO ONERILER
+        (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
+        'profil1.jpg',1, 1,11);
+        INSERT INTO ONERILER
+        (KNAME,KPOZISYON,BAGLANTI) VALUES (
+        2,2,7);
+        INSERT INTO ONERILER
+        (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
+        'profil2.jpg',3,3,9);
+        INSERT INTO ONERILER
+        (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
+        'ekenel.png',4,4,15);
+        INSERT INTO ONERILER
+        (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
+        'kaeser.jpg',5,5,8);"""
+
+    cursor.execute(query) 
+|
+  
+**Öneri Ekleme**
+
+Yeni öneri ekleme işlemi */oneriler* sayfasında yer alır. Listeli halde bulunan önerilerin ardından bu bölüme yer verilmiştir. Bu işlem *oneriler.html* sayfası içerisindeki form ile yapılmaktadır. Dış anahtar ile bağlantı oluşturulan kisiler tablosundan alınacak kişi ismi ve meslekler tablosundan alınacak meslek ismi için seçim kutuları eklenmiştir.
+Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı oluşturulmuştur.
+
+
+.. code-block:: python
+   class Oneriler:
+    def __init__(self, resim, kname, kpozisyon, baglanti ):
+
+        self.resim= resim
+        self.kname = kname
+        self.kpozisyon = kpozisyon
+        self.baglanti = baglanti
+|    
+
+*server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde oneriler sınıfından oneri1 adlı bir nesne oluşturularak *POST* metoduyla alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_oneriler* fonksiyonu çağırılarak tamamlanmış olur.
+
+.. code-block:: python
+   @app.route('/oneriler', methods=['GET', 'POST'])
+   def oneriler_sayfasi():
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    now = datetime.datetime.now()
+    if request.method == 'GET':
+        query2 = "SELECT ID, ISIM FROM KISILER"
+        cursor.execute(query2)
+        kisiler = cursor.fetchall()
+        query = """SELECT O.ID, O.RESIM, K.ISIM, M.ISIM, O.BAGLANTI
+                    FROM ONERILER AS O, MESLEKLER AS M, KISILER AS K
+                    WHERE(
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = M.ID)
+                     ) """
+        cursor.execute(query)
+        oneriler=cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        meslekler=cursor.fetchall()
+        return render_template('oneriler.html', oneriler = oneriler, current_time=now.ctime(), kname = kisiler, pozisyon=meslekler)
+    elif "add" in request.form:
+        oneri1 = Oneriler( request.form['resim'],
+                            request.form['kisiler_isim'],
+                            request.form['kpozisyon'],
+                            request.form['baglanti'])
+        add_oneriler(cursor, request, oneri1)
+        connection.commit()
+        return redirect(url_for('oneriler_sayfasi'))
+ |  
+ 
+*add_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.  
+
+.. code-block:: python 
+   def add_oneriler(cursor, request, oneri1):
+        query = """INSERT INTO ONERILER
+        (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
+        %s,
+        %s,
+        %s,
+        %s
+        )"""
+        cursor.execute(query, (oneri1.resim, oneri1.kname, oneri1.kpozisyon,
+                               oneri1.baglanti)) 
+ |
+ 
+**Öneri Arama**
+
+Öneri arama işlemi */oneriler* sayfasının sonunda yer alır. Arama çubuğunda önerinin konusu yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.          
+
+.. code-block:: python       
+
+   elif "search" in request.form:
+        aranan = request.form['aranan'];
+        query = """SELECT O.ID, O.RESIM, K.ISIM, M.ISIM, O.BAGLANTI
+                    FROM ONERILER AS O, MESLEKLER AS M, KISILER AS K
+                    WHERE(
+                        (O.KNAME = K.ID) AND (O.KPOZISYON = M.ID)
+                    )AND (K.ISIM LIKE %s)"""
+        cursor.execute(query,[aranan])
+        oneriler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('oneri_ara.html', oneriler = oneriler, current_time=now.ctime(), sorgu = aranan)             
+| 
+
+Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listelenir.
+
+**Öneri Güncelleme**
+
+Öneriler sayfasında yer alan her çoklunun kendisine ait güncelleme sayfası bulunur. Listeli halde bulunan her önerinin altında bulunan düzenle butonu ile */oneriler/<oneri_id>* sayfasına geçiş yapılır. Güncelleme sayfası için *oneri_guncelle.html* sayfası oluşturuldu ve ekleme formuna benzer şekilde arama çubukları ve seçim kutuları kullanıldı. Böylece dış anahtar ile ilgili tablodan alınan niteliklerin kullanıcı tarafından seçilebilmesi sağlandı. *server.py* dosyasındaki *oneriler_update_page* fonksiyonu içerisinde *POST* metoduyla kullanıcı tarafından alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanında güncelleme işlemi *update_oneriler* fonksiyonu çağırılarak gerçekleştirilmiş olur.
+
+.. code-block:: python 
+
+   @app.route('/oneriler/<oneri_id>', methods=['GET', 'POST'])
+   def oneriler_update_page(oneri_id):
+    connection = dbapi2.connect(app.config['dsn'])
+    cursor = connection.cursor()
+    if request.method == 'GET':
+        cursor.close()
+        cursor = connection.cursor()
+        query = """SELECT * FROM ONERILER WHERE (ID = %s)"""
+        cursor.execute(query,oneri_id)
+        oneri=cursor.fetchall()
+        now = datetime.datetime.now()
+        cursor.execute("SELECT ID, ISIM FROM KISILER")
+        kisiler=cursor.fetchall()
+        cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+        isilanlari=cursor.fetchall()
+        return render_template('oneri_guncelle.html', oneri = oneri,  current_time=now.ctime(), kisiler= kisiler,isilanlari= isilanlari)
+    elif request.method == 'POST':
+        if "update" in request.form:
+            oneri1 = Oneriler( request.form['resim'],
+                            request.form['kisiler_isim'],
+                            request.form['kpozisyon'],
+                            request.form['baglanti'])
+            update_oneriler(cursor, request.form['oneri_id'], oneri1)
+            connection.commit()
+            return redirect(url_for('oneriler_sayfasi'))
+ | 
+           
+*update_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
+
+.. code-block:: python
+   def update_oneriler(cursor, id, oneri1):
+            query="""
+            UPDATE ONERILER
+            SET RESIM=%s,
+            KNAME=%s,
+            KPOZISYON=%s,
+            BAGLANTI=%s
+            WHERE ID=%s
+            """
+            cursor.execute(query, (oneri1.resim, oneri1.kname, oneri1.kpozisyon,
+                                   oneri1.baglanti, id)) 
+| 
+
+**Öneri Silme**  
+  
+Öneri silme işlemi her önerinin kendi */oneriler/<oneri_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan öneriyi sil butonu seçilerek ilgili öneri silinir. Kullanıcı, silme işlemi sonrası */oneriler* sayfasına yönlendirilir.
+
+.. code-block:: python
+   elif "delete" in request.form:
+            delete_oneriler(cursor, oneri_id)
+            connection.commit()
+
+            return redirect(url_for('oneriler_sayfasi'))    
+|
+
+*delete_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
+
+.. code-block:: python
+   def delete_oneriler(cursor, id):
+        query="""DELETE FROM ONERILER WHERE ID = %s"""
+        cursor.execute(query, id)
+|
+                                                                           
