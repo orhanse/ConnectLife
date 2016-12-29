@@ -141,8 +141,9 @@ kisi1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
            pozisyon = cursor.fetchall()
            cursor.execute("SELECT ID, NAME FROM DIL")
            diller = cursor.fetchall()
-           return render_template('kisiler.html', kisiler = kisi2, universite = university,
-           work = sirket, pozisyon = pozisyon, diller = diller)
+           return render_template('kisiler.html', kisiler = kisi2,
+           universite = university, work = sirket, pozisyon = pozisyon,
+           diller = diller)
        elif "add" in request.form:
            kisi1 = Kisiler(request.form['isim'],
                                request.form['resim'],
@@ -178,7 +179,8 @@ Arama fonksiyonunda kişinin ismi arama barına girilerek arama yapılabilir. Ar
            cursor.execute(query,[aranankisi])
            kisiler=cursor.fetchall()
            now = datetime.datetime.now()
-           return render_template('kisi_ara.html', kisiler = kisiler, current_time=now.ctime(),
+           return render_template('kisi_ara.html', kisiler = kisiler,
+           current_time=now.ctime(),
            sorgu = aranankisi)
 
 
@@ -229,8 +231,9 @@ ilgili niteliklere güncellenen bilgiler eklenir.
            query = """SELECT * FROM KISILER WHERE (ID = %s)"""
            cursor.execute(query, kisi_id)
            now = datetime.datetime.now()
-           return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime(),
-                  universiteler = universiteler, sirketler=sirketler, pozisyonlar = pozisyonlar,
+           return render_template('kisi_guncelle.html', kisi = cursor,
+                  current_time=now.ctime(), universiteler = universiteler,
+                  sirketler=sirketler, pozisyonlar = pozisyonlar,
                   diller = diller)
        elif request.method == 'POST':
            if "update" in request.form:
@@ -318,7 +321,8 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya başlan
 
    def fill_meslekler_db(cursor):
     query = """ INSERT INTO MESLEKLER (ISIM, TANIM)
-                    VALUES('Kurucu', ' Bir kurumun, bir işin kurulmasını sağlayan, müessis.');
+                    VALUES('Kurucu', ' Bir kurumun, bir işin kurulmasını sağlayan,
+                    müessis.');
                 INSERT INTO MESLEKLER (ISIM, TANIM)
                     VALUES('Muhendis', 'İnsanların her türlü ihtiyacını
                     karşılamaya dayalı yol, köprü, bina gibi bayındırlık; tarım,
@@ -337,8 +341,8 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya başlan
                     muallim, muallime.');
                 INSERT INTO MESLEKLER (ISIM, TANIM)
                     VALUES('Avukat', 'Hak ve yasa işlerinde isteyenlere yol göstermeyi,
-                    mahkemelerde, devlet dairelerinde başkalarının hakkını aramayı, korumayı
-                    meslek edinen ve bunun için yasanın gerektirdiği şartları
+                    mahkemelerde, devlet dairelerinde başkalarının hakkını aramayı,
+                    korumayı meslek edinen ve bunun için yasanın gerektirdiği şartları
                     taşıyan kimse.');
                 INSERT INTO MESLEKLER (ISIM, TANIM)
                     VALUES('Hakem', 'Tarafların aralarındaki anlaşmazlığı çözmek
