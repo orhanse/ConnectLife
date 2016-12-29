@@ -91,7 +91,7 @@ Kişiler ID dış anahtarına silme operasyonu için *ON DELETE CASCADE* ve gün
 
 **c. Grup Listeleme(SELECT)**
 
-Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */gruplar* sayfasının GET metodu ile çağrılması sonucu yapılmaktadır. Yapılan SELECT query'si sonucunda veritabanından gelen satırlar html sorgusunda yazdırılmaktadır. Ayrıca bir başka SELECT que
+Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */gruplar* sayfasının GET metodu ile çağrılması sonucu yapılmaktadır. Yapılan SELECT query'si sonucunda veritabanından gelen satırlar html sorgusunda yazdırılmaktadır. Ayrıca bir başka SELECT query yapısı da dış anahtar için yazıldı. 
 
 .. code-block:: python
 
@@ -109,6 +109,24 @@ Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */grupl
            cursor.execute(query)
            kisiler =cursor.fetchall()
    return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime(),kisiler=kisiler)
-   
+|   
+
+.. code-block:: html
    #HTML
+   {%for id, baslik, zaman, aciklama, icerik, resim, kisi in gruplar%}
+
+			<h2>{{baslik}}</h2>
+			<p>{{zaman}}</p>
+			<p>{{aciklama}}</p>
+			<p>{{icerik}}</p>
+			<p>{{kisi}}</p>
+			<img style= "width:300px;heigth=300px;" src = "static/images/{{resim}}" class="img-responsive">
+			<a class="btn btn-large btn-info" href= "{{ url_for('gruplar_update_page',grup_id=id)}}">Grubu Duzenle</a>
+			<button type="button" action=" class="btn btn-success">Katıl!</button>
+			</div>
+		{%endfor%}
+
 |
+
+**c. Grup Ekleme(ADD)**
+Kişiler tablosundan tüm kişi isimleri alınıp kullanıcıya gösterilmiştir ve kullanıcının dış anahtarı liste halinde rahatça seçebilmesi sağlanmıştır.
