@@ -28,6 +28,7 @@ Tablo oluşturma işlemi *gruplar.py* dosyasındaki def *init_gruplar_db(cursor)
 
 .. code-block:: python
 
+  #Gruplar.py
   def init_gruplar_db(cursor):
       query = """CREATE TABLE IF NOT EXISTS GRUPLAR (
       ID SERIAL,
@@ -40,6 +41,74 @@ Tablo oluşturma işlemi *gruplar.py* dosyasındaki def *init_gruplar_db(cursor)
       PRIMARY KEY(ID)
       )"""
       cursor.execute(query)
-      
+  
+  #Server.py
+  @app.route('/gruplar/initdb')
+  ...
+  init_gruplar_db(cursor)
 |
     
+Kişiler ID dış anahtarına silme operasyonu için *ON DELETE CASCADE* ve günceleme operasyonu için *ON UPDATE CASCADE* tanımları eklenmiştir. *CASCADE* yapısı sayesinde tablo üzerinde yapılan değişiklikler bağlı tabloya da uygulanacaktır ve o tablo da güncellenecektir. *RESTRICT* yapısı bu işlemlerin yapılmasını engellediğinden dolayı tercih edilmemiştir. Bir diğer tanım olan *DEFAULT 1* tanımı ile dış anahtarın verilmediği durumlarda *kişi_id=1* olan kişinin grup kurucusu olarak atanması sağlanmıştır.
+
+**b. İlk değer atama**
+
+İlk değer atama(initialization) işlemi *Gruplar.py* dosyasında tanımlanmıştır ve bu dosya içerisinde *fill_gruplar_db(cursor)* tanımında çağırılmaktadır. Tablo oluşturma işleminin hemen sonrasında bu işlem yapılır.
+
+.. code-block:: python
+
+   def fill_gruplar_db(cursor):
+       query="""INSERT INTO GRUPLAR
+           (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+           'Yazılım & Teknoloji ',
+           to_date('02.03.2015', 'DD-MM-YYYY'),
+           'Yazılım mühendisleri ve teknolojiyi takip edenler için oluşturulmuş bir topluluk. Sen de bize katıl!',
+           'Icerik Eklenecektir',
+           'software.jpg');
+           INSERT INTO GRUPLAR
+           (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+           'Finans Klubü',
+           to_date('13.09.2019', 'DD-MM-YYYY'),
+           'Finans sektöründe çalışanlar, firma sahipleri, ve girişimciler için eşsiz bir kaynak. Bu grup ile finans konusunda yeni gelişmeleri kaçırmadan güncel piyasaları takip ederek doğru kararlar alabileceksiniz. Hemen gruba katılın ve tartışmaya başlayın!',
+           'Icerik Eklenecektir',
+           'finance.jpg');
+           INSERT INTO GRUPLAR
+           (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+           'Digital Marketing',
+           to_date('13.09.2019', 'DD-MM-YYYY'),
+           'We know marketing! Discussions on current trends, close scope on money exchange and tips and tricks for new entrepreneur. Join us and enjoy great discussions!',
+           'Icerik Eklenecektir',
+           'marketing.jpeg');
+           INSERT INTO GRUPLAR
+           (BASLIK, ZAMAN, ACIKLAMA, ICERIK, RESIM) VALUES (
+           'Mühendisler Topluluğu',
+           to_date('13.09.2019', 'DD-MM-YYYY'),
+           'Mühendisler ve mühendis adaylarını buluşturan bu toplulukta pratik bilgiler, iş ilanları, sektöre ilişkin başlıklar ve çok daha fazlasını bulacaksınız.',
+           'Icerik Eklenecektir',
+           'muhendis.jpg');
+           """
+   cursor.execute(query)
+|
+
+**c. Grup Listeleme(SELECT)**
+
+Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */gruplar* sayfasının GET metodu ile çağrılması sonucu yapılmaktadır. Yapılan SELECT query'si sonucunda veritabanından gelen satırlar html sorgusunda yazdırılmaktadır. Ayrıca bir başka SELECT que
+
+.. code-block:: python
+
+   #Server.py
+   @app.route('/gruplar',methods=['GET', 'POST'])
+   def gruplar_sayfasi():
+       connection = dbapi2.connect( app.config['dsn'])
+       cursor = connection.cursor()
+       now = datetime.datetime.now()
+       if request.method == 'GET':
+           query = "SELECT G.ID,G.BASLIK,G.ZAMAN,G.ACIKLAMA,G.ICERIK,G.RESIM,K.ISIM FROM KISILER AS K RIGHT JOIN GRUPLAR AS G ON G.KISILER_ID = K.ID"
+           cursor.execute(query)
+           gruplar=cursor.fetchall()
+           query = "SELECT ID,ISIM FROM KISILER"
+           cursor.execute(query)
+           kisiler =cursor.fetchall()
+   return render_template('gruplar.html', gruplar = gruplar, current_time=now.ctime(),kisiler=kisiler)
+   
+   #HTML
+|
