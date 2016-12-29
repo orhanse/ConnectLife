@@ -1,8 +1,8 @@
 Parts Implemented by Tuğba Özkal
 ================================
 
-General View
-------------
+Genel
+-----
 
 Kişiler, mailler ve meslekler tablolarının içerikleri ve yeni çoklu ekleme, varolan çokluyu silme, güncelleme arama gibi veritabanı işlemleri bu kısımda açıklanmıştır.
 
