@@ -11,6 +11,10 @@ Kişiler, mailler ve meslekler tablolarının içerikleri ve yeni çoklu ekleme,
 1. Kişiler
 ----------
 
+Anasayfadan '\kisiler' sekmesine gidilerek kişiler tablosuna ulaşılabilinir.
+
+|
+
 ID, isim, profil resmi (resim), yaşadığı yer (mekan), yaş, üniversite, çalıştığı yer (work), çalıştığı pozisyon ve konuştuğu dil özelliklerini içeren
 kişiler tablosu figür 1.2.1'de gösterilmiştir.
 
@@ -48,13 +52,14 @@ kişiler tablosu figür 1.2.1'de gösterilmiştir.
 
 Yukarıdaki kod diliminde kişiler tablosu oluşturulmuştur. Kişiler tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur.
 Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE
-, ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
+, ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Profil resmi eklemeyenler için "defaultprofil.png" öntanımlı değişken olarak tanımlanmıştır.
+İsim, resim ve mekan boş değer olarak girilemez. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
 
 
 **Başlangıç Eklemeleri**
 
 
-Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklular eklenir.
+Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya çoklular eklenir. Çoklular eklenirken "INSERT INTO" komutu kullanır.
 
 
 .. code-block:: python
@@ -174,6 +179,7 @@ Arama fonksiyonunda kişinin ismi arama barına girilerek arama yapılabilir. Ar
 
 |
 
+
 **Güncelleme Fonksiyonu**
 
 Aşağıdaki kod diliminde yeni kişi ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan kisi1 etiketiyle çekilir ve
@@ -257,3 +263,225 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
    def delete_kisiler(cursor, id):
            query="""DELETE FROM KISILER WHERE ID = %s"""
            cursor.execute(query, id)
+
+
+|
+
+"DELETE FROM {table}" komutu tablodaki çoklunun silinmesini sağlar. Hangi çoklunun silineceği "WHERE ID = %s" komutuyla belirlenir.
+
+|
+
+
+2. Meslekler
+------------
+
+
+ID, isim, tanım özelliklerini içeren meslekler tablosu figür 2.2.1'de gösterilmiştir.
+
+.. figure:: tugba/meslekler.png
+   :figclass: align-center
+
+   figure 2.2.1
+
+|
+
+Tüm sütunlar varlık içerisinde tanımlanmıştır.
+
+**Tablo Oluşturma**
+
+
+.. code-block:: python
+
+   def init_meslekler_db(cursor):
+    query = """CREATE TABLE IF NOT EXISTS MESLEKLER (
+    ID SERIAL PRIMARY KEY,
+    ISIM VARCHAR(30) NOT NULL,
+    TANIM VARCHAR(500)
+    )"""
+
+    cursor.execute(query)
+    fill_meslekler_db(cursor)
+
+
+Yukarıdaki kod diliminde meslekler tablosu oluşturulmuştur. Meslekler tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur.
+Kodun bu partında birincil anahtar olarak ID belirlenmiştir. Başlangıçta eklenen çoklular "fill_meslekler_db(cursor)" fonksiyonuyla varlığa eklenir.
+
+
+
+**Başlangıç Eklemeleri**
+
+
+Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz tabloya başlangıç çokluları eklenir.
+
+
+.. code-block:: python
+
+   def fill_meslekler_db(cursor):
+    query = """ INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Kurucu', ' Bir kurumun, bir işin kurulmasını sağlayan, müessis.');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Muhendis', 'İnsanların her türlü ihtiyacını karşılamaya dayalı yol, köprü, bina gibi bayındırlık; tarım, beslenme gibi gıda; fizik, kimya, biyoloji, elektrik, elektronik gibi fen; uçak, otomobil, motor, iş makineleri gibi teknik ve sosyal alanlarda uzmanlaşmış, belli bir eğitim görmüş kimse');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Proje Yoneticisi', 'Proje yöneticileri, mühendisliğin herhangi bir alanında, planlama, temin etme ve projenin yerine getirilmesinde sorumluluk sahibidir.');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Teknisyen', 'Bir işin bilim yönünden çok, uygulama ve pratik yönü ile uğraşan kimse, teknik adam, tekniker.');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Ogretmen', 'Mesleği bilgi öğretmek olan kimse, hoca, muallim, muallime.');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Avukat', 'Hak ve yasa işlerinde isteyenlere yol göstermeyi, mahkemelerde, devlet dairelerinde başkalarının hakkını aramayı, korumayı meslek edinen ve bunun için yasanın gerektirdiği şartları taşıyan kimse.');
+                INSERT INTO MESLEKLER (ISIM, TANIM)
+                    VALUES('Hakem', 'Tarafların aralarındaki anlaşmazlığı çözmek için yetkili olarak seçtikleri ve üzerinde anlaştıkları kişi, yargıcı.');
+                """
+
+    cursor.execute(query)
+
+|
+
+
+**Yeni Meslek Ekleme**
+
+
+Aşağıdaki kod dilimi, yeni meslek ekleme fonksiyonudur. SQL dilinde yazılan programa yeni çoklu eklenirken "INSERT INTO" komutu kullanılır.
+
+|
+
+
+.. code-block:: python
+
+   def add_meslekler(cursor, request, meslek1):
+        query = """INSERT INTO MESLEKLER (ISIM, TANIM)
+        VALUES( INITCAP(%s), %s )"""
+        cursor.execute(query, (meslek1.isim, meslek1.tanim))
+
+|
+
+Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan meslek1 çoklusu alınır ve içeriği uygun niteliklere eklenir.
+
+|
+
+meslek1 çoklusunu döndüren fonksiyon aşağıda verilmiştir.
+
+|
+
+
+.. code-block:: python
+
+   @app.route('/meslekler',methods=['GET', 'POST'])
+   def meslekler_sayfasi():
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       now = datetime.datetime.now()
+
+       if request.method == 'GET':
+           query = """SELECT ID, ISIM, TANIM FROM MESLEKLER"""
+           cursor.execute(query)
+           meslek2 = cursor.fetchall()
+           return render_template('meslekler.html', meslekler = meslek2)
+
+
+       elif "add" in request.form:
+           meslek1 = Meslekler(request.form['isim'],
+                               request.form['tanim'])
+           add_meslekler(cursor, request, meslek1)
+           connection.commit()
+           return redirect(url_for('meslekler_sayfasi'))
+
+|
+
+GET metoduyla alınan bilgiler, html kodlarında belirtilen 'add' metoduyla ilgili niteliklere gönderilir.
+"SELECT {column} FROM {table}" komutu ile seçme işlemi yapılır.
+
+**Arama Fonksiyonu**
+
+Arama fonksiyonunda mesleğin ismi arama barına girilerek arama yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
+
+
+.. code-block:: python
+
+   elif "search" in request.form:
+        arananmeslek = request.form['arananmeslek'];
+        query = """SELECT ID, ISIM, TANIM FROM MESLEKLER WHERE ISIM LIKE %s"""
+        cursor.execute(query,[arananmeslek])
+        meslekler=cursor.fetchall()
+        now = datetime.datetime.now()
+        return render_template('meslek_ara.html', meslekler = meslekler, current_time=now.ctime(), sorgu = arananmeslek)
+
+|
+
+"SELECT ID, ISIM, TANIM FROM MESLEKLER WHERE ISIM LIKE %s" satırı ile isme göre arama yapılması sağlanır.
+
+|
+
+**Güncelleme Fonksiyonu**
+
+Aşağıdaki kod diliminde yeni meslek ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan meslek1 etiketiyle çekilir ve
+ilgili niteliklere güncellenen bilgiler eklenir. Güncelleme fonksiyonunda güncellenecek olan çoklu ID etiketi yardımıyla belirienir.
+
+|
+
+
+.. code-block:: python
+
+   def update_meslekler(cursor, id, meslek1):
+            query = """
+            UPDATE MESLEKLER
+            SET ISIM=INITCAP(%s),
+            TANIM=INITCAP(%s)
+            WHERE ID=%s
+            """
+            cursor.execute(query, (meslek1.isim, meslek1.tanim, id))
+
+|
+
+"INITCAP(%s)" komutu ile alınan stringin baş harfinin büyük olması sağlanır.
+
+
+
+.. code-block:: python
+
+   @app.route('/meslekler/<meslek_id>', methods=['GET', 'POST'])
+   def meslekler_update_page(meslek_id):
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       if request.method == 'GET':
+           cursor.close()
+           cursor = connection.cursor()
+           query = """SELECT * FROM MESLEKLER WHERE (ID = %s)"""
+           cursor.execute(query, meslek_id)
+           now = datetime.datetime.now()
+           return render_template('meslek_guncelle.html', meslek = cursor, current_time=now.ctime() )
+       elif request.method == 'POST':
+           if "update" in request.form:
+               meslek1 = Meslekler(request.form['isim'],
+                                   request.form['tanim'])
+               update_meslekler(cursor, request.form['meslek_id'], meslek1)
+               connection.commit()
+               return redirect(url_for('meslekler_sayfasi'))
+
+|
+
+**Silme Fonksiyonu**
+
+Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
+
+
+.. code-block:: python
+
+   elif "delete" in request.form:
+            delete_meslekler(cursor, meslek_id)
+            connection.commit()
+            return redirect(url_for('meslekler_sayfasi'))
+
+
+.. code-block:: python
+
+   def delete_meslekler(cursor, id):
+           query="""DELETE FROM MESLEKLER WHERE ID = %s"""
+           cursor.execute(query, id)
+
+
+|
+
+"DELETE FROM {table}" komutu tablodaki çoklunun silinmesini sağlar. Hangi çoklunun silineceği "WHERE ID = %s" komutuyla belirlenir.
+
+|
