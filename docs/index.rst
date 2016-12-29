@@ -21,20 +21,4 @@ sağlar.
    :maxdepth: 1
 
    user/index
-   -Tuğba Özkal
-      Kişiler
-      Meslekler
-      Mailler
-   -Çağrı Gökçe
-   -Ahmet Eğinkaya
-   -Selman Orhan
-   -Gülşah Damla
    developer/index
-   -Tuğba Özkal
-      Kişiler
-      Meslekler
-      Mailler
-   -Çağrı Gökçe
-   -Ahmet Eğinkaya
-   -Selman Orhan
-   -Gülşah Damla
