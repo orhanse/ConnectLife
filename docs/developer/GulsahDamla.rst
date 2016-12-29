@@ -6,7 +6,7 @@ Makaleler, işilanları ve öneriler tablolarının içerikleri, varolan çokluy
 1. Makaleler
 ------------
 
-Anasayfadan *\makaleler* sekmesine gidilerek makaleler varlığına ulaşılır. Makaleler varlığının gerçeklenmesi için makaleler tablosu oluşturulmuştur. 
+Anasayfadan *\makaleler* sekmesine gidilerek makaleler varlığına ulaşılır. Makaleler varlığının gerçeklenmesi için makaleler tablosu oluşturulmuştur.
 - Id, konu, baslik , yazar, tarih(yayın tarihi) ve uniname(üniversite ismi) sütunları bu tabloda yer alır.
 - Konu, baslik ve yazar değişkenleri VARCHAR türünde tanımlıdır.
 - Tarih(yayın tarihi) ve dış anahtar olarak üniversiteler tablosuna başvuran uniname(üniversite ismi) değişkeni INTEGER türünde tanımlıdır.
@@ -32,19 +32,19 @@ Anasayfadan *\makaleler* sekmesine gidilerek makaleler varlığına ulaşılır.
       TARIH integer NOT NULL,
       UNINAME INTEGER NOT NULL REFERENCES UNIVERSITY(ID) ON DELETE CASCADE ON UPDATE CASCADE
       )"""
-      
+
       cursor.execute(query)
       insert_makaleler(cursor)
-|  
- 
+|
+
 **İlk Çokluları Ekleme**
- 
+
 *makaleler.py* dosyasındaki *insert_makaleler(cursor)* fonksiyonu içerisinde tabloya yeni çoklular eklenmiştir.
- 
+
 .. code-block:: python
- 
+
    def insert_makaleler(cursor):
-   
+
       query = """INSERT INTO MAKALELER
       (KONU,BASLIK, YAZAR, TARIH, UNINAME) VALUES (
       'Bilişim',
@@ -77,8 +77,8 @@ Anasayfadan *\makaleler* sekmesine gidilerek makaleler varlığına ulaşılır.
       2002,
       2
       );"""
-      cursor.execute(query)                  
-|  
+      cursor.execute(query)
+|
 
 **Makale Ekleme**
 
@@ -93,7 +93,7 @@ Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı 
         self.yazar = yazar
         self.tarih = tarih
         self.uniname = uniname
-|   
+|
 
 *server.py* dosyasındaki *makaleler_sayfasi* fonksiyonu içerisinde makaleler sınıfından makale1 adlı bir nesne oluşturularak *POST* metoduyla alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_makaleler* fonksiyonu çağırılarak tamamlanmış olur.
 
@@ -124,7 +124,7 @@ Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı 
                             request.form['university_name'])
         add_makaleler(cursor, request, makale1)
         connection.commit()
-        return redirect(url_for('makaleler_sayfasi'))       
+        return redirect(url_for('makaleler_sayfasi'))
 |
 
 *add_makaleler* fonksiyonu *makaleler.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.
@@ -132,7 +132,7 @@ Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı 
 .. code-block:: python
 
    def add_makaleler(cursor, request, makale1):
-   
+
             query = """INSERT INTO MAKALELER
             (KONU,BASLIK, YAZAR, TARIH, UNINAME ) VALUES (
             INITCAP(%s),
@@ -142,12 +142,12 @@ Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı 
             %s
             )"""
             cursor.execute(query, (makale1.konu,makale1.baslik, makale1.yazar,
-                                   makale1.tarih, makale1.uniname))                               
-|        
+                                   makale1.tarih, makale1.uniname))
+|
 
 **Makale Arama**
 
-Makale arama işlemi */makaleler* sayfasının sonunda yer alır. Arama çubuğunda makalenin konusu yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *makaleler_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.          
+Makale arama işlemi */makaleler* sayfasının sonunda yer alır. Arama çubuğunda makalenin konusu yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *makaleler_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.
 
 .. code-block:: python
 
@@ -163,7 +163,7 @@ Makale arama işlemi */makaleler* sayfasının sonunda yer alır. Arama çubuğu
         makaleler=cursor.fetchall()
         now = datetime.datetime.now()
         return render_template('makale_ara.html', makaleler = makaleler, current_time=now.ctime(), sorgu = aranan)
-|  
+|
 
 Arama işlemi sonucu *makale_ara.html* sayfası içerisindeki forma göre listelenir.
 
@@ -197,16 +197,16 @@ Makaleler sayfasında yer alan her çoklunun kendisine ait güncelleme sayfası 
             update_makaleler(cursor, request.form['makale_id'], makale1)
             connection.commit()
             return redirect(url_for('makaleler_sayfasi'))
- |        
- 
+ |
+
 *update_makaleler* fonksiyonu *makaleler.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
 
 .. code-block:: python
- 
+
    def update_makaleler(cursor, id, makale1):
             query="""
             UPDATE MAKALELER
-            SET KONU=INITCAP(%s), 
+            SET KONU=INITCAP(%s),
             BASLIK=INITCAP(%s),
             YAZAR=INITCAP(%s),
             TARIH=%s,
@@ -214,32 +214,32 @@ Makaleler sayfasında yer alan her çoklunun kendisine ait güncelleme sayfası 
             WHERE ID=%s
             """
             cursor.execute(query, (makale1.konu,makale1.baslik, makale1.yazar,
-                                   makale1.tarih,makale1.uniname, id)) 
-  |        
-  
-**Makale Silme**  
-  
-Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan makaleyi sil butonu seçilerek ilgili makale silinir. Kullanıcı, silme işlemi sonrası */makaleler* sayfasına yönlendirilir. 
+                                   makale1.tarih,makale1.uniname, id))
+  |
+
+**Makale Silme**
+
+Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan makaleyi sil butonu seçilerek ilgili makale silinir. Kullanıcı, silme işlemi sonrası */makaleler* sayfasına yönlendirilir.
 
 .. code-block:: python
     elif "delete" in request.form:
             delete_makaleler(cursor, makale_id)
             connection.commit()
             return redirect(url_for('makaleler_sayfasi'))
-|     
+|
 
 *delete_makaleler* fonksiyonu *makaleler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
- 
+
 .. code-block:: python
    def delete_makaleler(cursor, id):
         query="""DELETE FROM MAKALELER WHERE ID = %s"""
         cursor.execute(query, id)
-|                     
+|
 
 2. İş ilanları
 --------------
 
-Anasayfadan *\isilanlari* sekmesine gidilerek işilanları varlığına ulaşılır. İşilanları varlığının gerçeklenmesi için isilanlari tablosu oluşturulmuştur. 
+Anasayfadan *\isilanlari* sekmesine gidilerek işilanları varlığına ulaşılır. İşilanları varlığının gerçeklenmesi için isilanlari tablosu oluşturulmuştur.
 - Id, sirketname, pozisyon, lokasyon, basvuru, tarih sütunları bu tabloda yer alır.
 - Pozisyon, lokasyon, basvuru değişkenleri VARCHAR türünde tanımlıdır.
 - Tarih(ilan tarihi) DATE türünde tanımlanmıştır ve GG/AA/YY formatında yazılır.
@@ -271,9 +271,9 @@ Anasayfadan *\isilanlari* sekmesine gidilerek işilanları varlığına ulaşıl
 |
 
 **İlk Çokluları Ekleme**
- 
+
 *isilanlari.py* dosyasındaki *insert_isilanlari(cursor)* fonksiyonu içerisinde tabloya yeni çoklular eklenmiştir.
- 
+
 .. code-block:: python
 
    def insert_isilanlari(cursor):
@@ -311,7 +311,7 @@ Anasayfadan *\isilanlari* sekmesine gidilerek işilanları varlığına ulaşıl
         );"""
     cursor.execute(query)
 |
- 
+
 **İlan Ekleme**
 
 Yeni ilan ekleme işlemi */isilanlari* sayfasında yer alır. Listeli halde bulunan işilanlarının ardından bu bölüme yer verilmiştir. Bu işlem *isilanlari.html* sayfası içerisindeki form ile yapılmaktadır. Dış anahtar ile bağlantı oluşturulan sirket tablosundan alınacak şirket ismi için seçim kutusu eklenmiştir.
@@ -356,7 +356,7 @@ Alınacak çoklu değerler için *isilanlari.py* dosyasında Isilanlari sınıf�
         add_isilanlari(cursor, request, ilan1)
         connection.commit()
         return redirect(url_for('isilanlari_sayfasi'))
-    
+
 |
 *add_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.
 .. code-block:: python
@@ -375,7 +375,7 @@ Alınacak çoklu değerler için *isilanlari.py* dosyasında Isilanlari sınıf�
 |
 **İlan Arama**
 
-İlan arama işlemi */isilanlari* sayfasının sonunda yer alır. Arama çubuğunda ilanda yer alan şirket ismi yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *isilanlari_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.          
+İlan arama işlemi */isilanlari* sayfasının sonunda yer alır. Arama çubuğunda ilanda yer alan şirket ismi yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *isilanlari_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.
 
 .. code-block:: python
 
@@ -443,31 +443,31 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
             cursor.execute(query, (ilan1.sirketname, ilan1.pozisyon, ilan1.lokasyon,
                                    ilan1.basvuru, ilan1.tarih, id))
  |
-  
-**İlan Silme**  
-  
-İlan silme işlemi her ilanın kendi */isilanlari/<ilan_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan ilanı sil butonu seçilerek ilgili ilan silinir. Kullanıcı, silme işlemi sonrası */isilanlari* sayfasına yönlendirilir. 
+
+**İlan Silme**
+
+İlan silme işlemi her ilanın kendi */isilanlari/<ilan_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan ilanı sil butonu seçilerek ilgili ilan silinir. Kullanıcı, silme işlemi sonrası */isilanlari* sayfasına yönlendirilir.
 
 .. code-block:: python
    elif "delete" in request.form:
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
-  |       
+  |
 
 *delete_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
- 
+
 .. code-block:: python
      elif "delete" in request.form:
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
-|     
+|
 
-2. Öneriler
+3. Öneriler
 -----------
 
-Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. Öneriler varlığının gerçeklenmesi için oneriler tablosu oluşturulmuştur. 
+Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. Öneriler varlığının gerçeklenmesi için oneriler tablosu oluşturulmuştur.
 - Id, resim, kname(kişi ismi), kpozisyon(meslek), baglanti(ortak bağlantı sayısı) sütunları bu tabloda yer alır.
 - Resim değişkeni VARCHAR türünde tanımlıdır.
 - Baglanti(ortak bağlantı sayısı), kisiler tablosuna başvuran kname(kişi ismi) ve meslekler tablosuna başvuran kpozisyon(meslek) dış anahtarları INTEGER türünde tanımlıdır.
@@ -482,7 +482,7 @@ Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. 
 *oneriler.py* dosyasındaki *init_oneriler_db(cursor)* fonksiyonu içerisinde tablo oluşturulmuştur. Kname ve kpozisyon dış anahtarlarına silme işlemleri için *ON DELETE CASCADE* ve günceleme işlemleri için *ON UPDATE CASCADE* tanımları eklenmiştir. Başvurulan tablodaki silme ve güncelleme işlemlerini etkilenen çoklulara yansıtmak için *CASCADE* yapısı kullanılmıştır.
 
 .. code-block:: python
- 
+
    def init_oneriler_db(cursor):
 
     query = """CREATE TABLE IF NOT EXISTS ONERILER (
@@ -494,13 +494,13 @@ Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. 
    )"""
 
     cursor.execute(query)
-    insert_oneriler(cursor)  
- |    
- 
+    insert_oneriler(cursor)
+ |
+
 **İlk Çokluları Ekleme**
- 
+
 *oneriler.py* dosyasındaki *insert_oneriler(cursor)* fonksiyonu içerisinde tabloya yeni çoklular eklenmiştir.
- 
+
 .. code-block:: python
 
    def insert_oneriler(cursor):
@@ -520,9 +520,9 @@ Anasayfadan *\oneriler* sekmesine gidilerek öneriler varlığına ulaşılır. 
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
         'kaeser.jpg',5,5,8);"""
 
-    cursor.execute(query) 
+    cursor.execute(query)
 |
-  
+
 **Öneri Ekleme**
 
 Yeni öneri ekleme işlemi */oneriler* sayfasında yer alır. Listeli halde bulunan önerilerin ardından bu bölüme yer verilmiştir. Bu işlem *oneriler.html* sayfası içerisindeki form ile yapılmaktadır. Dış anahtar ile bağlantı oluşturulan kisiler tablosundan alınacak kişi ismi ve meslekler tablosundan alınacak meslek ismi için seçim kutuları eklenmiştir.
@@ -537,7 +537,7 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
         self.kname = kname
         self.kpozisyon = kpozisyon
         self.baglanti = baglanti
-|    
+|
 
 *server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde oneriler sınıfından oneri1 adlı bir nesne oluşturularak *POST* metoduyla alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_oneriler* fonksiyonu çağırılarak tamamlanmış olur.
 
@@ -569,11 +569,11 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
         add_oneriler(cursor, request, oneri1)
         connection.commit()
         return redirect(url_for('oneriler_sayfasi'))
- |  
- 
-*add_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.  
+ |
 
-.. code-block:: python 
+*add_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.
+
+.. code-block:: python
    def add_oneriler(cursor, request, oneri1):
         query = """INSERT INTO ONERILER
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
@@ -583,14 +583,14 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
         %s
         )"""
         cursor.execute(query, (oneri1.resim, oneri1.kname, oneri1.kpozisyon,
-                               oneri1.baglanti)) 
+                               oneri1.baglanti))
  |
- 
+
 **Öneri Arama**
 
-Öneri arama işlemi */oneriler* sayfasının sonunda yer alır. Arama çubuğunda önerinin konusu yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.          
+Öneri arama işlemi */oneriler* sayfasının sonunda yer alır. Arama çubuğunda önerinin konusu yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.
 
-.. code-block:: python       
+.. code-block:: python
 
    elif "search" in request.form:
         aranan = request.form['aranan'];
@@ -602,8 +602,8 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
         cursor.execute(query,[aranan])
         oneriler=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('oneri_ara.html', oneriler = oneriler, current_time=now.ctime(), sorgu = aranan)             
-| 
+        return render_template('oneri_ara.html', oneriler = oneriler, current_time=now.ctime(), sorgu = aranan)
+|
 
 Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listelenir.
 
@@ -611,7 +611,7 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
 
 Öneriler sayfasında yer alan her çoklunun kendisine ait güncelleme sayfası bulunur. Listeli halde bulunan her önerinin altında bulunan düzenle butonu ile */oneriler/<oneri_id>* sayfasına geçiş yapılır. Güncelleme sayfası için *oneri_guncelle.html* sayfası oluşturuldu ve ekleme formuna benzer şekilde arama çubukları ve seçim kutuları kullanıldı. Böylece dış anahtar ile ilgili tablodan alınan niteliklerin kullanıcı tarafından seçilebilmesi sağlandı. *server.py* dosyasındaki *oneriler_update_page* fonksiyonu içerisinde *POST* metoduyla kullanıcı tarafından alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanında güncelleme işlemi *update_oneriler* fonksiyonu çağırılarak gerçekleştirilmiş olur.
 
-.. code-block:: python 
+.. code-block:: python
 
    @app.route('/oneriler/<oneri_id>', methods=['GET', 'POST'])
    def oneriler_update_page(oneri_id):
@@ -638,8 +638,8 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
             update_oneriler(cursor, request.form['oneri_id'], oneri1)
             connection.commit()
             return redirect(url_for('oneriler_sayfasi'))
- | 
-           
+ |
+
 *update_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
 
 .. code-block:: python
@@ -653,11 +653,11 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
             WHERE ID=%s
             """
             cursor.execute(query, (oneri1.resim, oneri1.kname, oneri1.kpozisyon,
-                                   oneri1.baglanti, id)) 
-| 
+                                   oneri1.baglanti, id))
+|
 
-**Öneri Silme**  
-  
+**Öneri Silme**
+
 Öneri silme işlemi her önerinin kendi */oneriler/<oneri_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan öneriyi sil butonu seçilerek ilgili öneri silinir. Kullanıcı, silme işlemi sonrası */oneriler* sayfasına yönlendirilir.
 
 .. code-block:: python
@@ -665,7 +665,7 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
             delete_oneriler(cursor, oneri_id)
             connection.commit()
 
-            return redirect(url_for('oneriler_sayfasi'))    
+            return redirect(url_for('oneriler_sayfasi'))
 |
 
 *delete_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
@@ -675,4 +675,3 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
         query="""DELETE FROM ONERILER WHERE ID = %s"""
         cursor.execute(query, id)
 |
-                                                                           
