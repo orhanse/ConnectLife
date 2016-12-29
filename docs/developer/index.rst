@@ -6,7 +6,12 @@ Database Design
 
 **explain the database design of your project**
 
-**include the E/R diagram(s)**
+.. figure:: ER.png
+   :figclass: align-center
+
+   ER Diagram
+
+Tablo baglantıları diyagramda gösterilmiştir.
 
 Code
 ----
