@@ -12,18 +12,13 @@ Proje raporunun bu kısmında Sirket, lokasyon ve dil tablolarının içerikleri
 
 Sirket varlığı ve site içerisindeki /Sirketler/* sayfaları sirket tablosunda gerçeklendi. Bu tablo da id, name, date, location, ceo_id, work_area ve photo satırlarından oluşmaktadır.
 
-
 .. figure:: ahmet/sirketdata1.png
    :figclass: align-center
 
    figure 1.1
-
 |
-
    Figure 1.1 deki sirket tablosu database görüntüsünün içeriği şu şekildedir:
-
 |
-
   - ID INTEGER türde tanımlanmıştır ve tablonun birincil anahtarıdır.
   - Name, date ve work_area VARCHAR türünde tanımlanmıştır ve varlığın ilgili bölümlerini içerir.
   - Photo VARCHAR türünde tanımlanmıştır. Bu satır html içerisinde <img src=""> etiketi içerisine yerleştirilmiştir ve uygun formatta verilen resimler kullanıcıya gösterilebilecek şekilde ayarlanmıştır.
@@ -32,14 +27,12 @@ Sirket varlığı ve site içerisindeki /Sirketler/* sayfaları sirket tablosund
   - Name ve photo aynı zamanda UNIQUE olarak tanımlandı.
 
 |
-
 Sirket tablosunun içeriği figure 1.2 de gösterilmiştir.
 
 .. figure:: ahmet/sirketdata2.png
    :figclass: align-center
 
    figure 1.2
-
 |
 
    **Tablo Oluşturma**
@@ -63,14 +56,11 @@ Sirket tablosunun içeriği figure 1.2 de gösterilmiştir.
 
 |
 Yukarıdaki kod diliminde sirket tablosu oluşturulmuştur. Sirket tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur. Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Name, date, location ve ceo_id boş değer olarak girilemez. Aynı isimde name ve photo kullanılamaz çünkü UNIQUE olarak tanımlandı. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
-
 |
 
 **Tabloya İlk Değer Atama**
 
-
 Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz sirket tablosuna çoklular eklenir.
-
 
 .. code-block:: python
 
@@ -125,7 +115,6 @@ Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz sirket tablosun
         'koc.png'
         )"""
     cursor.execute(query)
-
 |
 
 **Şirket Listeleme(SELECT)**
@@ -188,15 +177,8 @@ Aşağıdaki kod diliminde ise yeni şirket ekleme fonksiyonunun nasıl yazıld�
      cursor.execute(query, (sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo))
 
 |
-
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan sirket çoklusu alınır ve içeriği uygun niteliklere eklenir.
-
-|
-
 sirket çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağıdaki gibidir.
-
-|
-
 
 .. code-block:: python
 
@@ -214,16 +196,12 @@ sirket çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağ
           return redirect(url_for('sirketler_sayfasi'))
 
 |
-
-
 Ekle butonuna basıldığında verilen formdaki veriler /sirketler sayfasından POST metodu ile alınmaktadır. Alınan değerleri doğru bir şekilde saklamak için database ile benzer içeriği olan bir python sınıfı oluşturulmuştur. Bu sınıftan bir nesne oluşturularak alınan input verileri nesnenin ilgili alanlarına atılmıştır.
-
 |
 
 **Arama Fonksiyonu**
 
 Arama fonksiyonunda aranacak şirket ismi arama barına girilerek yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
-
 
 .. code-block:: python
 
@@ -237,13 +215,9 @@ Arama fonksiyonunda aranacak şirket ismi arama barına girilerek yapılabilir. 
         return render_template('sirket_ara.html', sirket = sirket, current_time=now.ctime(), sorgu = aranan)
 
 |
-
 **Güncelleme Fonksiyonu**
 
 Aşağıdaki kod diliminde yeni şirket ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan sirket etiketiyle çekilir ve ilgili niteliklere güncellenen bilgiler eklenir.
-
-|
-
 
 .. code-block:: python
 
@@ -260,9 +234,7 @@ Aşağıdaki kod diliminde yeni şirket ekleme fonksiyonuna benzer olarak günce
          """
     cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo, id))
 
-
-
-
+|
 .. code-block:: python
 
    @app.route('/sirketler/<sirket_id>', methods=['GET', 'POST'])
@@ -300,7 +272,6 @@ Aşağıdaki kod diliminde yeni şirket ekleme fonksiyonuna benzer olarak günce
 
 Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
 
-
 .. code-block:: python
 
    elif "delete" in request.form:
@@ -316,25 +287,18 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
          cursor.execute(query, id)
 
 |
-
-
 2. Dil
 ------
 
 Dil varlığı ve site içerisindeki /Diller/* sayfaları dil tablosunda gerçeklendi. Bu tablo da id, name, ulkesi, photo ve bilenler satırlarından oluşmaktadır.
 
-
 .. figure:: ahmet/dildata1.png
    :figclass: align-center
 
    figure 2.1
-
 |
-
    Figure 2.1 deki dil tablosu database görüntüsünün içeriği şu şekildedir:
-
 |
-
   - ID INTEGER türde tanımlanmıştır ve tablonun birincil anahtarıdır.
   - Name VARCHAR türünde tanımlanmıştır ve varlığın ilgili bölümlerini içerir.
   - Photo VARCHAR türünde tanımlanmıştır. Bu satır html içerisinde <img src=""> etiketi içerisine yerleştirilmiştir ve uygun formatta verilen resimler kullanıcıya gösterilebilecek şekilde ayarlanmıştır.
@@ -343,14 +307,12 @@ Dil varlığı ve site içerisindeki /Diller/* sayfaları dil tablosunda gerçek
   - Name aynı zamanda UNIQUE olarak tanımlandı.
 
 |
-
 Dil tablosunun içeriği figure 2.2 de gösterilmiştir.
 
 .. figure:: ahmet/dildata2.png
    :figclass: align-center
 
    figure 2.2
-
 |
 
 **Tablo Oluşturma**
@@ -369,18 +331,14 @@ Dil tablosunun içeriği figure 2.2 de gösterilmiştir.
         )"""
     cursor.execute(query)
     insert_dil(cursor)
-
 |
 
 Yukarıdaki kod diliminde dil tablosu oluşturulmuştur. Dil tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur. Kodun bu partında birincil anahtar ve dış anahtarlar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Name, ulkesi ve bilenler boş değer olarak girilemez. Aynı isimde name kullanılamaz çünkü UNIQUE olarak tanımlandı. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
-
 |
 
 **Tabloya İlk Değer Atama**
 
-
 Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz dil tablosuna çoklular eklenir.
-
 
 .. code-block:: python
 
@@ -454,7 +412,6 @@ Veritabanındaki dillerin listelenip kullanıcıya gösterilme işlemi /diller s
          return render_template('diller.html', dil = dil, current_time=now.ctime(), kisiler = kisiler, lokasyon = lokasyon)
 
 |
-
 **Yeni Dil Ekleme(ADD)**
 
 Dil tablosu içerisine yeni dil ekleme işlemi /diller sayfasında gerçeklenmiştir. Dillerin listelendiği bölümün hemen altında dil ekleme bölümü bulunmaktadır. Kullanıcı istenilen bilgileri girdikten sonra Dil ekle butonuna basarak bilgileri gönderir.
@@ -489,9 +446,6 @@ Aşağıdaki kod diliminde ise yeni dil ekleme fonksiyonunun nasıl yazıldığ�
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan dil çoklusu alınır ve içeriği uygun niteliklere eklenir.
 Dil çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağıdaki gibidir.
 
-|
-
-
 .. code-block:: python
 
       elif "add" in request.form:
@@ -506,16 +460,12 @@ Dil çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağıd
         return redirect(url_for('diller_sayfasi'))
 
 |
-
-
 Ekle butonuna basıldığında verilen formdaki veriler /diller sayfasından POST metodu ile alınmaktadır. Alınan değerleri doğru bir şekilde saklamak için database ile benzer içeriği olan bir python sınıfı oluşturulmuştur. Bu sınıftan bir nesne oluşturularak alınan input verileri nesnenin ilgili alanlarına atılmıştır.
 
 |
-
 **Arama Fonksiyonu(SEARCH)**
 
 Arama fonksiyonunda aranacak dil ismi arama barına girilerek yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
-
 
 .. code-block:: python
 
@@ -536,9 +486,6 @@ Arama fonksiyonunda aranacak dil ismi arama barına girilerek yapılabilir. Aram
 
 Aşağıdaki kod diliminde yeni dil ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan dil etiketiyle çekilir ve ilgili niteliklere güncellenen bilgiler eklenir.
 
-|
-
-
 .. code-block:: python
 
    def update_diller(cursor, id, dil):
@@ -551,8 +498,6 @@ Aşağıdaki kod diliminde yeni dil ekleme fonksiyonuna benzer olarak güncellen
             WHERE ID=%s
             """
             cursor.execute(query,(dil.name, dil.ulkesi, dil.photo, dil.bilenler, id))
-
-
 |
 
 .. code-block:: python
@@ -590,7 +535,6 @@ Aşağıdaki kod diliminde yeni dil ekleme fonksiyonuna benzer olarak güncellen
 
 Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
 
-
 .. code-block:: python
 
    elif "delete" in request.form:
@@ -620,11 +564,8 @@ Lokasyon varlığı ve site içerisindeki /Lokasyonlar/* sayfaları lokasyon tab
    figure 3.1
 
 |
-
    Figure 3.1 deki lokasyon tablosu database görüntüsünün içeriği şu şekildedir:
-
 |
-
   - ID INTEGER türde tanımlanmıştır ve tablonun birincil anahtarıdır.
   - Name, baskent ve GPS VARCHAR türünde tanımlanmıştır ve varlığın ilgili bölümlerini içerir.
   - Photo VARCHAR türünde tanımlanmıştır. Bu satır html içerisinde <img src=""> etiketi içerisine yerleştirilmiştir ve uygun formatta verilen resimler kullanıcıya gösterilebilecek şekilde ayarlanmıştır.
@@ -632,14 +573,12 @@ Lokasyon varlığı ve site içerisindeki /Lokasyonlar/* sayfaları lokasyon tab
   - Name aynı zamanda UNIQUE olarak tanımlandı.
 
 |
-
 Lokasyon tablosunun içeriği figure 3.2 de gösterilmiştir.
 
 .. figure:: ahmet/lokasyondata2.png
    :figclass: align-center
 
    figure 3.2
-
 |
 
 **Tablo Oluşturma**
@@ -665,12 +604,9 @@ Lokasyon tablosunun içeriği figure 3.2 de gösterilmiştir.
 Yukarıdaki kod lokasyoniminde lokasyon tablosu oluşturulmuştur. Lokasyon tablosu daha önce oluşturulduysa o tablo silinir ve sıfırdan yeni tablo oluşturulur. Kodun bu partında birincil anahtar ve dış anahtar da belirlenmiştir. Bağlı olduğu diğer tablolardaki değişikliklerden etkilenme biçimleri de (ON DELETE CASCADE , ON UPDATE CASCADE) yine bu kısımda belirtilmiştir. Name, baskent, GPS ve yerel_dil bos değer olarak girilemez. Aynı isimde name kullanılamaz çünkü UNIQUE olarak tanımlandı. Son satırda çağrılan fonksiyon aşağıda gösterilmiştir.
 
 |
-
 **Tabloya İlk Değer Atama**
 
-
 Aşağıda belirtilen kod diliminde, daha önce oluşturduğumuz lokasyon tablosuna çoklular eklenir.
-
 
 .. code-block:: python
 
@@ -784,11 +720,8 @@ Aşağıdaki kod lokasyoniminde ise yeni lokasyon ekleme fonksiyonunun nasıl ya
     cursor.execute(query, (lokasyon.name, lokasyon.baskent, lokasyon.gps, lokasyon.yerel_dil, lokasyon.photo))
 
 |
-
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan lokasyon çoklusu alınır ve içeriği uygun niteliklere eklenir.
 Lokasyon çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağıdaki gibidir.
-
-|
 
 .. code-block:: python
 
@@ -806,15 +739,12 @@ Lokasyon çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşa
 
 |
 
-
 Ekle butonuna basıldığında verilen formdaki veriler /lokasyonlar sayfasından POST metodu ile alınmaktadır. Alınan değerleri doğru bir şekilde saklamak için database ile benzer içeriği olan bir python sınıfı oluşturulmuştur. Bu sınıftan bir nesne oluşturularak alınan input verileri nesnenin ilgili alanlarına atılmıştır.
 
 |
-
 **Arama Fonksiyonu(SEARCH)**
 
 Arama fonksiyonunda aranacak lokasyon ismi arama barına girilerek yapılabilir. Arama fonksiyonu aşağıda gösterilmiştir.
-
 
 .. code-block:: python
 
@@ -838,9 +768,6 @@ Arama fonksiyonunda aranacak lokasyon ismi arama barına girilerek yapılabilir.
 
 Aşağıdaki kod lokasyoniminde yeni lokasyon ekleme fonksiyonuna benzer olarak güncellenecek çoklu diğer fonksiyondan lokasyon etiketiyle çekilir ve ilgili niteliklere güncellenen bilgiler eklenir.
 
-|
-
-
 .. code-block:: python
 
    def update_lokasyonlar(cursor, id, lokasyon):
@@ -854,8 +781,6 @@ Aşağıdaki kod lokasyoniminde yeni lokasyon ekleme fonksiyonuna benzer olarak 
         WHERE ID=%s
         """
     cursor.execute(query,(lokasyon.name, lokasyon.baskent, lokasyon.gps, lokasyon.yerel_dil, lokasyon.photo, id))
-
-
 |
 
 .. code-block:: python
@@ -891,7 +816,6 @@ Aşağıdaki kod lokasyoniminde yeni lokasyon ekleme fonksiyonuna benzer olarak 
 
 Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gönderir ve çokluyu siler.
 
-
 .. code-block:: python
 
    elif "delete" in request.form:
@@ -899,7 +823,7 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
             connection.commit()
             return redirect(url_for('lokasyonlar_sayfasi'))
 
-
+|
 .. code-block:: python
 
    def delete_lokasyonlar(cursor, id):
