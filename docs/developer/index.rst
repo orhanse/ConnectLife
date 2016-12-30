@@ -1,7 +1,7 @@
 Developer Guide
 ===============
 
-.. figure:: logo.jpeg
+.. figure:: developer_index/logo.jpeg
    :figclass: align-center
 
 Web projemiz olan Connect Life projesinin geliştirici bölümüne hoş geldiniz! Bu bölümde web projemizin veritabanı tasarımı ve kod tasarımı ile ilgili detayları bulabilir, site geliştirmesi için kullandığımız araçlar ve yapılar hakkında fikir sahibi olabilirsiniz. Eğer bir geliştirici değilseniz bu bölüm size karışık gelebilir, kullanıcı rehberi bölümüne göz atmanız önerilir.
@@ -15,7 +15,7 @@ ConnectLife projesinin veritabanı tasarımı bu bölümde anlatılacaktır. Sit
 
 Veritabanı tasarımında projemiz için uygun olarak düşündüğümüz PostgreSQL veritabanını kullandık. PostgreSQL'in açık kaynaklı olması, hızlı olarak işlem yapabilmesi, sistem üzerinde efektif çalışması, python ve flask için desteğinin olması ve SQLAlchemy gibi ORM yapıları ile çalışabilmesi bu seçimi yapmamızda faydası olan nedenler arasında. En büyük avantajı ise projemizde bağıntı modelli(Relational) bir veritabanı seçmemiz gerekmesi ve PostgreSQL'in bu özelliği sağlaması oldu.
 
-.. figure:: postgre.png
+.. figure:: developer_index/postgre.png
    :figclass: align-center
 
 
