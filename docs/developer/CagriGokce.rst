@@ -13,7 +13,7 @@ Gruplar varlığı ve site içerisindeki /gruplar/* sayfaları gruplar tablosund
 - Zaman satırı DATE türünde tanımlanmıştır ve GG/AA/YY biçimindeki formatları desteklemektedir.
 - Kişi_ID satırı INTEGER türünde tanımlandı ve kişiler tablosuna bağlantı kuran bir dış anahtar olarak tanımlandı.
 
-.. figure::cagri/grup_1.jpg
+.. figure:: cagri/grup_1.jpeg
    :figclass: align-center
 
 
