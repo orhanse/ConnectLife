@@ -86,6 +86,7 @@ Yeni makale ekleme işlemi */makaleler* sayfasında yer alır. Listeli halde bul
 Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı oluşturulmuştur.
 
 .. code-block:: python
+
    class Makaleler:
     def __init__(self, konu, baslik , yazar, tarih, uniname):
         self.konu = konu
@@ -98,6 +99,7 @@ Alınacak çoklu değerler için *makaleler.py* dosyasında Makaleler sınıfı 
 *server.py* dosyasındaki *makaleler_sayfasi* fonksiyonu içerisinde makaleler sınıfından makale1 adlı bir nesne oluşturularak *POST* metoduyla alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_makaleler* fonksiyonu çağırılarak tamamlanmış olur.
 
 .. code-block:: python
+
    @app.route('/makaleler', methods=['GET', 'POST'])
    def makaleler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
@@ -222,6 +224,7 @@ Makaleler sayfasında yer alan her çoklunun kendisine ait güncelleme sayfası 
 Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan makaleyi sil butonu seçilerek ilgili makale silinir. Kullanıcı, silme işlemi sonrası */makaleler* sayfasına yönlendirilir.
 
 .. code-block:: python
+
     elif "delete" in request.form:
             delete_makaleler(cursor, makale_id)
             connection.commit()
@@ -231,6 +234,7 @@ Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında ge
 *delete_makaleler* fonksiyonu *makaleler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
 .. code-block:: python
+
    def delete_makaleler(cursor, id):
         query="""DELETE FROM MAKALELER WHERE ID = %s"""
         cursor.execute(query, id)
@@ -331,6 +335,7 @@ Alınacak çoklu değerler için *isilanlari.py* dosyasında Isilanlari sınıf�
 *server.py* dosyasındaki *isilanlari_sayfasi* fonksiyonu içerisinde isilanlari sınıfından ilan1 adlı bir nesne oluşturularak *POST* metoduyla kullanıcı tarafından alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_isilanlari* fonksiyonu çağırılarak tamamlanmış olur.
 
 .. code-block:: python
+
    @app.route('/isilanlari', methods=['GET', 'POST'])
    def isilanlari_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
@@ -432,6 +437,7 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
  *update_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
 
 .. code-block:: python
+
    def update_isilanlari(cursor, id, ilan1):
             query="""
             UPDATE ISILANLARI
@@ -451,15 +457,17 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
 İlan silme işlemi her ilanın kendi */isilanlari/<ilan_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan ilanı sil butonu seçilerek ilgili ilan silinir. Kullanıcı, silme işlemi sonrası */isilanlari* sayfasına yönlendirilir.
 
 .. code-block:: python
+
    elif "delete" in request.form:
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
  
 
- *delete_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
+*delete_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
 .. code-block:: python
+
      elif "delete" in request.form:
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
@@ -532,6 +540,7 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
 
 
 .. code-block:: python
+
    class Oneriler:
     def __init__(self, resim, kname, kpozisyon, baglanti ):
 
@@ -544,6 +553,7 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
 *server.py* dosyasındaki *oneriler_sayfasi* fonksiyonu içerisinde oneriler sınıfından oneri1 adlı bir nesne oluşturularak *POST* metoduyla alınan çoklu verileri nesnenin ilgili alanlarına atılmıştır. Veritabanına ekleme işlemi *add_oneriler* fonksiyonu çağırılarak tamamlanmış olur.
 
 .. code-block:: python
+
    @app.route('/oneriler', methods=['GET', 'POST'])
    def oneriler_sayfasi():
     connection = dbapi2.connect(app.config['dsn'])
@@ -576,6 +586,7 @@ Alınacak çoklu değerler için *oneriler.py* dosyasında Oneriler sınıfı ol
 *add_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.
 
 .. code-block:: python
+
    def add_oneriler(cursor, request, oneri1):
         query = """INSERT INTO ONERILER
         (RESIM,KNAME,KPOZISYON,BAGLANTI) VALUES (
@@ -645,6 +656,7 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
 *update_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
 
 .. code-block:: python
+
    def update_oneriler(cursor, id, oneri1):
             query="""
             UPDATE ONERILER
@@ -663,17 +675,19 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
 Öneri silme işlemi her önerinin kendi */oneriler/<oneri_id>* sayfasında gerçeklenir. Bu sayfada düzenle butonunun altında bulunan öneriyi sil butonu seçilerek ilgili öneri silinir. Kullanıcı, silme işlemi sonrası */oneriler* sayfasına yönlendirilir.
 
 .. code-block:: python
+
    elif "delete" in request.form:
             delete_oneriler(cursor, oneri_id)
             connection.commit()
 
             return redirect(url_for('oneriler_sayfasi'))
-
+|
 
 *delete_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
 .. code-block:: python
+
    def delete_oneriler(cursor, id):
         query="""DELETE FROM ONERILER WHERE ID = %s"""
         cursor.execute(query, id)
-
+|
