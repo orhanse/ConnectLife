@@ -139,7 +139,8 @@ Veritabanındaki şirketlerin listelenip kullanıcıya gösterilme işlemi /sirk
           query = "SELECT ID,NAME FROM LOKASYON"
           cursor.execute(query)
           lokasyon =cursor.fetchall()
-         return render_template('sirketler.html', sirket = sirket, current_time=now.ctime(),kisiler=kisiler, lokasyon = lokasyon)
+         return render_template('sirketler.html', sirket = sirket, current_time=now.ctime(),
+                                 kisiler=kisiler, lokasyon = lokasyon)
 
 |
 
@@ -174,7 +175,8 @@ Aşağıdaki kod diliminde ise yeni şirket ekleme fonksiyonunun nasıl yazıld�
           %s,
           %s
           )"""
-     cursor.execute(query, (sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo))
+     cursor.execute(query, (sirket.name, sirket.date, sirket.location, sirket.ceo_id,
+                              sirket.work_area, sirket.photo))
 
 |
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan sirket çoklusu alınır ve içeriği uygun niteliklere eklenir.
@@ -208,7 +210,8 @@ Arama fonksiyonunda aranacak şirket ismi arama barına girilerek yapılabilir. 
   elif "search" in request.form:
         aranan = request.form['aranan'];
         query = """SELECT S.ID,S.NAME,S.DATE,L.NAME,K.ISIM, S.WORK_AREA,S.PHOTO FROM KISILER AS K,
-                 SIRKET AS S, LOKASYON AS L WHERE ((S.LOCATION = L.ID) AND (S.CEO_ID = K.ID) AND (S.NAME LIKE %s))"""
+                 SIRKET AS S, LOKASYON AS L WHERE ((S.LOCATION = L.ID) AND (S.CEO_ID = K.ID) 
+                                                   AND (S.NAME LIKE %s))"""
         cursor.execute(query,[aranan])
         sirket=cursor.fetchall()
         now = datetime.datetime.now()
@@ -232,7 +235,8 @@ Aşağıdaki kod diliminde yeni şirket ekleme fonksiyonuna benzer olarak günce
          PHOTO=%s
          WHERE ID=%s
          """
-    cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, sirket.work_area, sirket.photo, id))
+    cursor.execute(query,(sirket.name, sirket.date, sirket.location, sirket.ceo_id, 
+                           sirket.work_area, sirket.photo, id))
 
 |
 .. code-block:: python
@@ -252,7 +256,8 @@ Aşağıdaki kod diliminde yeni şirket ekleme fonksiyonuna benzer olarak günce
         query = "SELECT ID,NAME FROM LOKASYON"
         cursor.execute(query)
         lokasyon =cursor.fetchall()
-        return render_template('sirket_guncelle.html', sirket = sirket, current_time=now.ctime(), kisiler = kisiler, lokasyon=lokasyon)
+        return render_template('sirket_guncelle.html', sirket = sirket, 
+                                 current_time=now.ctime(), kisiler = kisiler, lokasyon=lokasyon)
     elif request.method == 'POST':
         if "update" in request.form:
             sirket1 = Sirket(request.form['name'],
@@ -325,9 +330,11 @@ Dil tablosunun içeriği figure 2.2 de gösterilmiştir.
     query = """CREATE TABLE DIL (
         ID SERIAL PRIMARY KEY,
         NAME varchar(100) UNIQUE NOT NULL,
-        ULKESI INTEGER NOT NULL REFERENCES LOKASYON(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+        ULKESI INTEGER NOT NULL REFERENCES LOKASYON(ID) ON DELETE CASCADE 
+                                                         ON UPDATE CASCADE,
         PHOTO varchar(80),
-        BILENLER INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1
+        BILENLER INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE 
+                                                ON UPDATE CASCADE DEFAULT 1
         )"""
     cursor.execute(query)
     insert_dil(cursor)
@@ -409,7 +416,8 @@ Veritabanındaki dillerin listelenip kullanıcıya gösterilme işlemi /diller s
          query = "SELECT ID,NAME FROM LOKASYON"
          cursor.execute(query)
          lokasyon =cursor.fetchall()
-         return render_template('diller.html', dil = dil, current_time=now.ctime(), kisiler = kisiler, lokasyon = lokasyon)
+         return render_template('diller.html', dil = dil, current_time=now.ctime(), 
+                                    kisiler = kisiler, lokasyon = lokasyon)
 
 |
 **Yeni Dil Ekleme(ADD)**
@@ -472,7 +480,8 @@ Arama fonksiyonunda aranacak dil ismi arama barına girilerek yapılabilir. Aram
   elif "search" in request.form:
         aranan = request.form['aranan'];
         query = """SELECT D.ID, D.NAME, L.NAME, D.PHOTO, K.ISIM FROM KISILER AS K,
-                LOKASYON AS L, DIL AS D WHERE((D.ULKESI = L.ID) AND (D.BILENLER = K.ID) AND (D.NAME LIKE %s))"""
+                LOKASYON AS L, DIL AS D WHERE((D.ULKESI = L.ID) AND (D.BILENLER = K.ID) 
+                                                               AND (D.NAME LIKE %s))"""
 
 
         cursor.execute(query,[aranan])
@@ -517,7 +526,8 @@ Aşağıdaki kod diliminde yeni dil ekleme fonksiyonuna benzer olarak güncellen
         query = "SELECT ID,NAME FROM LOKASYON"
         cursor.execute(query)
         lokasyon =cursor.fetchall()
-        return render_template('dil_guncelle.html', dil = dil, current_time=now.ctime(), kisiler = kisiler, lokasyon = lokasyon )
+        return render_template('dil_guncelle.html', dil = dil, current_time=now.ctime(), 
+                                          kisiler = kisiler, lokasyon = lokasyon )
     elif request.method == 'POST':
         if "update" in request.form:
             dil1 = Dil(request.form['name'],
@@ -593,7 +603,8 @@ Lokasyon tablosunun içeriği figure 3.2 de gösterilmiştir.
         NAME varchar(100) UNIQUE NOT NULL,
         BASKENT varchar(100) NOT NULL,
         GPS varchar(100) NOT NULL,
-        YEREL_DIL INTEGER NOT NULL REFERENCES DIL(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
+        YEREL_DIL INTEGER NOT NULL REFERENCES DIL(ID) ON DELETE CASCADE 
+                                       ON UPDATE CASCADE DEFAULT 1,
         PHOTO varchar(80)
         )"""
     cursor.execute(query)
@@ -684,7 +695,8 @@ Veritabanındaki lokasyonlerin listelenip kullanıcıya gösterilme işlemi /lok
          query = "SELECT ID,NAME FROM DIL"
          cursor.execute(query)
          diller =cursor.fetchall()
-         return render_template('lokasyonlar.html', lokasyon = lokasyon, current_time=now.ctime(),diller=diller)
+         return render_template('lokasyonlar.html', lokasyon = lokasyon, 
+                                    current_time=now.ctime(),diller=diller)
 
 |
 
@@ -717,7 +729,8 @@ Aşağıdaki kod lokasyoniminde ise yeni lokasyon ekleme fonksiyonunun nasıl ya
         %s,
         %s
         )"""
-    cursor.execute(query, (lokasyon.name, lokasyon.baskent, lokasyon.gps, lokasyon.yerel_dil, lokasyon.photo))
+    cursor.execute(query, (lokasyon.name, lokasyon.baskent, lokasyon.gps, 
+                                       lokasyon.yerel_dil, lokasyon.photo))
 
 |
 Burada, varlık niteliklerinin girildiği diğer bir fonksiyondan lokasyon çoklusu alınır ve içeriği uygun niteliklere eklenir.
@@ -760,7 +773,8 @@ Arama fonksiyonunda aranacak lokasyon ismi arama barına girilerek yapılabilir.
         cursor.execute(query,[aranan])
         lokasyon=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('lokasyon_ara.html', lokasyon = lokasyon, current_time=now.ctime(), sorgu = aranan)
+        return render_template('lokasyon_ara.html', lokasyon = lokasyon, 
+                                 current_time=now.ctime(), sorgu = aranan)
 
 |
 
@@ -780,7 +794,8 @@ Aşağıdaki kod lokasyoniminde yeni lokasyon ekleme fonksiyonuna benzer olarak 
         PHOTO=%s
         WHERE ID=%s
         """
-    cursor.execute(query,(lokasyon.name, lokasyon.baskent, lokasyon.gps, lokasyon.yerel_dil, lokasyon.photo, id))
+    cursor.execute(query,(lokasyon.name, lokasyon.baskent, lokasyon.gps, 
+                                    lokasyon.yerel_dil, lokasyon.photo, id))
 |
 
 .. code-block:: python
@@ -797,7 +812,8 @@ Aşağıdaki kod lokasyoniminde yeni lokasyon ekleme fonksiyonuna benzer olarak 
         query = "SELECT ID,NAME FROM DIL"
         cursor.execute(query)
         diller =cursor.fetchall()
-        return render_template('lokasyon_guncelle.html', lokasyon = lokasyon, current_time=now.ctime(), diller = diller)
+        return render_template('lokasyon_guncelle.html', lokasyon = lokasyon, 
+                                    current_time=now.ctime(), diller = diller)
     elif request.method == 'POST':
         if "update" in request.form:
             lokasyon1 = Lokasyon(request.form['name'],
