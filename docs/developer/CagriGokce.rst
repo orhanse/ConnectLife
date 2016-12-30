@@ -4,7 +4,7 @@ Gruplar, Tags(Etiketler), Has_Tag(Etiket İlişkisi) tabloları ve özellikleri 
 
 
 1. Gruplar
-------------------
+----------
 Gruplar varlığı ve site içerisindeki /gruplar/* sayfaları gruplar tablosunda gerçeklendi. Bu tablo id, zaman, aciklama, icerik, resim ve dış anahtar olan kişi_id satırlarından oluşmaktadır.
 
 - ID satırı SERIAL türde tanımlanmıştır ve tablonun birincil anahtarıdır.
@@ -127,6 +127,7 @@ Veritabanındaki grupların listelenip kullanıcıya gösterilme işlemi */grupl
 Gruplar tablosu içerisine grup ekleme işlemi */gruplar* sayfasında gerçeklenmiştir. Grupların listelendiği bölümün hemen altında grup ekleme bölümü bulunmaktadır. Bu bölümde database satırları için input formları ve dış anahtar için selection box yapısı bulunur. Bu bölümde kişiler tablosundan tüm kişi isimleri alınıp kullanıcıya gösterilmiştir ve kullanıcının dış anahtarı liste halinde rahatça seçebilmesi sağlanmıştır. Aşağıdaki kod satırında gruplar için hazırlanan input formlar ve kişilerin select yapısı içerisinde eklenmesi gösterilmiştir.
 
 .. code-block:: python
+
 	<form id="add" action="{{ url_for('gruplar_sayfasi')}}" method = "post">
                 <div class="form-group">
   			<label for="usr">Başlık:</label>
@@ -381,7 +382,7 @@ Grup arama için oluşturulan sayfada listeleme sayfasına benzer bir yapı olu�
 Gruplar tablosu üzerinde yapılabilen bu işlemlerle bu tablo site üzerindeki aktif ve çok işlevsel sayfalardan bir tanesi olmaktadır. Kullanıcı tarafından arayüz kullanılarak tüm işlemlerin gerçekleştirilebileceği bir sayfa olmuştur. Tüm işlemlere */gruplar* bağlantısından linklere tıklayarak ulaşılabilmektedir.
 
 2. Tags (Etiketler)
-------------------
+-------------------
 
 Tags tablosunun tasarlanmasında her grup için kullanıcıların ekleyebileceği ve grup aramalarında kullanabileceği etiketler düşünüldü. Bu sistem kullanıcıların aynı ortak özellikteki kullanıcılar ile eşleşmesini sağlayan grup yapısının bu işlevini geliştirmesini sağlıyor. Etiketler sayesinde kullanıcılar doğru ilgi alanlarına daha hızlı ulaşıyor. Bu işlemin daha etkin olması için bir grupta birden fazla etiket olması aynı etiketlerle oluşturulan grupların tespit edilip önerilmesi açısından daha uygun görüldü.
 

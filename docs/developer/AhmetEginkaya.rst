@@ -161,8 +161,9 @@ Sirket tablosu içerisine yeni şirket ekleme işlemi /sirketler sayfasında ger
 Aşağıdaki kod diliminde  Sirket classının tanımlanması gösterilmiştir.
 
 .. code-block:: python
+
   class Sirket:
-    def __init__(self, name, date, location, ceo_id, work_area, photo):
+     def __init__(self, name, date, location, ceo_id, work_area, photo):
         self.name = name
         self.date = date
         self.location = location
@@ -198,6 +199,7 @@ sirket çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağ
 
 
 .. code-block:: python
+
       elif "add" in request.form:
           sirket = Sirket(request.form['name'],
                      request.form['date'],
@@ -491,6 +493,7 @@ Dil çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşağıd
 
 
 .. code-block:: python
+
       elif "add" in request.form:
         dil = Dil(request.form['name'],
                   request.form['lokasyon_name'],
@@ -787,8 +790,8 @@ Lokasyon çoklusunu döndüren fonksiyon server.py ta tanımlanmıştır ve aşa
 
 |
 
-
 .. code-block:: python
+
       elif "add" in request.form:
         lokasyon = Lokasyon(request.form['name'],
                      request.form['baskent'],
