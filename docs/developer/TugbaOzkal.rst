@@ -7,8 +7,8 @@ Genel
 Kişiler, mailler ve meslekler tablolarının içerikleri ve yeni çoklu ekleme, varolan çokluyu silme, güncelleme arama gibi veritabanı işlemleri bu kısımda açıklanmıştır.
 
 
-1. Kişiler
-----------
+Kişiler
+-------
 
 Anasayfadan '\kisiler' sekmesine gidilerek kişiler tablosuna ulaşılabilinir.
 
@@ -20,6 +20,23 @@ kişiler tablosu figür 1.2.1'de gösterilmiştir.
    :figclass: align-center
 
    figure 1.2.1
+
+
+Kişiler sınıfı aşağıdaki kodla oluşturulmuştur.
+
+
+.. code-block:: python
+
+   class Kisiler:
+       def __init__(self, isim, resim, mekan, yas, universite, work, pozisyon, dil):
+           self.isim = isim
+           self.resim = resim
+           self.mekan = mekan
+           self.yas = yas
+           self.universite = universite
+           self.work = work
+           self.pozisyon = pozisyon
+           self.dil = dil
 
 
 Üniversite, çalıştığı yer, dil ve meslek bilgileri diğer tablolardan dış anahtarla alınır.
@@ -273,8 +290,8 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
 "DELETE FROM {table}" komutu tablodaki çoklunun silinmesini sağlar. Hangi çoklunun silineceği "WHERE ID = %s" komutuyla belirlenir.
 
 
-2. Meslekler
-------------
+Meslekler
+---------
 
 
 ID, isim, tanım özelliklerini içeren meslekler tablosu figür 2.2.1'de gösterilmiştir.
@@ -287,7 +304,15 @@ ID, isim, tanım özelliklerini içeren meslekler tablosu figür 2.2.1'de göste
 
 Tüm sütunlar varlık içerisinde tanımlanmıştır.
 
+Meslekler sınıfı aşağıdaki kodla oluşturulmuştur.
 
+
+.. code-block:: python
+
+   class Meslekler:
+    def __init__(self, isim, tanim):
+        self.isim = isim
+        self.tanim = tanim
 
 
 **Tablo Oluşturma**
@@ -495,8 +520,8 @@ Silinmek istenen çoklunun birincil anahtarı olan ID'sini alarak fonksiyona gö
 
 
 
-3. Mailler
-----------
+Mailler
+-------
 
 
 ID, isim, mail ve kişi özelliklerini içeren mailler tablosu figür 3.2.1'de gösterilmiştir.
@@ -506,6 +531,17 @@ ID, isim, mail ve kişi özelliklerini içeren mailler tablosu figür 3.2.1'de g
 
    figure 3.2.1
 
+
+Mailler sınıfı aşağıdaki kodla oluşturulmuştur.
+
+
+.. code-block:: python
+
+   class Mailler:
+       def __init__(self, isim, mail, sifre):
+           self.isim = isim
+           self.mail = mail
+           self.sifre = sifre
 
 ID, mail ve şifre sütunları varlık içerisinde tanımlanmıştır. İsim ise mailin kime ait olduğunu bildirir ve kişiler tablosundan dış anahtar
 bağlantısıyla çekilmiştir.
