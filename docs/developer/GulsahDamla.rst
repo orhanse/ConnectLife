@@ -226,7 +226,7 @@ Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında ge
             delete_makaleler(cursor, makale_id)
             connection.commit()
             return redirect(url_for('makaleler_sayfasi'))
-|
+
 
 *delete_makaleler* fonksiyonu *makaleler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
@@ -234,7 +234,7 @@ Makale silme işlemi her makalenin kendi */makaleler/<makale_id>* sayfasında ge
    def delete_makaleler(cursor, id):
         query="""DELETE FROM MAKALELER WHERE ID = %s"""
         cursor.execute(query, id)
-|
+
 
 2. İş ilanları
 --------------
@@ -359,6 +359,7 @@ Alınacak çoklu değerler için *isilanlari.py* dosyasında Isilanlari sınıf�
 
 |
 *add_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *INSERT* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanına eklenir.
+
 .. code-block:: python
 
    def add_isilanlari(cursor, request, ilan1):
@@ -373,6 +374,7 @@ Alınacak çoklu değerler için *isilanlari.py* dosyasında Isilanlari sınıf�
         cursor.execute(query, (ilan1.sirketname, ilan1.pozisyon, ilan1.lokasyon,
                                ilan1.basvuru, ilan1.tarih))
 |
+
 **İlan Arama**
 
 İlan arama işlemi */isilanlari* sayfasının sonunda yer alır. Arama çubuğunda ilanda yer alan şirket ismi yazılarak ilgili sonuçlara erişilir. *server.py* dosyasındaki *isilanlari_sayfasi* fonksiyonu içerisinde bulunan arama fonksiyonu aşağıda gösterilmiştir.
@@ -427,7 +429,7 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
             return redirect(url_for('isilanlari_sayfasi'))
 |
 
-*update_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
+ *update_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *UPDATE* komutu ile oluşturulan nesne içerisindeki bilgiler veritabanında güncellenir.
 
 .. code-block:: python
    def update_isilanlari(cursor, id, ilan1):
@@ -442,7 +444,7 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
             """
             cursor.execute(query, (ilan1.sirketname, ilan1.pozisyon, ilan1.lokasyon,
                                    ilan1.basvuru, ilan1.tarih, id))
- |
+
 
 **İlan Silme**
 
@@ -453,16 +455,16 @@ Arama işlemi sonucu *ilan_ara.html* sayfası içerisindeki forma göre listelen
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
-  |
+ 
 
-*delete_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
+ *delete_isilanlari* fonksiyonu *isilanlari.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
 .. code-block:: python
      elif "delete" in request.form:
             delete_isilanlari(cursor, ilan_id)
             connection.commit()
             return redirect(url_for('isilanlari_sayfasi'))
-|
+
 
 3. Öneriler
 -----------
@@ -666,7 +668,7 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
             connection.commit()
 
             return redirect(url_for('oneriler_sayfasi'))
-|
+
 
 *delete_oneriler* fonksiyonu *oneriler.py* dosyasında tanımlanmıştır. *DELETE FROM {table}* komutu ile tablodaki çoklunun silinmesi sağlanır. Hangi çoklunun silineceği *WHERE ID = %s* komutuyla belirlenir.
 
@@ -674,4 +676,4 @@ Arama işlemi sonucu *oneri_ara.html* sayfası içerisindeki forma göre listele
    def delete_oneriler(cursor, id):
         query="""DELETE FROM ONERILER WHERE ID = %s"""
         cursor.execute(query, id)
-|
+
