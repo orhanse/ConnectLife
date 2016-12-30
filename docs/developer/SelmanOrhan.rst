@@ -61,7 +61,8 @@ Yukarıda belirtilen şekilde **class** olarak tanımlanan Universiteler tablosu
           LOCATION VARCHAR(80) NOT NULL,
           SMALL_INFO VARCHAR(500),
           PHOTO VARCHAR(80),
-          RECTOR_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE DEFAULT 1,
+          RECTOR_ID INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE 
+                    CASCADE ON UPDATE CASCADE DEFAULT 1,
           PRIMARY KEY (ID)
           )"""
       cursor.execute(query)
@@ -85,7 +86,8 @@ Yukarıdaki kod diliminde Universiteler tablosu oluşturulmuştur. Bu tablosu da
               %s
               )"""
       cursor.execute(query, (university1.name, university1.foundation_date, 
-      university1.location, university1.small_info, university1.photo, university1.rector_id))
+                             university1.location, university1.small_info, 
+                             university1.photo, university1.rector_id))
 
 *GET* metoduyla kullanıcıdan alınan bilgiler, html sayfasındaki *'add'* metoduyla yukarıdaki fonksiyon yardımıyla databasedeki daha önceden oluşturulan Universiteler tablosuna eklenir.
 
@@ -114,8 +116,9 @@ Databaseden silinmek istenen çoklu birincil anahtar yardımıyle (ID) databased
           RECTOR_ID =%s
           WHERE ID=%s
           """
-      cursor.execute(query, (university1.name, university1.foundation_date, university1.location, 
-      university1.small_info, university1.photo, university1.rector_id, id))
+      cursor.execute(query, (university1.name, university1.foundation_date, 
+                             university1.location, university1.small_info, 
+                             university1.photo, university1.rector_id, id))
       
 Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan seçilir. *'update'* ve *GET* metodları kullanılarak kullanıcıdan alınan yeni bilgiler *POST* metodu kullanılarak database eklenir.
 
@@ -125,13 +128,15 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
   
   elif "search" in request.form:
         searched = request.form['searched'];
-        query = """SELECT U.ID, U.NAME, U.FOUNDATION_DATE, U.LOCATION, U.SMALL_INFO, U.PHOTO, K.ISIM FROM UNIVERSITY AS U,
-                   KISILER AS K WHERE((U.RECTOR_ID = K.ID) AND (U.NAME LIKE %s))"""
+        query = """SELECT U.ID, U.NAME, U.FOUNDATION_DATE, U.LOCATION, U.SMALL_INFO, 
+                   U.PHOTO, K.ISIM FROM UNIVERSITY AS U,
+                   KISILER AS K WHERE((U.RECTOR_ID = K.ID) AND (U.NAME LIKE %s)
+                )"""
         cursor.execute(query,[searched])
         university=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('universiteler_ara.html', university = university, current_time=now.ctime(), 
-        sorgu = searched)
+        return render_template('universiteler_ara.html', university = university, 
+                                current_time=now.ctime(), sorgu = searched)
 
 Arama metodu Universite çoklusunun name değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
 
@@ -175,7 +180,8 @@ Yukarıda belirtilen şekilde **class** olarak tanımlanan Hobiler tablosu, aşa
             ISIM varchar(100) NOT NULL,
             RESIM VARCHAR(80) NOT NULL DEFAULT 'defaulthobi.jpg',
             ALAN varchar(100) NOT NULL,
-            KOORDINATOR INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+            KOORDINATOR INTEGER NOT NULL REFERENCES KISILER(ID) 
+                        ON DELETE CASCADE ON UPDATE CASCADE,
             ACIKLAMA varchar(1000) NOT NULL
             )"""
     cursor.execute(query)
@@ -239,13 +245,15 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
   elif "search" in request.form:
         aranan = request.form['aranan'];
 
-        query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA
-                    FROM HOBILER AS H, KISILER AS K
-                    WHERE((H.KOORDINATOR = K.ID) AND (H.ISIM LIKE %s))"""
+        query = """SELECT H.ID, H.ISIM, H.RESIM, H.ALAN, K.ISIM, H.ACIKLAMA 
+                   FROM HOBILER AS H, KISILER AS K
+                   WHERE((H.KOORDINATOR = K.ID) AND (H.ISIM LIKE %s)
+                )"""
         cursor.execute(query,[aranan])
         hobiler=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('hobi_ara.html', hobiler = hobiler, current_time=now.ctime(), sorgu = aranan)
+        return render_template('hobi_ara.html', hobiler = hobiler, 
+                                current_time=now.ctime(), sorgu = aranan)
 
 Arama metodu Hobi çoklusunun isim değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
 
@@ -288,10 +296,13 @@ Yukarıda belirtilen şekilde **class** olarak tanımlanan Projeler tablosu, aş
     query = """CREATE TABLE IF NOT EXISTS PROJELER (
            ID SERIAL PRIMARY KEY,
            BASLIK varchar(500) NOT NULL,
-           KONU INTEGER NOT NULL REFERENCES MESLEKLER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
-           SAHIP INTEGER NOT NULL REFERENCES KISILER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+           KONU INTEGER NOT NULL REFERENCES MESLEKLER(ID) 
+                ON DELETE CASCADE ON UPDATE CASCADE,
+           SAHIP INTEGER NOT NULL REFERENCES KISILER(ID) 
+                ON DELETE CASCADE ON UPDATE CASCADE,
            TARIH integer NOT NULL,
-           UNINAME INTEGER NOT NULL REFERENCES UNIVERSITY(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+           UNINAME INTEGER NOT NULL REFERENCES UNIVERSITY(ID) 
+                ON DELETE CASCADE ON UPDATE CASCADE,
            ACIKLAMA varchar(1000) NOT NULL
            )"""
     cursor.execute(query)
@@ -356,8 +367,9 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
   
   elif "search" in request.form:
         aranan = request.form['aranan'];
-        query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, P.ACIKLAMA
-            FROM PROJELER AS P, MESLEKLER AS M, KISILER AS K, UNIVERSITY AS U
+        query = """SELECT P.ID, P.BASLIK, M.ISIM, K.ISIM, P.TARIH, U.NAME, 
+                          P.ACIKLAMA FROM PROJELER AS P, MESLEKLER AS M, 
+                          KISILER AS K, UNIVERSITY AS U
             WHERE(
             (P.KONU = M.ID)
             AND
@@ -368,7 +380,8 @@ Güncellenmek istenen çoklu birincil anahtar yardımıyla database tablosundan 
         cursor.execute(query,[aranan])
         projeler=cursor.fetchall()
         now = datetime.datetime.now()
-        return render_template('proje_ara.html', projeler = projeler, current_time=now.ctime(), sorgu = aranan)
+        return render_template('proje_ara.html', projeler = projeler, 
+                                current_time=now.ctime(), sorgu = aranan)
 
 Arama metodu Proje çoklusunun isim değişkeni üzerinden arama yapar. Aramak istenen çoklu yukarıdaki fonksiyon yardımıyla databaseden aranır ve *POST* metodu yardımıyla ekrana aktarılır.
 
