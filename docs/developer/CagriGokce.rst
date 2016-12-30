@@ -13,14 +13,11 @@ Gruplar varlığı ve site içerisindeki /gruplar/* sayfaları gruplar tablosund
 - Zaman satırı DATE türünde tanımlanmıştır ve GG/AA/YY biçimindeki formatları desteklemektedir.
 - Kişi_ID satırı INTEGER türünde tanımlandı ve kişiler tablosuna bağlantı kuran bir dış anahtar olarak tanımlandı.
 
-.. figure:: cagri/gruplar_tablo.jpg
-   :figclass: align-center ..
-   
-Gruplar tablosun site içerisinde aynı ilgi alanlarını paylaşan kullanıcıları buluşturup ortak paylaşımları görmelerini sağlamak amaçlandı. Her grup için oluşturan kişi bilgisini saklamak için Kişiler tablosuna dış anahtar ile bağlantı sağlandı. 
-
-.. figure:: cagri/gruplar_ER.jpg
+.. figure::cagri/grup_1.jpg
    :figclass: align-center
-   |
+
+
+Gruplar tablosun site içerisinde aynı ilgi alanlarını paylaşan kullanıcıları buluşturup ortak paylaşımları görmelerini sağlamak amaçlandı. Her grup için oluşturan kişi bilgisini saklamak için Kişiler tablosuna dış anahtar ile bağlantı sağlandı. 
 
 **a. Tablo Oluşturma (CREATE)**
 
@@ -390,7 +387,7 @@ Tags tablosunun tasarlanmasında her grup için kullanıcıların ekleyebileceğ
 
 Etiketler tablosunun içerisinde 2 adet satır olacak şekilde tasarlandı. Id değeri birincil anahtar olarak tanımlandı ve isim değeri de o anahtara sahip etiketi tanımlayan satır oldu. Etiketler tablosunun veritabanındaki görüntüsü aşağıda verilmiştir.
 
-.. figure:: cagri/etiketler.jpg
+.. figure:: cagri/tags_1.jpg
    :figclass: align-center
 
 Tablo üzerinde yapılan işlemler ve kodlar Gruplar sayfası için detaylı anlatıldığından dolayı burada daha kısa bir biçimde anlatılacaktır. Gruplar sayfası için anlatılan bölüm bu bölüme referans teşkil edecektir. Özellikle bu tabloyu özgün kılan özellikler anlatılacaktır.
@@ -436,7 +433,7 @@ Tablo tanımları yapıldıktan sonra ilk değerlerin ataması yapılmıştır. 
 
 Tablo tasarımında Gruplar ile ilişki gerektiğinden dolayı Gruplar tablosuna bir dış anahtar gereklidir. Bir grupta birden fazla etiket olabileceği yukarıda belirtilmişti. Aynı zamanda bir etiketin brden fazla grupta olması gerektiği de açıklanmıştı. Bu durumda Gruplar tablosunda da bu tabloyu belirten bir dış anahtar olması gerekiyor. **N to N bağlantı ilişkisi** problemi ile karşılaşıyoruz. Tasarlanan E-R diyagramı ile bu durum açıkça görünmektedir.
 
-.. figure:: cagri/etiketler-ER.jpg
+.. figure:: cagri/tags_ER.jpg
    :figclass: align-center
    
 Bu N to N durumunu çözmek için iki tablo arasındaki ilişkiyi modelleyen başka bir ek tabloya ihtiyacımız oluyor. Bu amaçla bir sonraki bölümde anlatılacak olan has_tag tablosu gerçeklendi.
@@ -449,55 +446,58 @@ Has_tag tablosu Tags tablosunun eklenmesi sonucunda oluşan N-N ilişkinin gider
 
 Bu sistem kullanılırken ilişki tablosundan gerçek değerleri tutan tablolara sürekli bağlantı yapmamız gerekmektedir. Örneğin bir grubun sahip olduğu etiketlerin isimlerini öğrenmek için grupID değeri ile has_tag tablosunu filtreleyi çıkan sonuçlardaki tag_id değerlerini Tags tablosunda eşleştirerek isimlere ulaşmamız gerekiyor.
 
-.. figure:: cagri/etiketler.jpg
+.. figure:: cagri/hastag_1.jpg
    :figclass: align-center
 
 Tablo üzerinde yapılan işlemler ve kodlar Gruplar sayfası için detaylı anlatıldığından dolayı burada da kısa bir biçimde anlatılacaktır. Gruplar sayfası için anlatılan bölüm bu bölüme referans teşkil edecektir. Özellikle bu tabloyu özgün kılan özellikler anlatılacaktır.
 
 **Veritabanı İşlemleri**
 
-Tablo veritabanı Gruplar ile bağlantılı olduğundan Gruplar tablosu oluşturulduktan sonra oluşturuldu. 
+Tablo veritabanı Tags ve Gruplar tablolari ile baglantili oldugundan dolayi bu tablolardan sonra olusturuldu. 2'si dış anahtar olmak uzere toplam 3 satirdan olusmaktadir.
 
 - ID değeri SERIAL olarak tanımlanmıştır AI(auto increment) özelliğine sahiptir.
-- İsim değeri VARCHAR olarak tanımlanmıştır ve Etiket tanımını tutar
-- İsim satırı *NOT NULL* (boş bırakılamaz) olarak tanımlanmıştır. Kullanıcı bu değeri boş olarak verdiğinde hata oluşacaktır.
+- Gruplar icin dis anahtar olan grup_id satiri bulunur.
+- Tags ile dis anahtar baglantisi olan tag_id satiri bulunur.
 - Tablonun birincil anahtarı ID satırıdır.
 
 .. code-block:: python
 
 	def init_tag_db(cursor):
-	    query = """CREATE TABLE IF NOT EXISTS TAGS (
+	    query = """CREATE TABLE IF NOT EXISTS HASTAG (
 	    ID SERIAL,
-	    ISIM VARCHAR(80) NOT NULL,
+	    GRUPLAR_ID INTEGER NOT NULL REFERENCES GRUPLAR(ID) DEFAULT 1,
+	    TAGS_ID INTEGER NOT NULL REFERENCES TAGS(ID) DEFAULT 1,
 	    PRIMARY KEY(ID)
 	    )"""
 	    cursor.execute(query)
-	|
 
-Tablo tanımları yapıldıktan sonra ilk değerlerin ataması yapılmıştır. İstenilen grup etiketleri olan Teknoloji, Bilim ve Güncel isimli etiketler veritabanına eklenmiştir. 
+|
+
+Tablo tanımları yapıldıktan sonra ilk değerlerin ataması yapılmıştır. İstenilen bazı ilişkiler ekleme kısmında eklenmiştir.
 
 .. code-block:: python
 
-    query="""INSERT INTO TAGS
-        (ISIM) VALUES (
-        'Teknoloji'
-        );
-        INSERT INTO TAGS
-        (ISIM) VALUES (
-        'Bilim '
-        );
-        INSERT INTO TAGS
-        (ISIM) VALUES (
-        'Guncel'
-        );"""
-	cursor.execute(query)
+     query="""INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '1',
+        '1');
+        INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '1',
+        '2');
+        INSERT INTO HASTAG
+        (GRUPLAR_ID, TAGS_ID) VALUES (
+        '2',
+        '1');"""
+    cursor.execute(query)
+
 |
 
-Tablo tasarımında Gruplar ile ilişki gerektiğinden dolayı Gruplar tablosuna bir dış anahtar gereklidir. Bir grupta birden fazla etiket olabileceği yukarıda belirtilmişti. Aynı zamanda bir etiketin brden fazla grupta olması gerektiği de açıklanmıştı. Bu durumda Gruplar tablosunda da bu tabloyu belirten bir dış anahtar olması gerekiyor. **N to N bağlantı ilişkisi** problemi ile karşılaşıyoruz. Tasarlanan E-R diyagramı ile bu durum açıkça görünmektedir.
+Tablo tasarımında Gruplar ile ilişki gerektiğinden dolayı Gruplar tablosuna bir dış anahtar gereklidir. Bir grupta birden fazla etiket olabileceği yukarıda belirtilmişti. Aynı zamanda bir etiketin brden fazla grupta olması gerektiği de açıklanmıştı. Bu durumda Gruplar tablosunda da bu tabloyu belirten bir dış anahtar olması gerekiyor. Fakat has_tag tablosu içerisinde hem gruplar hem de tags tablosu için bir dış anahtar bulunuyor. 2 adet **1 to N bağlantı ilişkisi** oluştu ve önceden yaşadığımız problemi çözmüş olduk.
 
-.. figure:: cagri/etiketler-ER.jpg
+.. figure:: cagri/hastag_ER.jpg
    :figclass: align-center
    
-Bu N to N durumunu çözmek için iki tablo arasındaki ilişkiyi modelleyen başka bir ek tabloya ihtiyacımız oluyor. Bu amaçla bir sonraki bölümde anlatılacak olan has_tag tablosu gerçeklendi.
-
+Tablo gerçeklemeleri sonucunda kendi aralarında çalışabilen 3 tablo elde ettik. Ayrıca Gruplar bölümünde Kişiler tablosu ile bağlantı yapıldığından tüm website projesinin birbiri ile bağlantılı ve uyumlu çalışması sağlandı.
+   
 
