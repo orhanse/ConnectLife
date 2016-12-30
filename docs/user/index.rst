@@ -60,9 +60,11 @@ Kullanıcı aynı zamanda arkadaş önerilerini, ilgilenebileceği iş ilanları
 
 
 .. toctree::
+   :maxdepth: 5
 
-   Tuğba Özkal
-   Çağrı Gökçe
-   Ahmet Eğinkaya
-   Selman Orhan
-   Gülşah Damla
+   TugbaOzkal
+   CagriGokce
+   AhmetEginkaya
+   SelmanOrhan
+   GulsahDamla
+
