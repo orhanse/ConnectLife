@@ -18,7 +18,7 @@ sağlar.
 İçerik:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
    user/index
    developer/index
