@@ -52,17 +52,21 @@ Python kurulumu Windows için https://www.python.org/downloads/ adresinden Pytho
 Kurulumların ardından Flask eklentisi yüklenmelidir. Tüm işletim sistemleri için konsolu açıp aşağıdaki kodu yazarak Flask ve Python için postgreSQL eklentisi olan Psycopg2 kurulmalıdır. 
 
 .. code-block:: python
+
    #Eklenti kurulumları
    sudo pip3 install flask
    sudo pip3 install psycopg2
+
 |
 
 Ayrıca projenin github adresinden erişilebilmesi için Git eklentisi de kurulmalıdır. Windows ve Mac için web adresinden kurulum dosyalarına erişilebilir. Linux için aşağıdaki komut ile uygulama merkezinden indirme yapılabilir.
 
 
 .. code-block:: python
+
    #Git kurulumu
    sudo apt-get install git-all
+
 |
 
 Kurulumların tamamı bittikten sonra projenin github sayfına gelinip güncel bir **Clone-URL** alınır ve git-clone komutu ile proje lokal sisteme çekilir.
@@ -73,7 +77,9 @@ Kurulumların tamamı bittikten sonra projenin github sayfına gelinip güncel b
 Clone işlemi tamamlandığında konsoldan python3 ile server.py çalıştırıldığında proje localhost üzerinde 0.0.0.0:5000 adresinde açılacaktır.
 
 .. code-block:: python
+
    python3 server.py
+
 |
 
 **Kod yapısı**
@@ -81,6 +87,7 @@ Clone işlemi tamamlandığında konsoldan python3 ile server.py çalıştırıl
 Kod düzeninde programın çalışması *server.py* ana dosyasında gerçekleşmektedir. Grup üyeleri her tablo için kendilerine ait .py dosyası oluşturuldu. Her tablo yapısını simgeleyen bu .py dosyalarında veritabanı ile ilgili fonksiyonlar bulunuyor. Server.py dosyası içerisinde bu dosyalar aşağıdaki gibi çağrılıyor.
 
 .. code-block:: python
+
    from university import *
    from sirketler import *
    from gruplar import *
@@ -94,6 +101,7 @@ Kod düzeninde programın çalışması *server.py* ana dosyasında gerçekleşm
    from projeler import *
    from lokasyonlar import *
    from hobiler import *
+
 |
 
 Server.py dosyasında ayrıca veritabanı ile ilgili işlemlerle ilgili iki fonksiyon bulunuyor. Veritabanının açılıp kullanıma hazır hale getirilmesi sağlanıyor. Ayrıca konfigürasyonların yapıldığı ve HTML bağlantısının sağlandığı bir fonksiyon da mevcut.
@@ -126,6 +134,7 @@ Server.py dosyasında ayrıca veritabanı ile ilgili işlemlerle ilgili iki fonk
         app.config['dsn'] = """user='vagrant' password='vagrant'
                                host='localhost' port=5432 dbname='itucsdb'"""
    app.run(host='0.0.0.0', port=port, debug=debug)
+
 |
 
 Dosya içerisinde anasayfa için / adresine bir app.route çağrılıyor. Bu adreste anasayfa için hazırladığımız home.html render edilerek kullanıcıya sunuluyor.
@@ -139,17 +148,200 @@ Dosya içerisinde anasayfa için / adresine bir app.route çağrılıyor. Bu adr
    
 |
 
+Temel bir sayfa için 3 farklı temel app.route() yapısı bulunuyor. Bu yapılar: 
+
+- */varlık_ismi/initdb*: Gerekli varlığın veritabanı tablo oluşumunu yapan ve ilk atamaları yapan sayfadır.
+- */varlık_ismi*: Varlık ile ilgili anasayfadır. Seçme, Ekleme ve Arama işlemleri bu sayfada bulunur.
+- */varlık_ismi/varlık_id*: Verilen ID ile ilişkili varlığın Güncelleme ve Silme işlemlerinin bulunduğu sayfayı açar.
+
+Örneğin kişiler varlığı için gösterilen route yapıları ve fonksiyonları verilmiştir. Diğer varlıklar için aynı sayfalar mevcut olduğundan kod yanlızca kişiler için eklenmiştir.
+
+.. code-block:: python
+
+   @app.route('/kisiler/initdb')
+   def initialize_database_kisiler():
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       cursor.execute('''
+       DROP TABLE IF EXISTS KISILER CASCADE;
+       ''')
+       init_kisiler_db(cursor)
+       connection.commit()
+       return redirect(url_for('kisiler_sayfasi'))
 
 
-**to include a code listing, use the following example**::
+   @app.route('/kisiler',methods=['GET', 'POST'])
+   def kisiler_sayfasi():
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       now = datetime.datetime.now()
 
-   .. code-block:: python
+       if request.method == 'GET':
+           query2 = "SELECT ID, NAME FROM UNIVERSITY"
+           cursor.execute(query2)
+           university = cursor.fetchall()
+           query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME, M.ISIM, D.NAME
+                       FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S, MESLEKLER AS M, DIL AS D
+                       WHERE(
+                           (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID) AND (K.POZISYON = M.ID) AND (K.DIL = D.ID)
+                       )"""
+           cursor.execute(query)
+           kisi2 = cursor.fetchall()
+           cursor.execute("SELECT ID, NAME FROM SIRKET")
+           sirket = cursor.fetchall()
+           cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+           pozisyon = cursor.fetchall()
+           cursor.execute("SELECT ID, NAME FROM DIL")
+           diller = cursor.fetchall()
+           return render_template('kisiler.html', kisiler = kisi2, universite = university, work = sirket, pozisyon = pozisyon, diller = diller)
 
-      class Foo:
 
-         def __init__(self, x):
-            self.x = x
+       elif "add" in request.form:
+           kisi1 = Kisiler(request.form['isim'],
+                               request.form['resim'],
+                               request.form['mekan'],
+                               request.form['yas'],
+                               request.form['university_name'],
+                               request.form['work_name'],
+                               request.form['pozisyon_adi'],
+                               request.form['dil_adi'])
+           add_kisiler(cursor, request, kisi1)
+           connection.commit()
+           return redirect(url_for('kisiler_sayfasi'))
+       elif "search" in request.form:
+           aranankisi = request.form['aranankisi'];
+           query = """SELECT K.ID, K.ISIM, K.RESIM, K.MEKAN, K.YAS, U.NAME, S.NAME, M.ISIM, D.NAME
+                       FROM KISILER AS K, UNIVERSITY AS U, SIRKET AS S, MESLEKLER AS M, DIL AS D
+                       WHERE(
+                           (K.WORK = S.ID) AND (K.UNIVERSITE = U.ID) AND (K.POZISYON = M.ID) AND (K.DIL = D.ID)
+                       ) AND (K.ISIM LIKE %s)"""
+           cursor.execute(query,[aranankisi])
+           kisiler=cursor.fetchall()
+           now = datetime.datetime.now()
+           return render_template('kisi_ara.html', kisiler = kisiler, current_time=now.ctime(), sorgu = aranankisi)
 
+
+   @app.route('/kisiler/<kisi_id>', methods=['GET', 'POST'])
+   def kisiler_update_page(kisi_id):
+       connection = dbapi2.connect(app.config['dsn'])
+       cursor = connection.cursor()
+       if request.method == 'GET':
+           cursor.close()
+           cursor = connection.cursor()
+           cursor.execute("SELECT ID, NAME FROM UNIVERSITY")
+           universiteler = cursor.fetchall()
+           cursor.execute("SELECT ID, NAME FROM SIRKET")
+           sirketler = cursor.fetchall()
+           cursor.execute("SELECT ID, ISIM FROM MESLEKLER")
+           pozisyonlar = cursor.fetchall()
+           cursor.execute("SELECT ID, NAME FROM DIL")
+           diller = cursor.fetchall()
+           query = """SELECT * FROM KISILER WHERE (ID = %s)"""
+           cursor.execute(query, kisi_id)
+           now = datetime.datetime.now()
+           return render_template('kisi_guncelle.html', kisi = cursor, current_time=now.ctime(), universiteler = universiteler, sirketler=sirketler, pozisyonlar = pozisyonlar, diller = diller)
+       elif request.method == 'POST':
+           if "update" in request.form:
+               kisi1 = Kisiler(request.form['isim'],
+                               request.form['resim'],
+                               request.form['mekan'],
+                               request.form['yas'],
+                               request.form['university_name'],
+                               request.form['work_name'],
+                               request.form['pozisyon_adi'],
+                               request.form['dil_adi'])
+               update_kisiler(cursor, request.form['kisi_id'], kisi1)
+               connection.commit()
+               return redirect(url_for('kisiler_sayfasi'))
+           elif "delete" in request.form:
+               delete_kisiler(cursor, kisi_id)
+               connection.commit()
+               return redirect(url_for('kisiler_sayfasi'))
+
+|
+
+Her grup elemanının *<varlık_ismi>.py* dosyasında da veritabanı ile ilgili yapılan işlemlere ait fonksiyonlar bulunur. Bu fonksiyonlar tablo oluşturma, ilk değer atama, ekleme, çıkarma silme ve güncelleme bölümlerinden oluşur. Bu yapıların genel açıklamaları aşağıda verilmiştir.
+
+- *init_<varlik-ismi>_db*: Gerekli varlığın veritabanı tablo oluşumunu yapan fonksiyondur.
+- *fill_<varlik-ismi>_db*: Gerekli tabloya ilk atamayı yapan fonksiyondur.
+- *add_<varlik-ismi>_db*: Gerekli tabloya satır ekleme işlemini yapan fonksiyondur.
+- *delete_<varlik-ismi>_db*: Gerekli tablodan verilen ID değerine ait satırı silen fonksiyondur.
+- *update_<varlik-ismi>_db*: Gerekli tablonun verilen ID değerine ait satırını verilen bilgiler ile güncelleyen fonksiyondur.
+
+Yukarıdaki örnek ile benzer olması açısından kişiler varlığı için olan kişiler.py dosyasındaki bu işlemleri yapan fonksiyonlar aşağıda verilmiştir.
+
+
+.. code-block:: python
+
+   def init_kisiler_db(cursor):
+       query = """CREATE TABLE IF NOT EXISTS KISILER (
+       ID SERIAL PRIMARY KEY,
+       ISIM VARCHAR(30) NOT NULL,
+       RESIM VARCHAR(80) NOT NULL DEFAULT 'defaultprofil.png',
+       MEKAN VARCHAR(15) NOT NULL,
+       YAS INTEGER,
+       UNIVERSITE INTEGER REFERENCES UNIVERSITY(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+       WORK INTEGER REFERENCES SIRKET(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+       POZISYON INTEGER REFERENCES MESLEKLER(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+       DIL INTEGER REFERENCES DIL(ID) ON DELETE CASCADE ON UPDATE CASCADE )"""
+
+       cursor.execute(query)
+       fill_kisiler_db(cursor)
+
+
+   def fill_kisiler_db(cursor):
+       query = """INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
+                      VALUES ('Tugba Ozkal', 'profil1.jpg' ,'Afyonkarahisar', 22, 1, 1, 1, 3);
+                   INSERT INTO KISILER (ISIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
+                       VALUES ('Cagri Gokce', 'Ankara', 22, 2, 2, 2, 1);
+                   INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
+                       VALUES ('Furkan Evirgen', 'profil2.jpg','Istanbul', 26, 2, 1, 3, 1);
+                   INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
+                       VALUES ('Kemal Hazım Ekenel', 'ekenel.png','Istanbul', 38, 2, 1, 4, 2);
+                   INSERT INTO KISILER (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL)
+                       VALUES ('Jeo Kaeser', 'kaeser.jpg','Almanya', 59, 2, 1, 5, 4);"""
+
+       cursor.execute(query)
+
+
+   def add_kisiler(cursor, request, kisi1):
+           query = """INSERT INTO KISILER
+           (ISIM, RESIM, MEKAN, YAS, UNIVERSITE, WORK, POZISYON, DIL) VALUES (
+           %s,
+           %s,
+           INITCAP(%s),
+           %s,
+           %s,
+           %s,
+           %s,
+           %s
+           )"""
+           cursor.execute(query, (kisi1.isim, kisi1.resim, kisi1.mekan, kisi1.yas,
+                                  kisi1.universite, kisi1.work, kisi1.pozisyon, kisi1.dil))
+
+   def delete_kisiler(cursor, id):
+           query="""DELETE FROM KISILER WHERE ID = %s"""
+           cursor.execute(query, id)
+
+   def update_kisiler(cursor, id, kisi1):
+               query="""
+               UPDATE KISILER
+               SET ISIM=%s,
+               RESIM=%s,
+               MEKAN=INITCAP(%s),
+               YAS=%s,
+               UNIVERSITE=%s,
+               WORK=%s,
+               POZISYON=%s,
+               DIL=%s
+               WHERE ID=%s
+               """
+               cursor.execute(query,(kisi1.isim, kisi1.resim, kisi1.mekan, kisi1.yas,
+   kisi1.universite, kisi1.work, kisi1.pozisyon, kisi1.dil, id))
+
+|
+
+Python dosyalarına Proje ana klasöründen, HTML dosyalarına /templates klasöründen, CSS ve projede kullanılan resim dosyalarına ise /static klasöründen erişilebilir. 
 
 .. toctree::
    :maxdepth: 5
