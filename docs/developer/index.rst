@@ -352,7 +352,7 @@ Python dosyalarına Proje ana klasöründen, HTML dosyalarına /templates klasö
    :maxdepth: 5
 
    TugbaOzkal
-   CagriGökce
+   CagriGokce
    AhmetEginkaya
    SelmanOrhan
    GulsahDamla
